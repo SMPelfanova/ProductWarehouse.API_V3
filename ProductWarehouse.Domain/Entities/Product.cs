@@ -1,8 +1,7 @@
-﻿namespace ProductWarehouse.API.Models
+﻿namespace ProductWarehouse.Domain.Entities
 {
-    public class ProductDto
+    public class Product
     {
-        public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public List<string> Sizes { get; set; } = new List<string>();
