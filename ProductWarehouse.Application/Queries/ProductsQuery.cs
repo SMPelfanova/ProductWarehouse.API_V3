@@ -3,7 +3,7 @@ using ProductWarehouse.Application.Responses;
 
 namespace ProductWarehouse.Application.Queries
 {
-    public class GetProductsQuery : IRequest<ProductFilterResponse>
+    public class ProductsQuery : IRequest<ProductFilterResponse>
     {
         public decimal? MinPrice { get; set; } = 0;
         public decimal? MaxPrice { get; set; } = 0;

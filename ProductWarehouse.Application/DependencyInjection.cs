@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using ProductWarehouse.Application.Behaviors;
+using ProductWarehouse.Application.Profiles;
 
 namespace ProductWarehouse.Application
 {
@@ -12,6 +15,8 @@ namespace ProductWarehouse.Application
             {
                 configuration.RegisterServicesFromAssembly(assembly);
             });
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
+            services.AddAutoMapper(typeof(AutoMapperProfile));
 
             return services;
         }
