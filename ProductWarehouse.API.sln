@@ -5,11 +5,13 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWarehouse.API", "ProductWarehouse.API\ProductWarehouse.API.csproj", "{6BF13B20-EA7F-43E6-9FFD-B497F282CFDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductWarehouse.Domain", "ProductWarehouse.Domain\ProductWarehouse.Domain.csproj", "{4BF46AFF-B197-4A40-98D6-69A66B33B868}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWarehouse.Domain", "ProductWarehouse.Domain\ProductWarehouse.Domain.csproj", "{4BF46AFF-B197-4A40-98D6-69A66B33B868}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductWarehouse.Infrastructure", "ProductWarehouse.Infrastructure\ProductWarehouse.Infrastructure.csproj", "{474562F0-4EB7-4BCF-8ACF-114A93B04ABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWarehouse.Infrastructure", "ProductWarehouse.Infrastructure\ProductWarehouse.Infrastructure.csproj", "{474562F0-4EB7-4BCF-8ACF-114A93B04ABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductWarehouse.Application", "ProductWarehouse.Application\ProductWarehouse.Application.csproj", "{75B5812A-E1B7-43E3-9C8C-E48DE2154619}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWarehouse.Application", "ProductWarehouse.Application\ProductWarehouse.Application.csproj", "{75B5812A-E1B7-43E3-9C8C-E48DE2154619}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductWarehouse.UnitTests", "ProductWarehouse.UnitTests\ProductWarehouse.UnitTests.csproj", "{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{75B5812A-E1B7-43E3-9C8C-E48DE2154619}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75B5812A-E1B7-43E3-9C8C-E48DE2154619}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75B5812A-E1B7-43E3-9C8C-E48DE2154619}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

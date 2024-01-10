@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="xunit" Version="2.6.5" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProductWarehouse.API\ProductWarehouse.API.csproj" />
+    <ProjectReference Include="..\ProductWarehouse.Application\ProductWarehouse.Application.csproj" />
+    <ProjectReference Include="..\ProductWarehouse.Domain\ProductWarehouse.Domain.csproj" />
+    <ProjectReference Include="..\ProductWarehouse.Infrastructure\ProductWarehouse.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
