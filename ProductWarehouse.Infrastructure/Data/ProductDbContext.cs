@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Infrastructure.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace ProductWarehouse.Infrastructure.Data
 {
@@ -20,12 +20,14 @@ namespace ProductWarehouse.Infrastructure.Data
         public async Task<List<Product>> Products()
         {
             var response = await _httpClient.GetAsync(ProductListURL);
-            _logger.LogInformation($"Response from mocky.io: {response}");
             if (response.IsSuccessStatusCode)
             {
                 try
                 {
                     var jsonString = await response.Content.ReadAsStringAsync();
+
+                    _logger.LogInformation($"Response from mocky.io: {jsonString}");
+
                     var products = JsonConvert.DeserializeObject<List<Product>>(jsonString);
 
                     _logger.LogInformation($"Returning deserialized product list");

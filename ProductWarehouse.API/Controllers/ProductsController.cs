@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.Application.Queries;
+using ProductWarehouse.Application.Responses;
 
 namespace ProductWarehouse.API.Controllers
 {
@@ -17,7 +18,7 @@ namespace ProductWarehouse.API.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductResponse>>> GetProducts()
         {
             var result = await _mediator.Send(new ProductsQuery());
             if (result == null || !result.Products.Any())
@@ -29,7 +30,7 @@ namespace ProductWarehouse.API.Controllers
         }
 
         [HttpGet("filter")]
-        public async Task<ActionResult> GetProducts([FromQuery] ProductsQuery searchFilter)
+        public async Task<ActionResult<ProductFilterResponse>> GetProducts([FromQuery] ProductsQuery searchFilter)
         {
             var result = await _mediator.Send(searchFilter);
 
