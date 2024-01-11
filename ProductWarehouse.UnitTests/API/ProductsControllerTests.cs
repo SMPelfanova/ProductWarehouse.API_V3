@@ -26,7 +26,7 @@ public class ProductsControllerTests
         var result = await controller.GetProducts();
 
         // Assert
-        Assert.IsType<NotFoundResult>(result.Result);
+        Assert.IsType<NotFoundResult>(result);
     }
 
     [Fact]
@@ -67,8 +67,8 @@ public class ProductsControllerTests
         var result = await controller.GetProducts();
 
         // Assert
-        Assert.IsType<OkObjectResult>(result.Result);
-        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<OkObjectResult>(result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.NotNull(okResult.Value);
     }
 
@@ -110,8 +110,8 @@ public class ProductsControllerTests
         var result = await controller.GetProducts(searchFilter);
 
         // Assert
-        Assert.IsType<OkObjectResult>(result.Result);
-        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.IsType<OkObjectResult>(result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.NotNull(okResult.Value);
     }
 }

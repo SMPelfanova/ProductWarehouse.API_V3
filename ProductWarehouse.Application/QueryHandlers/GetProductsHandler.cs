@@ -3,9 +3,9 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ProductWarehouse.Application.Queries;
 using ProductWarehouse.Application.Responses;
+using ProductWarehouse.Application.Utilities;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Domain.Repositories;
-using System.Text.RegularExpressions;
 
 namespace ProductWarehouse.Application.QueryHandlers
 {
@@ -14,11 +14,16 @@ namespace ProductWarehouse.Application.QueryHandlers
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<GetProductsHandler> _logger;
-        public GetProductsHandler(IProductRepository productRepository, IMapper mapper, ILogger<GetProductsHandler> logger)
+        private readonly IKeywordHighlighter _keywordHighlighter;
+        private readonly ICommonWordsFinder _commonWordsFinder;
+
+        public GetProductsHandler(IProductRepository productRepository, IMapper mapper, ILogger<GetProductsHandler> logger, IKeywordHighlighter keywordHighlighter, ICommonWordsFinder commonWordsFinder)
         {
             _productRepository = productRepository;
             _mapper = mapper;
             _logger = logger;
+            _keywordHighlighter = keywordHighlighter;
+            _commonWordsFinder = commonWordsFinder;
         }
 
         public async Task<ProductFilterResponse> Handle(ProductsQuery request, CancellationToken cancellationToken)
@@ -37,69 +42,25 @@ namespace ProductWarehouse.Application.QueryHandlers
                     MinPrice = products.Min(p => p.Price),
                     MaxPrice = products.Max(p => p.Price),
                     Sizes = products.SelectMany(o => o.Sizes).Distinct().ToArray(),
-                    CommonWords = FindMostCommonWords(products)
+                    CommonWords = _commonWordsFinder.FindMostCommonWords(products)
                 }
             };
 
             if (!string.IsNullOrEmpty(request.Highlight))
             {
-                ReplaceDescriptions(response.Products, request.Highlight);
+                HighlightKeywords(products, request.Highlight);
             }
 
             return response;
         }
 
-        private string[] FindMostCommonWords(IEnumerable<Product> products)
+        private void HighlightKeywords(IEnumerable<Product> products, string highlight)
         {
-            var allWords = products
-                .SelectMany(p => Regex.Replace(p.Description.ToLowerInvariant(), "[^a-zA-Z ]", "", RegexOptions.Compiled).Split(' ', StringSplitOptions.RemoveEmptyEntries))
-                .ToList();
-
-            var wordFrequency = allWords.GroupBy(word => word)
-                .OrderByDescending(group => group.Count())
-                .ThenBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
-                .Skip(5).Take(10)
-                .ToDictionary(group => group.Key, group => group.Count());
-
-            return wordFrequency.Keys.ToArray();
-        }
-
-        private void ReplaceDescriptions(IEnumerable<ProductResponse> products, string highlights)
-        {
-            if (!string.IsNullOrEmpty(highlights))
+            foreach (var product in products)
             {
-                foreach (var product in products)
-                {
-                    product.Description = HighlightKeywords(product.Description, highlights);
-                }
+                product.Description = _keywordHighlighter.HighlightKeywords(product.Description, highlight);
             }
         }
 
-        private string HighlightKeywords(string description, string highlight)
-        {
-            if (string.IsNullOrEmpty(description) || string.IsNullOrEmpty(highlight))
-            {
-                return description;
-            }
-
-            string[] highlightList = highlight.Split(',', StringSplitOptions.RemoveEmptyEntries);
-
-            foreach (var keyword in highlightList)
-            {
-                string[] words = description.Split(' ');
-
-                for (int i = 0; i < words.Length; i++)
-                {
-                    if (string.Equals(words[i], keyword, StringComparison.OrdinalIgnoreCase))
-                    {
-                        words[i] = $"<em>{words[i]}</em>";
-                    }
-                }
-
-                description = string.Join(' ', words);
-            }
-
-            return description;
-        }
     }
 }

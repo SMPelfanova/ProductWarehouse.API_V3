@@ -1,16 +1,18 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.Domain.Repositories;
-using ProductWarehouse.Infrastructure.Data;
+using ProductWarehouse.Infrastructure.Configuration;
 using ProductWarehouse.Infrastructure.Repositories;
 
 namespace ProductWarehouse.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
         {
             services.AddTransient<IProductRepository, ProductRepository>();
-            services.AddTransient<ProductDbContext>();
+            services.Configure<ProductSourceSettings>(
+                config.GetSection(nameof(ProductSourceSettings)));
 
             return services;
         }

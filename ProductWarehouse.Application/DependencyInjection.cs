@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.Application.Behaviors;
 using ProductWarehouse.Application.Profiles;
+using ProductWarehouse.Application.Utilities;
 
 namespace ProductWarehouse.Application
 {
@@ -17,6 +18,9 @@ namespace ProductWarehouse.Application
             });
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
             services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            services.AddScoped<IKeywordHighlighter, KeywordHighlighter>();
+            services.AddScoped<ICommonWordsFinder, CommonWordsFinder>();
 
             return services;
         }

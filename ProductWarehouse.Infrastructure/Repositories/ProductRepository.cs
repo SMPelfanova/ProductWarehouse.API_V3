@@ -1,20 +1,27 @@
-﻿using ProductWarehouse.Domain.Entities;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Domain.Repositories;
-using ProductWarehouse.Infrastructure.Data;
 
 namespace ProductWarehouse.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly ProductDbContext _dbContext;
-        public ProductRepository(ProductDbContext dbContext)
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<ProductRepository> _logger;
+        private readonly string _productListURL;
+
+        public ProductRepository(HttpClient httpClient, ILogger<ProductRepository> logger, IConfiguration config)
         {
-            _dbContext = dbContext;
+            _httpClient = httpClient;
+            _logger = logger;
+            _productListURL = config.GetSection("ProductSourceSettings:ProductListURL").Value ?? throw new ArgumentNullException("ProductListURL is missing in configuration");
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync(decimal? minPrice, decimal? maxPrice, string? size)
         {
-            var products = await _dbContext.Products();
+            var products = await GetProductListAsync();
 
             products = products.Where(x => (minPrice == 0 || x.Price >= minPrice))
                 .Where(x => (maxPrice == 0 || x.Price <= maxPrice))
@@ -23,5 +30,34 @@ namespace ProductWarehouse.Infrastructure.Repositories
             return products;
         }
 
+        private async Task<List<Product>> GetProductListAsync()
+        {
+            var response = await _httpClient.GetAsync(_productListURL);
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    var jsonString = await response.Content.ReadAsStringAsync();
+
+                    _logger.LogInformation($"Response from mocky.io: {jsonString}");
+
+                    var products = JsonConvert.DeserializeObject<List<Product>>(jsonString);
+
+                    _logger.LogInformation($"Returning deserialized product list");
+
+                    return products ?? new List<Product>();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"Deserialization of product failed: {ex.Message}");
+                    return null;
+                }
+            }
+            else
+            {
+                _logger.LogWarning($"No products found with status code: {response.StatusCode}");
+                return new List<Product>();
+            }
+        }
     }
 }

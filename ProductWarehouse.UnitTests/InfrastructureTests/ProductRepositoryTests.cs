@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.Protected;
+using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Infrastructure.Data;
 using ProductWarehouse.Infrastructure.Repositories;
+using System.Net;
 using Xunit;
 
 public class ProductRepositoryTests
@@ -11,10 +14,38 @@ public class ProductRepositoryTests
     public async Task GetProductsAsync_ReturnsFilteredProducts()
     {
         // Arrange
-        var httpClientMock = new Mock<HttpClient>();
+        string testLink = "https://testlink";
+        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        var httpClient = new HttpClient(httpMessageHandlerMock.Object);
+        var configurationMock = new Mock<IConfiguration>();
         var loggerMock = new Mock<ILogger<ProductRepository>>();
-        var productDbContext = new ProductDbContext(httpClientMock.Object, loggerMock.Object);
-        var productRepository = new ProductRepository(productDbContext);
+
+        configurationMock.Setup(x => x.GetSection("ProductSourceSettings:ProductListURL").Value)
+                         .Returns(testLink);
+
+        var expectedProducts = new List<Product>
+        {
+            new Product { /* Set properties for the first product */ },
+            new Product { /* Set properties for the second product */ },
+            // Add more sample products as needed
+        };
+
+        var jsonString = JsonConvert.SerializeObject(expectedProducts);
+
+        httpMessageHandlerMock
+         .Protected()
+         .Setup<Task<HttpResponseMessage>>(
+             "SendAsync",
+             ItExpr.IsAny<HttpRequestMessage>(),
+             ItExpr.IsAny<CancellationToken>()
+         )
+         .ReturnsAsync(new HttpResponseMessage
+         {
+             Content = new StringContent(jsonString),
+             StatusCode = HttpStatusCode.OK,
+         });
+
+        var productRepository = new ProductRepository(httpClient, loggerMock.Object, configurationMock.Object);
 
         var minPrice = 10m;
         var maxPrice = 100m;

@@ -4,11 +4,12 @@ using Moq;
 using ProductWarehouse.Application.Queries;
 using ProductWarehouse.Application.QueryHandlers;
 using ProductWarehouse.Application.Responses;
+using ProductWarehouse.Application.Utilities;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Domain.Repositories;
 using Xunit;
 
-namespace ProductWarehouse.UnitTests.ApplicationTests
+namespace ProductWarehouse.UnitTests.ApplicationTests.QueryHandlers
 {
     public class GetProductsHandlerTests
     {
@@ -19,7 +20,9 @@ namespace ProductWarehouse.UnitTests.ApplicationTests
             var productRepositoryMock = new Mock<IProductRepository>();
             var mapperMock = new Mock<IMapper>();
             var loggerMock = new Mock<ILogger<GetProductsHandler>>();
-
+            var keywordHihglighter = new Mock<IKeywordHighlighter>();
+            var commonWordsFinder = new Mock<ICommonWordsFinder>();
+            
             var productsQuery = new ProductsQuery
             {
                 MinPrice = 10,
@@ -40,7 +43,7 @@ namespace ProductWarehouse.UnitTests.ApplicationTests
             mapperMock.Setup(mapper => mapper.Map<IEnumerable<ProductResponse>>(It.IsAny<IEnumerable<Product>>()))
                       .Returns((IEnumerable<Product> source) => source.Select(p => new ProductResponse { /* map properties */ }));
 
-            var handler = new GetProductsHandler(productRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
+            var handler = new GetProductsHandler(productRepositoryMock.Object, mapperMock.Object, loggerMock.Object, keywordHihglighter.Object, commonWordsFinder.Object);
 
             // Act
             var result = await handler.Handle(productsQuery, CancellationToken.None);
