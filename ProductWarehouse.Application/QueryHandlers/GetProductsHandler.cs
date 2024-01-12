@@ -48,13 +48,13 @@ namespace ProductWarehouse.Application.QueryHandlers
 
             if (!string.IsNullOrEmpty(request.Highlight))
             {
-                HighlightKeywords(products, request.Highlight);
+                HighlightKeywords(response.Products, request.Highlight);
             }
 
             return response;
         }
 
-        private void HighlightKeywords(IEnumerable<Product> products, string highlight)
+        private void HighlightKeywords(IEnumerable<ProductResponse> products, string highlight)
         {
             foreach (var product in products)
             {
