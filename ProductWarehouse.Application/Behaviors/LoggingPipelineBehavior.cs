@@ -3,8 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ProductWarehouse.Application.Behaviors
 {
-    public class LoggingPipelineBehavior<TRequest, TResponse> 
-        : IPipelineBehavior<TRequest, TResponse>
+    public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     {
         private readonly ILogger<LoggingPipelineBehavior<TRequest, TResponse>> _logger;
 

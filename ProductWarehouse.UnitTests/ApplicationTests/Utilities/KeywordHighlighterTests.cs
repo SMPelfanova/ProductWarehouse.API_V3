@@ -7,16 +7,16 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.Utilities
     {
        
         [Fact]
-        public void HighlightKeywords_NullInput_ReturnsNull()
+        public void HighlightKeywords_EmptyInput_ReturnsNull()
         {
             // Arrange
             var highlighter = new KeywordHighlighter();
 
             // Act
-            var result = highlighter.HighlightKeywords(null, "keyword");
+            var result = highlighter.HighlightKeywords(string.Empty, "keyword");
 
             // Assert
-            Assert.Null(result);
+            Assert.Empty(result);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.Utilities
             var inputText = "some text";
 
             // Act
-            var result = highlighter.HighlightKeywords(inputText, null);
+            var result = highlighter.HighlightKeywords(inputText, string.Empty);
 
             // Assert
             Assert.Equal(inputText, result);

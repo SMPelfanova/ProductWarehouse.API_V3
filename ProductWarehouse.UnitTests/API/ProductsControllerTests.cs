@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using ProductWarehouse.API.Controllers;
-using ProductWarehouse.API.Models;
+using ProductWarehouse.API.QueryParameters;
 using ProductWarehouse.Application.Queries;
 using ProductWarehouse.Application.Responses;
 using Xunit;
@@ -38,8 +38,8 @@ public class ProductsControllerTests
         var controller = new ProductsController(loggerMock.Object, mediatorMock.Object);
 
         // Set up MediatR to return a result with some products
-        var products = new List<ProductDto> {
-            new ProductDto {
+        var products = new List<ProductResponse> {
+            new ProductResponse {
                 Description = "Test",
                 Price = 12,
                 Title = "Test",
@@ -80,10 +80,10 @@ public class ProductsControllerTests
         var mediatorMock = new Mock<IMediator>();
         var controller = new ProductsController(loggerMock.Object, mediatorMock.Object);
 
-        var searchFilter = new ProductsQuery { MaxPrice = 12 };
+        var searchFilter = new ProductsFilter { MaxPrice = 12 };
 
         // Set up MediatR to return a result with filtered products
-        var filteredProducts = new List<ProductDto> { new ProductDto {
+        var filteredProducts = new List<ProductResponse> { new ProductResponse {
            Description = "Test",
                 Price = 12,
                 Title = "Test",
