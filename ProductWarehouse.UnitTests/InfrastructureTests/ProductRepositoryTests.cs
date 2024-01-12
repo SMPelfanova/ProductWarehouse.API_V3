@@ -4,6 +4,7 @@ using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Infrastructure.Http;
 using ProductWarehouse.Infrastructure.Repositories;
 using System.Net;
 using Xunit;
@@ -16,7 +17,8 @@ public class ProductRepositoryTests
         // Arrange
         string testLink = "https://testlink";
         var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
-        var httpClient = new HttpClient(httpMessageHandlerMock.Object);
+        var httpClientMock = new HttpClient(httpMessageHandlerMock.Object);
+        var httpClient = new HttpClientService(httpClientMock);
         var configurationMock = new Mock<IConfiguration>();
         var loggerMock = new Mock<ILogger<ProductRepository>>();
 

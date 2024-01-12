@@ -59,7 +59,12 @@ namespace ProductWarehouse.API.Controllers
         [ProducesResponseType(typeof(ProductFilterResponse), 200)]
         public async Task<ActionResult> GetProducts([FromQuery] ProductsFilter productsFilter)
         {
-            var result = await _mediator.Send(productsFilter);
+            var result = await _mediator.Send(new ProductsQuery { 
+                MinPrice = productsFilter.MinPrice,
+                MaxPrice = productsFilter.MaxPrice,
+                Highlight = productsFilter.Highlight,
+                Size = productsFilter.Size
+            });
 
             return Ok(result);
         }

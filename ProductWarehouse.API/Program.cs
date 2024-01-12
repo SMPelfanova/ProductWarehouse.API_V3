@@ -5,13 +5,6 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            // Add other Serilog configuration as needed
-            .CreateLogger();
-
-
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddApplication();
@@ -30,7 +23,14 @@ builder.Services.AddSwaggerGen(setupAction =>
 });
 
 
-builder.Host.UseSerilog();
+builder.Host.UseSerilog((context, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(context.Configuration)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day); // Specify the file path
+});
 
 var app = builder.Build();
 

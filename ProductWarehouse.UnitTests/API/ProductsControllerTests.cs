@@ -78,9 +78,8 @@ public class ProductsControllerTests
         // Arrange
         var loggerMock = new Mock<ILogger<ProductsController>>();
         var mediatorMock = new Mock<IMediator>();
-        var controller = new ProductsController(loggerMock.Object, mediatorMock.Object);
 
-        var searchFilter = new ProductsFilter { MaxPrice = 12 };
+        var searchFilter = new ProductsQuery {Highlight = "string", MaxPrice = 13, MinPrice = 1, Size = "Small" };
 
         // Set up MediatR to return a result with filtered products
         var filteredProducts = new List<ProductResponse> { new ProductResponse {
@@ -94,20 +93,21 @@ public class ProductsControllerTests
                     "Large"
                 }
         }};
-        mediatorMock.Setup(m => m.Send(searchFilter, CancellationToken.None))
-                    .ReturnsAsync(new ProductFilterResponse
-                    {
-                        Products = filteredProducts.Select(productDto => new ProductResponse
-                        {
-                            Price = productDto.Price,
-                            Description = productDto.Description,
-                            Sizes = productDto.Sizes,
-                            Title = productDto.Title
-                        })
-                    });
+        mediatorMock.Setup(m => m.Send(It.IsAny<ProductsQuery>(), CancellationToken.None))
+                   .ReturnsAsync(new ProductFilterResponse
+                   {
+                       Products = filteredProducts.Select(productDto => new ProductResponse
+                       {
+                           Price = productDto.Price,
+                           Description = productDto.Description,
+                           Sizes = productDto.Sizes,
+                           Title = productDto.Title
+                       })
+                   });
+        var controller = new ProductsController(loggerMock.Object, mediatorMock.Object);
 
         // Act
-        var result = await controller.GetProducts(searchFilter);
+        var result = await controller.GetProducts(new ProductsFilter { Size = searchFilter.Size, MinPrice = searchFilter.MinPrice, MaxPrice = searchFilter.MaxPrice, Highlight = searchFilter.Highlight});
 
         // Assert
         Assert.IsType<OkObjectResult>(result);

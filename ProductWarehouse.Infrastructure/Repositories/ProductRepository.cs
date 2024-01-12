@@ -3,18 +3,19 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Domain.Repositories;
+using ProductWarehouse.Infrastructure.Http;
 
 namespace ProductWarehouse.Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        private readonly HttpClient _httpClient;
+        private readonly HttpClientService _httpClientService;
         private readonly ILogger<ProductRepository> _logger;
         private readonly string _productListURL;
 
-        public ProductRepository(HttpClient httpClient, ILogger<ProductRepository> logger, IConfiguration config)
+        public ProductRepository(HttpClientService httpClientService, ILogger<ProductRepository> logger, IConfiguration config)
         {
-            _httpClient = httpClient;
+            _httpClientService = httpClientService;
             _logger = logger;
             _productListURL = config.GetSection("ProductSourceSettings:ProductListURL").Value ?? throw new ArgumentNullException("ProductListURL is missing in configuration");
         }
@@ -32,30 +33,25 @@ namespace ProductWarehouse.Infrastructure.Repositories
 
         private async Task<List<Product>> GetProductListAsync()
         {
-            var response = await _httpClient.GetAsync(_productListURL);
-            if (response.IsSuccessStatusCode)
+            var jsonString = await _httpClientService.GetStringAsync(_productListURL);
+            if (!string.IsNullOrEmpty(jsonString))
             {
+                _logger.LogInformation($"Response from mocky.io: {jsonString}");
                 try
                 {
-                    var jsonString = await response.Content.ReadAsStringAsync();
-
-                    _logger.LogInformation($"Response from mocky.io: {jsonString}");
-
                     var products = JsonConvert.DeserializeObject<List<Product>>(jsonString);
-
                     _logger.LogInformation($"Returning deserialized product list");
-
                     return products ?? new List<Product>();
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, $"Deserialization of product failed: {ex.Message}");
-                    return null;
+                    return new List<Product>();
                 }
             }
             else
             {
-                _logger.LogWarning($"No products found with status code: {response.StatusCode}");
+                _logger.LogWarning($"No products found with status code: {jsonString}");
                 return new List<Product>();
             }
         }
