@@ -54,9 +54,6 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.Utilities
             // Assert
             Assert.Contains("product", result, StringComparer.OrdinalIgnoreCase);
             Assert.Contains("sample", result, StringComparer.OrdinalIgnoreCase);
-            // Add more assertions based on the expected common words
         }
-
-        // Add more test cases as needed
     }
 }

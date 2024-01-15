@@ -17,7 +17,7 @@ namespace ProductWarehouse.Infrastructure.Repositories
         {
             _httpClientService = httpClientService;
             _logger = logger;
-            _productListURL = config.GetSection("ProductSourceSettings:ProductListURL").Value ?? throw new ArgumentNullException("ProductListURL is missing in configuration");
+            _productListURL = config.GetSection("ProductSourceSettings:ProductListURL")?.Value ?? throw new ArgumentNullException("ProductListURL is missing in configuration");
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync(decimal? minPrice, decimal? maxPrice, string? size)

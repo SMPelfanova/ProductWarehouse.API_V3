@@ -22,7 +22,7 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.QueryHandlers
             var loggerMock = new Mock<ILogger<GetProductsHandler>>();
             var keywordHihglighter = new Mock<IKeywordHighlighter>();
             var commonWordsFinder = new Mock<ICommonWordsFinder>();
-            
+
             var productsQuery = new ProductsQuery
             {
                 MinPrice = 10,
@@ -32,10 +32,10 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.QueryHandlers
             };
 
             var products = new List<Product>
-        {
-            new Product { /* create sample product 1 */ },
-            new Product { /* create sample product 2 */ }
-        };
+            {
+                new Product { Title = "Test", Description = "test", Price = 10, Sizes = new List<string>{ "Small" } },
+                new Product { Title = "Test 2", Description = "test 2", Price = 10, Sizes = new List<string>{ "Medium" } }
+            };
 
             productRepositoryMock.Setup(repo => repo.GetProductsAsync(productsQuery.MinPrice, productsQuery.MaxPrice, productsQuery.Size))
                                  .ReturnsAsync(products);
@@ -52,8 +52,6 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.QueryHandlers
             Assert.NotNull(result);
             Assert.NotNull(result.Products);
             Assert.Equal(products.Count(), result.Products.Count());
-
-            // Add more assertions based on your specific expectations for the response
         }
 
     }

@@ -12,6 +12,51 @@ using Xunit;
 public class ProductRepositoryTests
 {
     [Fact]
+    public async Task GetProductsAsync_ReturnsEmptyList()
+    {
+        // Arrange
+        string testLink = "https://testlink";
+        var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        var httpClientMock = new HttpClient(httpMessageHandlerMock.Object);
+        var httpClient = new HttpClientService(httpClientMock);
+        var configurationMock = new Mock<IConfiguration>();
+        var loggerMock = new Mock<ILogger<ProductRepository>>();
+
+        configurationMock.Setup(x => x.GetSection("ProductSourceSettings:ProductListURL").Value)
+                         .Returns(testLink);
+
+        var expectedProducts = new List<Product>();
+
+        var jsonString = JsonConvert.SerializeObject(expectedProducts);
+
+        httpMessageHandlerMock
+         .Protected()
+         .Setup<Task<HttpResponseMessage>>(
+             "SendAsync",
+             ItExpr.IsAny<HttpRequestMessage>(),
+             ItExpr.IsAny<CancellationToken>()
+         )
+         .ReturnsAsync(new HttpResponseMessage
+         {
+             Content = new StringContent(jsonString),
+             StatusCode = HttpStatusCode.OK,
+         });
+
+        var productRepository = new ProductRepository(httpClient, loggerMock.Object, configurationMock.Object);
+
+        var minPrice = 10m;
+        var maxPrice = 100m;
+        var size = "Medium";
+
+        // Act
+        var result = await productRepository.GetProductsAsync(minPrice, maxPrice, size);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+    }
+
+    [Fact]
     public async Task GetProductsAsync_ReturnsFilteredProducts()
     {
         // Arrange
@@ -27,9 +72,8 @@ public class ProductRepositoryTests
 
         var expectedProducts = new List<Product>
         {
-            new Product { /* Set properties for the first product */ },
-            new Product { /* Set properties for the second product */ },
-            // Add more sample products as needed
+            new Product { Title = "Test", Description = "test", Price = 10, Sizes = new List<string>{ "Small" } },
+            new Product { Title = "Test 2", Description = "test 2", Price = 10, Sizes = new List<string>{ "Medium" } },
         };
 
         var jsonString = JsonConvert.SerializeObject(expectedProducts);
@@ -53,14 +97,6 @@ public class ProductRepositoryTests
         var maxPrice = 100m;
         var size = "Medium";
 
-        var productsInDatabase = new List<Product>
-        {
-            new Product { /* create sample product 1 */ },
-            new Product { /* create sample product 2 */ },
-            // Add more sample products as needed
-        };
-
-
         // Act
         var result = await productRepository.GetProductsAsync(minPrice, maxPrice, size);
 
@@ -72,6 +108,4 @@ public class ProductRepositoryTests
             (string.IsNullOrEmpty(size) || p.Sizes.Any(s => s.ToLowerInvariant() == size.ToLowerInvariant()))
         ));
     }
-
-    // Add more test cases to cover different scenarios, such as empty products, null parameters, etc.
 }
