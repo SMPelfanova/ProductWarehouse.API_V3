@@ -1,20 +1,20 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProductWarehouse.Domain.Repositories;
 using ProductWarehouse.Infrastructure.Configuration;
 using ProductWarehouse.Infrastructure.Http;
+using ProductWarehouse.Infrastructure.Interfaces;
 using ProductWarehouse.Infrastructure.Repositories;
 
-namespace ProductWarehouse.Infrastructure
+namespace ProductWarehouse.Infrastructure.Extensions
 {
-    public static class DependencyInjection
+    public static class DependencyInjectionExtensions
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection DependencyRegistration(this IServiceCollection services, IConfiguration config)
         {
             services.AddTransient<IProductRepository, ProductRepository>();
 
-            services.Configure<ProductSourceSettings>(
-                config.GetSection(nameof(ProductSourceSettings)));
+            services.Configure<MockyClientSettings>(
+                config.GetSection(nameof(MockyClientSettings)));
 
             services.AddScoped<HttpClientService>();
 

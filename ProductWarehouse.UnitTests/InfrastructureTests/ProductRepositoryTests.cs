@@ -15,15 +15,19 @@ public class ProductRepositoryTests
     public async Task GetProductsAsync_ReturnsEmptyList()
     {
         // Arrange
-        string testLink = "https://testlink";
+        string baseUrl = "https://testlink.com";
+        string productUrl = "/v2/testlink";
         var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
         var httpClientMock = new HttpClient(httpMessageHandlerMock.Object);
-        var httpClient = new HttpClientService(httpClientMock);
         var configurationMock = new Mock<IConfiguration>();
         var loggerMock = new Mock<ILogger<ProductRepository>>();
+        var httpClient = new HttpClientService(httpClientMock, loggerMock.Object);
 
-        configurationMock.Setup(x => x.GetSection("ProductSourceSettings:ProductListURL").Value)
-                         .Returns(testLink);
+        configurationMock.Setup(x => x.GetSection("MockyClient:BaseUrl").Value)
+                         .Returns(baseUrl);
+
+        configurationMock.Setup(x => x.GetSection("MockyClient:ProductUrl").Value)
+                         .Returns(productUrl);
 
         var expectedProducts = new List<Product>();
 
@@ -42,7 +46,7 @@ public class ProductRepositoryTests
              StatusCode = HttpStatusCode.OK,
          });
 
-        var productRepository = new ProductRepository(httpClient, loggerMock.Object, configurationMock.Object);
+        var productRepository = new ProductRepository(httpClient, configurationMock.Object);
 
         var minPrice = 10m;
         var maxPrice = 100m;
@@ -60,15 +64,20 @@ public class ProductRepositoryTests
     public async Task GetProductsAsync_ReturnsFilteredProducts()
     {
         // Arrange
-        string testLink = "https://testlink";
+        string baseUrl = "https://testlink.com";
+        string productUrl = "/v2/testlink";
         var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
         var httpClientMock = new HttpClient(httpMessageHandlerMock.Object);
-        var httpClient = new HttpClientService(httpClientMock);
         var configurationMock = new Mock<IConfiguration>();
         var loggerMock = new Mock<ILogger<ProductRepository>>();
+        var httpClient = new HttpClientService(httpClientMock, loggerMock.Object);
 
-        configurationMock.Setup(x => x.GetSection("ProductSourceSettings:ProductListURL").Value)
-                         .Returns(testLink);
+        configurationMock.Setup(x => x.GetSection("MockyClient:BaseUrl").Value)
+                    .Returns(baseUrl);
+
+        configurationMock.Setup(x => x.GetSection("MockyClient:ProductUrl").Value)
+                         .Returns(productUrl);
+
 
         var expectedProducts = new List<Product>
         {
@@ -91,7 +100,7 @@ public class ProductRepositoryTests
              StatusCode = HttpStatusCode.OK,
          });
 
-        var productRepository = new ProductRepository(httpClient, loggerMock.Object, configurationMock.Object);
+        var productRepository = new ProductRepository(httpClient, configurationMock.Object);
 
         var minPrice = 10m;
         var maxPrice = 100m;

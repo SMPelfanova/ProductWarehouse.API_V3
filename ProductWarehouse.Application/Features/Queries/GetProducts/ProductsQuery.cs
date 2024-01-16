@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using ProductWarehouse.Application.Responses;
+using ProductWarehouse.Application.Models;
 
-namespace ProductWarehouse.Application.Queries
+namespace ProductWarehouse.Application.Features.Queries.GetProducts
 {
-    public class ProductsQuery : IRequest<ProductFilterResponse>
+    public class ProductsQuery : IRequest<IEnumerable<ProductDto>>
     {
         public decimal? MinPrice { get; set; } = 0;
         public decimal? MaxPrice { get; set; } = 0;

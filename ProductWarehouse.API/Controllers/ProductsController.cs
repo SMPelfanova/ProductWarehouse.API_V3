@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductWarehouse.API.QueryParameters;
-using ProductWarehouse.Application.Queries;
-using ProductWarehouse.Application.Responses;
+using ProductWarehouse.API.Models.Requests;
+using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers
@@ -11,21 +12,23 @@ namespace ProductWarehouse.API.Controllers
     /// Controller for managing product-related operations.
     /// </summary>
     [ApiController]
-    [Route("api/products")]
+    [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProductsController"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="mediator">The mediator.</param>
-        public ProductsController(ILogger<ProductsController> logger, IMediator mediator)
+        public ProductsController(ILogger<ProductsController> logger, IMediator mediator, IMapper mapper)
         {
             _logger = logger;
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -40,12 +43,12 @@ namespace ProductWarehouse.API.Controllers
         public async Task<ActionResult> GetProducts()
         {
             var result = await _mediator.Send(new ProductsQuery());
-            if (result == null || !result.Products.Any())
+            if (result == null || !result.Any())
             {
                 return NotFound();
             }
 
-            return Ok(result.Products);
+            return Ok(result);
         }
 
         /// <summary>
@@ -57,14 +60,11 @@ namespace ProductWarehouse.API.Controllers
         [HttpGet("filter")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(ProductFilterResponse), 200)]
-        public async Task<ActionResult> GetProducts([FromQuery] ProductsFilter productsFilter)
+        public async Task<ActionResult> GetProducts([FromQuery] FilterProductsRequest productsFilter)
         {
-            var result = await _mediator.Send(new ProductsQuery { 
-                MinPrice = productsFilter.MinPrice,
-                MaxPrice = productsFilter.MaxPrice,
-                Highlight = productsFilter.Highlight,
-                Size = productsFilter.Size
-            });
+            var productsQueryMap = _mapper.Map<ProductsQuery>(productsFilter);
+            var result = await _mediator.Send(productsQueryMap);
+
 
             return Ok(result);
         }

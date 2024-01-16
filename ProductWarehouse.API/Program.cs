@@ -1,14 +1,14 @@
-using ProductWarehouse.Infrastructure;
-using ProductWarehouse.Application;
+using ProductWarehouse.Application.Extensions;
 using Serilog;
 using System.Reflection;
+using ProductWarehouse.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.DependencyRegistration();
+builder.Services.DependencyRegistration(builder.Configuration);
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

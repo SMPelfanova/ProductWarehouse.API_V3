@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProductWarehouse.API.QueryParameters
+namespace ProductWarehouse.API.Models.Requests
 {
     /// <summary>
     /// Represents a query object for filtering products.
     /// </summary>
-    public class ProductsFilter
+    public class FilterProductsRequest
     {
         /// <summary>
         /// The minimum price for filtering products.

@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
-using ProductWarehouse.Application.Queries;
-using ProductWarehouse.Application.QueryHandlers;
-using ProductWarehouse.Application.Responses;
-using ProductWarehouse.Application.Utilities;
+using ProductWarehouse.Application.Features.Queries.GetProducts;
+using ProductWarehouse.Application.Models;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Domain.Repositories;
+using ProductWarehouse.Infrastructure.Interfaces;
 using Xunit;
 
 namespace ProductWarehouse.UnitTests.ApplicationTests.QueryHandlers
@@ -20,8 +18,6 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.QueryHandlers
             var productRepositoryMock = new Mock<IProductRepository>();
             var mapperMock = new Mock<IMapper>();
             var loggerMock = new Mock<ILogger<GetProductsHandler>>();
-            var keywordHihglighter = new Mock<IKeywordHighlighter>();
-            var commonWordsFinder = new Mock<ICommonWordsFinder>();
 
             var productsQuery = new ProductsQuery
             {
@@ -40,18 +36,18 @@ namespace ProductWarehouse.UnitTests.ApplicationTests.QueryHandlers
             productRepositoryMock.Setup(repo => repo.GetProductsAsync(productsQuery.MinPrice, productsQuery.MaxPrice, productsQuery.Size))
                                  .ReturnsAsync(products);
 
-            mapperMock.Setup(mapper => mapper.Map<IEnumerable<ProductResponse>>(It.IsAny<IEnumerable<Product>>()))
-                      .Returns((IEnumerable<Product> source) => source.Select(p => new ProductResponse { /* map properties */ }));
+            mapperMock.Setup(mapper => mapper.Map<IEnumerable<ProductDto>>(It.IsAny<IEnumerable<Product>>()))
+                      .Returns((IEnumerable<Product> source) => source.Select(p => new ProductDto{ /* map properties */ }));
 
-            var handler = new GetProductsHandler(productRepositoryMock.Object, mapperMock.Object, loggerMock.Object, keywordHihglighter.Object, commonWordsFinder.Object);
+            var handler = new GetProductsHandler(productRepositoryMock.Object, mapperMock.Object, loggerMock.Object);
 
             // Act
             var result = await handler.Handle(productsQuery, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
-            Assert.NotNull(result.Products);
-            Assert.Equal(products.Count(), result.Products.Count());
+            //Assert.NotNull(result.Products);
+            Assert.Equal(products.Count(), result.Count());
         }
 
     }
