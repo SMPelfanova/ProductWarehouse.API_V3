@@ -1,9 +1,8 @@
 ﻿using ProductWarehouse.Domain.Entities;
 
-namespace ProductWarehouse.Infrastructure.Interfaces
+namespace ProductWarehouse.Infrastructure.Interfaces;
+
+public interface IProductRepository
 {
-    public interface IProductRepository
-    {
-        Task<IEnumerable<Product>> GetProductsAsync(decimal? minPrice, decimal? maxPrice, string? size);
-    }
+    Task<IEnumerable<Product>> GetProductsAsync(decimal? minPrice, decimal? maxPrice, string? size);
 }

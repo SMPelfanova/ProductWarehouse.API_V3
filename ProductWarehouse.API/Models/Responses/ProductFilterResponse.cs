@@ -1,10 +1,9 @@
 ﻿using MediatR;
 
-namespace ProductWarehouse.API.Models.Responses
+namespace ProductWarehouse.API.Models.Responses;
+
+public class ProductFilterResponse
 {
-    public class ProductFilterResponse
-    {
-        public FilterResponse Filter { get; set; } = new FilterResponse();
-        public IEnumerable<ProductResponse> Products { get; set; } = Enumerable.Empty<ProductResponse>();
-    }
+    public FilterResponse Filter { get; set; } = new FilterResponse();
+    public IEnumerable<ProductResponse> Products { get; set; } = Enumerable.Empty<ProductResponse>();
 }

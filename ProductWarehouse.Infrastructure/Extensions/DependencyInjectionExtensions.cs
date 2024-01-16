@@ -5,20 +5,19 @@ using ProductWarehouse.Infrastructure.Http;
 using ProductWarehouse.Infrastructure.Interfaces;
 using ProductWarehouse.Infrastructure.Repositories;
 
-namespace ProductWarehouse.Infrastructure.Extensions
+namespace ProductWarehouse.Infrastructure.Extensions;
+
+public static class DependencyInjectionExtensions
 {
-    public static class DependencyInjectionExtensions
+    public static IServiceCollection DependencyRegistration(this IServiceCollection services, IConfiguration config)
     {
-        public static IServiceCollection DependencyRegistration(this IServiceCollection services, IConfiguration config)
-        {
-            services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddTransient<IProductRepository, ProductRepository>();
 
-            services.Configure<MockyClientSettings>(
-                config.GetSection(nameof(MockyClientSettings)));
+        services.Configure<MockyClientSettings>(
+            config.GetSection(nameof(MockyClientSettings)));
 
-            services.AddScoped<HttpClientService>();
+        services.AddScoped<HttpClientService>();
 
-            return services;
-        }
+        return services;
     }
 }

@@ -2,13 +2,12 @@
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Models;
 
-namespace ProductWarehouse.API.Mapping
+namespace ProductWarehouse.API.Mapping;
+
+public class AutoMapperProfile : Profile
 {
-    public class AutoMapperProfile : Profile
+    public AutoMapperProfile()
     {
-        public AutoMapperProfile()
-        {
-            CreateMap<ProductDto, ProductResponse>();
-        }
+        CreateMap<ProductDto, ProductResponse>();
     }
 }

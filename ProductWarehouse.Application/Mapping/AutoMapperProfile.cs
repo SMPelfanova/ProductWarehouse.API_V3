@@ -2,13 +2,12 @@
 using ProductWarehouse.Application.Models;
 using ProductWarehouse.Domain.Entities;
 
-namespace ProductWarehouse.Application.Mapping
+namespace ProductWarehouse.Application.Mapping;
+
+public class AutoMapperProfile : Profile
 {
-    public class AutoMapperProfile : Profile
+    public AutoMapperProfile()
     {
-        public AutoMapperProfile()
-        {
-            CreateMap<Product, ProductDto>();
-        }
+        CreateMap<Product, ProductDto>();
     }
 }
