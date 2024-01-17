@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.Application.Behaviors;
 using ProductWarehouse.Application.Mapping;
@@ -17,6 +18,8 @@ public static class DependencyInjectionExtensions
         });
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
         services.AddAutoMapper(typeof(AutoMapperProfile));
+
+        services.AddValidatorsFromAssembly(assembly);
 
         return services;
     }

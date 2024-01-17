@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ProductWarehouse.Application.Contracts;
@@ -11,18 +12,25 @@ public class GetProductsHandler : IRequestHandler<ProductsQuery, ProductsFilterD
 {
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
+    private readonly IValidator<ProductsQuery> _validator;
     private readonly ILogger<GetProductsHandler> _logger;
 
-    public GetProductsHandler(IProductRepository productRepository, IMapper mapper, ILogger<GetProductsHandler> logger)
+    public GetProductsHandler(IProductRepository productRepository, IMapper mapper, IValidator<ProductsQuery> validator, ILogger<GetProductsHandler> logger)
     {
         _productRepository = productRepository;
         _mapper = mapper;
+        _validator = validator;
         _logger = logger;
     }
 
     public async Task<ProductsFilterDto> Handle(ProductsQuery request, CancellationToken cancellationToken)
     {
-        //add the fluent validation here
+        var result = _validator.Validate(request);
+        if (!result.IsValid)
+        {
+            throw new Exceptions.ValidatorException(result.Errors);
+        }
+
         var products = _productRepository.GetProductsAsync(request.MinPrice, request.MaxPrice, request.Size).Result.ToList();
         if (products.Count <= 0)
         {

@@ -1,10 +1,11 @@
 ﻿namespace ProductWarehouse.UnitTests.API.Controllers;
 
 using AutoMapper;
+using FakeItEasy;
+using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
 using ProductWarehouse.API.Controllers;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
@@ -19,33 +20,32 @@ public class ProductsControllerTests
     public async Task GetProducts_ReturnsNotFound_WhenNoProducts()
     {
         // Arrange
-        var loggerMock = new Mock<ILogger<ProductsController>>();
-        var mediatorMock = new Mock<IMediator>();
-        var mapperMock = new Mock<IMapper>();
+        var loggerMock = A.Fake<ILogger<ProductsController>>();
+        var mediatorMock = A.Fake<IMediator>();
+        var mapperMock = A.Fake<IMapper>();
         
-        var controller = new ProductsController(loggerMock.Object, mediatorMock.Object, mapperMock.Object);
+        var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
 
         // Set up MediatR to return a result with no products
-        mediatorMock.Setup(m => m.Send(It.IsAny<ProductsQuery>(), CancellationToken.None))
-                    .ReturnsAsync(new ProductsFilterDto());
+        A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
+                    .Returns(new ProductsFilterDto());
 
         // Act
         var result = await controller.GetProducts();
 
         // Assert
-        Assert.IsType<NotFoundResult>(result);
+        result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
     public async Task GetProducts_ReturnsOk_WithProducts()
     {
         // Arrange
-        var loggerMock = new Mock<ILogger<ProductsController>>();
-        var mediatorMock = new Mock<IMediator>();
+        var loggerMock = A.Fake<ILogger<ProductsController>>();
+        var mediatorMock = A.Fake<IMediator>();
         var mapperMock = TestStartup.CreateMapper();
-        var controller = new ProductsController(loggerMock.Object, mediatorMock.Object, mapperMock);
+        var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
 
-        // Set up MediatR to return a result with some products
         var products = new List<ProductResponse> {
             new ProductResponse {
                 Description = "Test",
@@ -59,8 +59,8 @@ public class ProductsControllerTests
                 }
             }
         };
-        mediatorMock.Setup(m => m.Send(It.IsAny<ProductsQuery>(), CancellationToken.None))
-                    .ReturnsAsync(new ProductsFilterDto()
+        A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
+                    .Returns(new ProductsFilterDto()
                     {
                         Products = products.Select(productDto => new ProductDto
                         {
@@ -75,17 +75,17 @@ public class ProductsControllerTests
         var result = await controller.GetProducts();
 
         // Assert
-        Assert.IsType<OkObjectResult>(result);
+        result.Should().BeOfType<OkObjectResult>();
         var okResult = Assert.IsType<OkObjectResult>(result);
-        Assert.NotNull(okResult.Value);
+        okResult.Value.Should().NotBeNull();
     }
 
     [Fact]
     public async Task GetProducts_WithFilter_ReturnsOk_WithFilteredProducts()
     {
         // Arrange
-        var loggerMock = new Mock<ILogger<ProductsController>>();
-        var mediatorMock = new Mock<IMediator>();
+        var loggerMock = A.Fake<ILogger<ProductsController>>();
+        var mediatorMock = A.Fake<IMediator>();
         var mapperMock = TestStartup.CreateMapper();
 
         var searchFilter = new ProductsQuery {Highlight = "string", MaxPrice = 13, MinPrice = 1, Size = "Small" };
@@ -102,8 +102,8 @@ public class ProductsControllerTests
                     "Large"
                 }
         }};
-        mediatorMock.Setup(m => m.Send(It.IsAny<ProductsQuery>(), CancellationToken.None))
-                   .ReturnsAsync(new ProductsFilterDto
+        A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
+                   .Returns(new ProductsFilterDto
                    {
                        Products = filteredProducts.Select(productDto => new ProductDto
                        {
@@ -114,14 +114,14 @@ public class ProductsControllerTests
                        })
                    });
            
-        var controller = new ProductsController(loggerMock.Object, mediatorMock.Object, mapperMock);
+        var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
 
         // Act
         var result = await controller.GetProducts(new FilterProductsRequest { Size = searchFilter.Size, MinPrice = searchFilter.MinPrice, MaxPrice = searchFilter.MaxPrice, Highlight = searchFilter.Highlight});
 
         // Assert
-        Assert.IsType<OkObjectResult>(result);
+        result.Should().BeOfType<OkObjectResult>();
         var okResult = Assert.IsType<OkObjectResult>(result);
-        Assert.NotNull(okResult.Value);
+        okResult.Value.Should().NotBeNull();
     }
 }

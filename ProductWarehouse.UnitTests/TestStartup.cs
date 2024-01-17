@@ -2,18 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.API.Mapping;
 
-namespace ProductWarehouse.UnitTests
+namespace ProductWarehouse.UnitTests;
+
+public class TestStartup
 {
-    public class TestStartup
+    public static IMapper CreateMapper()
     {
-        public static IMapper CreateMapper()
-        {
-            var services = new ServiceCollection();
+        var services = new ServiceCollection();
 
-            services.AddAutoMapper(typeof(AutoMapperProfile), typeof(Application.Mapping.AutoMapperProfile));
+        services.AddAutoMapper(typeof(AutoMapperProfile), typeof(Application.Mapping.AutoMapperProfile));
 
-            var serviceProvider = services.BuildServiceProvider();
-            return serviceProvider.GetRequiredService<IMapper>();
-        }
+        var serviceProvider = services.BuildServiceProvider();
+        return serviceProvider.GetRequiredService<IMapper>();
     }
 }

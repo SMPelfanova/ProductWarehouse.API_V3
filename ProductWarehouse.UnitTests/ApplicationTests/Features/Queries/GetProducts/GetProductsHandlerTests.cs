@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using Moq;
+﻿using FakeItEasy;
+using FluentAssertions;
+using FluentValidation;
+using Microsoft.Extensions.Logging;
 using ProductWarehouse.Application.Contracts;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Domain.Entities;
@@ -13,9 +15,11 @@ public class GetProductsHandlerTests
     public async Task Handle_ReturnsExpectedResponse()
     {
         // Arrange
-        var productRepositoryMock = new Mock<IProductRepository>();
+        var productRepositoryMock = A.Fake<IProductRepository>();
+        var validatorMock = A.Fake<IValidator<ProductsQuery>>();
+        A.CallTo(() => validatorMock.Validate(A<ProductsQuery>._)).Returns(new FluentValidation.Results.ValidationResult());
         var mapperMock = TestStartup.CreateMapper();
-        var loggerMock = new Mock<ILogger<GetProductsHandler>>();
+        var loggerMock = A.Fake<ILogger<GetProductsHandler>>();
 
         var productsQuery = new ProductsQuery
         {
@@ -31,18 +35,18 @@ public class GetProductsHandlerTests
             new Product { Title = "Test 2", Description = "test 2", Price = 10, Sizes = new List<string>{ "Medium" } }
         };
 
-        productRepositoryMock.Setup(repo => repo.GetProductsAsync(productsQuery.MinPrice, productsQuery.MaxPrice, productsQuery.Size))
-                             .ReturnsAsync(products);
+        A.CallTo(() => productRepositoryMock.GetProductsAsync(productsQuery.MinPrice, productsQuery.MaxPrice, productsQuery.Size))
+                             .Returns(products);
 
-        var handler = new GetProductsHandler(productRepositoryMock.Object, mapperMock, loggerMock.Object);
+        var handler = new GetProductsHandler(productRepositoryMock, mapperMock, validatorMock, loggerMock);
 
         // Act
         var result = await handler.Handle(productsQuery, CancellationToken.None);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.NotNull(result.Products);
-        Assert.Equal(products.Count(), result.Products.Count());
+        result.Should().NotBeNull();
+        result.Products.Should().NotBeNull().And.HaveCount(2);
+        products.Count().Should().Be(result.Products.Count());
     }
 
 }
