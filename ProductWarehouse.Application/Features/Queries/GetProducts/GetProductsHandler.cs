@@ -1,59 +1,45 @@
-﻿namespace ProductWarehouse.Application.Features.Queries.GetProducts;
-
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ProductWarehouse.Application.Contracts;
+using ProductWarehouse.Application.Extensions;
 using ProductWarehouse.Application.Models;
-using ProductWarehouse.Infrastructure.Interfaces;
 
-public class GetProductsHandler : IRequestHandler<ProductsQuery, IEnumerable<ProductDto>>
+namespace ProductWarehouse.Application.Features.Queries.GetProducts;
+
+public class GetProductsHandler : IRequestHandler<ProductsQuery, ProductsFilterDto>
+{
+    private readonly IProductRepository _productRepository;
+    private readonly IMapper _mapper;
+    private readonly ILogger<GetProductsHandler> _logger;
+
+    public GetProductsHandler(IProductRepository productRepository, IMapper mapper, ILogger<GetProductsHandler> logger)
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
-        private readonly ILogger<GetProductsHandler> _logger;
+        _productRepository = productRepository;
+        _mapper = mapper;
+        _logger = logger;
+    }
 
-        public GetProductsHandler(IProductRepository productRepository, IMapper mapper, ILogger<GetProductsHandler> logger)
+    public async Task<ProductsFilterDto> Handle(ProductsQuery request, CancellationToken cancellationToken)
+    {
+        //add the fluent validation here
+        var products = _productRepository.GetProductsAsync(request.MinPrice, request.MaxPrice, request.Size).Result.ToList();
+        if (products.Count <= 0)
         {
-            _productRepository = productRepository;
-            _mapper = mapper;
-            _logger = logger;
+            _logger.LogInformation($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
+            return new ProductsFilterDto();
         }
 
-        public async Task<IEnumerable<ProductDto>> Handle(ProductsQuery request, CancellationToken cancellationToken)
+        var productFilter = _mapper.Map<ProductsFilterDto>(products);
+
+        if (!string.IsNullOrEmpty(request.Highlight))
         {
-            var products = _productRepository.GetProductsAsync(request.MinPrice, request.MaxPrice, request.Size).Result.ToList();
-            if (products.Count <= 0)
+            foreach (var product in products)
             {
-                _logger.LogInformation("No products found for filter: ");
-                return null;
+                product.Description = product.Description.HighlightKeywords(request.Highlight);
             }
-            //var response = new ProductFilterResponse()
-            //{
-            //    Products = _mapper.Map<IEnumerable<ProductResponse>>(products),
-            //    Filter = new FilterResponse()
-            //    {
-            //        MinPrice = products.Min(p => p.Price),
-            //        MaxPrice = products.Max(p => p.Price),
-            //        Sizes = products.SelectMany(o => o.Sizes).Distinct().ToArray(),
-            //        CommonWords = _commonWordsFinder.FindMostCommonWords(products)
-            //    }
-            //};
-
-            if (!string.IsNullOrEmpty(request.Highlight))
-            {
-               // HighlightKeywords(response.Products, request.Highlight);
-            }
-
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
         }
 
-        //private void HighlightKeywords(IEnumerable<ProductResponse> products, string highlight)
-        //{
-        //    foreach (var product in products)
-        //    {
-        //        product.Description = _keywordHighlighter.HighlightKeywords(product.Description, highlight);
-        //    }
-        //}
-
-   
+        return productFilter;
+    }
 }

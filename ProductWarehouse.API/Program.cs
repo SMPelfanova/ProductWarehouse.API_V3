@@ -2,6 +2,8 @@ using ProductWarehouse.Application.Extensions;
 using Serilog;
 using System.Reflection;
 using ProductWarehouse.Infrastructure.Extensions;
+using ProductWarehouse.API.Mapping;
+using ProductWarehouse.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.DependencyRegistration();
 builder.Services.DependencyRegistration(builder.Configuration);
-
+builder.Services.DependencyRegistrationPersistence();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

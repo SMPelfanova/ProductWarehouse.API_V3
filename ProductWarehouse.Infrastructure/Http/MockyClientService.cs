@@ -1,16 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Infrastructure.Repositories;
 
 namespace ProductWarehouse.Infrastructure.Http;
 
-public class HttpClientService
+public class MockyClientService
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<ProductRepository> _logger;
+    private readonly ILogger<MockyClientService> _logger;
 
-    public HttpClientService(HttpClient httpClient, ILogger<ProductRepository> logger)
+    public MockyClientService(HttpClient httpClient, ILogger<MockyClientService> logger)
     {
         _httpClient = httpClient;
         _logger = logger;

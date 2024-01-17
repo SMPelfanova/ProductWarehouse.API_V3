@@ -1,6 +1,6 @@
 ﻿using ProductWarehouse.Domain.Entities;
 
-namespace ProductWarehouse.Infrastructure.Interfaces;
+namespace ProductWarehouse.Application.Contracts;
 
 public interface IProductRepository
 {

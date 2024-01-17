@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWarehouse.Infrastruc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWarehouse.Application", "ProductWarehouse.Application\ProductWarehouse.Application.csproj", "{75B5812A-E1B7-43E3-9C8C-E48DE2154619}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductWarehouse.UnitTests", "ProductWarehouse.UnitTests\ProductWarehouse.UnitTests.csproj", "{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductWarehouse.UnitTests", "ProductWarehouse.UnitTests\ProductWarehouse.UnitTests.csproj", "{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductWarehouse.Persistence", "ProductWarehouse.Persistence\ProductWarehouse.Persistence.csproj", "{186FCE86-8058-4D2E-AB9B-68EBA43CCCE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C05E1C2-55C9-4EBE-BB7C-22D0EE6D6518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{186FCE86-8058-4D2E-AB9B-68EBA43CCCE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{186FCE86-8058-4D2E-AB9B-68EBA43CCCE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{186FCE86-8058-4D2E-AB9B-68EBA43CCCE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{186FCE86-8058-4D2E-AB9B-68EBA43CCCE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

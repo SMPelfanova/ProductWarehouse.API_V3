@@ -4,31 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
-using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers;
 
 /// <summary>
 /// Controller for managing product-related operations.
 /// </summary>
-[ApiController]
-[Route("api/[controller]")]
-public class ProductsController : ControllerBase
+public class ProductsController : BaseController
 {
-    private readonly ILogger<ProductsController> _logger;
-    private readonly IMediator _mediator;
-    private readonly IMapper _mapper;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ProductsController"/> class.
     /// </summary>
     /// <param name="logger">The logger.</param>
     /// <param name="mediator">The mediator.</param>
+    /// <param name="mapper">The mapper.</param>
     public ProductsController(ILogger<ProductsController> logger, IMediator mediator, IMapper mapper)
+         : base(logger, mediator, mapper)
     {
-        _logger = logger;
-        _mediator = mediator;
-        _mapper = mapper;
     }
 
     /// <summary>
@@ -38,17 +30,19 @@ public class ProductsController : ControllerBase
     /// <response code="200">Returns list of products</response>
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<Product>), 200)]
+    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), 200)]
     [ProducesResponseType(404)]
     public async Task<ActionResult> GetProducts()
     {
         var result = await _mediator.Send(new ProductsQuery());
-        if (result == null || !result.Any())
+        var products = _mapper.Map<IEnumerable<ProductResponse>>(result.Products);
+        if (products == null || !products.Any())
         {
             return NotFound();
         }
 
-        return Ok(result);
+
+        return Ok(products);
     }
 
     /// <summary>
@@ -60,13 +54,19 @@ public class ProductsController : ControllerBase
     [HttpGet("filter")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(ProductFilterResponse), 200)]
+    [ProducesResponseType(404)]
     public async Task<ActionResult> GetProducts([FromQuery] FilterProductsRequest productsFilter)
     {
         var productsQueryMap = _mapper.Map<ProductsQuery>(productsFilter);
         var result = await _mediator.Send(productsQueryMap);
+        var response = _mapper.Map<ProductFilterResponse>(result);
 
+        if (response == null || !response.Products.Any())
+        {
+            return NotFound();
+        }
 
-        return Ok(result);
+        return Ok(response);
     }
  
 }

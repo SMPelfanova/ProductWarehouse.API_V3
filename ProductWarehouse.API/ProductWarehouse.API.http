@@ -1,6 +1,11 @@
-@ProductWarehouse.API_HostAddress = http://localhost:5068
+@ProductWarehouse.API_HostAddress = https://localhost:7092
 
-GET {{ProductWarehouse.API_HostAddress}}/weatherforecast/
+GET {{ProductWarehouse.API_HostAddress}}/api/Products
 Accept: application/json
+
+###
+
+GET {{ProductWarehouse.API_HostAddress}}/api/Products/filter?MinPrice=10&MaxPrice=89&Highlight=red,blue&Size=Medium
+
 
 ###

@@ -3,10 +3,4 @@ using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProducts;
 
-public class ProductsQuery : IRequest<IEnumerable<ProductDto>>
-{
-    public decimal? MinPrice { get; set; } = 0;
-    public decimal? MaxPrice { get; set; } = 0;
-    public string Size { get; set; } = string.Empty;
-    public string Highlight { get; set; } = string.Empty;
-}
+public record ProductsQuery(decimal? MinPrice = 0, decimal? MaxPrice = 0, string Size = "", string Highlight = "") : IRequest<ProductsFilterDto>;

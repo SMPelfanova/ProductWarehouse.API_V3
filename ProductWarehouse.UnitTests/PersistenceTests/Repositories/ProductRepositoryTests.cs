@@ -1,11 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿namespace ProductWarehouse.UnitTests.PersistenceTests.Repositories;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Infrastructure.Http;
-using ProductWarehouse.Infrastructure.Repositories;
+using ProductWarehouse.Persistence.Repositories;
 using System.Net;
 using Xunit;
 
@@ -20,8 +22,8 @@ public class ProductRepositoryTests
         var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
         var httpClientMock = new HttpClient(httpMessageHandlerMock.Object);
         var configurationMock = new Mock<IConfiguration>();
-        var loggerMock = new Mock<ILogger<ProductRepository>>();
-        var httpClient = new HttpClientService(httpClientMock, loggerMock.Object);
+        var loggerMock = new Mock<ILogger<MockyClientService>>();
+        var httpClient = new MockyClientService(httpClientMock, loggerMock.Object);
 
         configurationMock.Setup(x => x.GetSection("MockyClient:BaseUrl").Value)
                          .Returns(baseUrl);
@@ -69,8 +71,8 @@ public class ProductRepositoryTests
         var httpMessageHandlerMock = new Mock<HttpMessageHandler>();
         var httpClientMock = new HttpClient(httpMessageHandlerMock.Object);
         var configurationMock = new Mock<IConfiguration>();
-        var loggerMock = new Mock<ILogger<ProductRepository>>();
-        var httpClient = new HttpClientService(httpClientMock, loggerMock.Object);
+        var loggerMock = new Mock<ILogger<MockyClientService>>();
+        var httpClient = new MockyClientService(httpClientMock, loggerMock.Object);
 
         configurationMock.Setup(x => x.GetSection("MockyClient:BaseUrl").Value)
                     .Returns(baseUrl);

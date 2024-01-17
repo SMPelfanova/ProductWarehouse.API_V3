@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace ProductWarehouse.API.Models.Responses;
+﻿namespace ProductWarehouse.API.Models.Responses;
 
 public class ProductFilterResponse
 {
