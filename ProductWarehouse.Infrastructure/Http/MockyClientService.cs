@@ -15,7 +15,7 @@ public class MockyClientService
         _logger = logger;
     }
 
-    public async Task<List<Product>> GetProductListAsync(Uri productUri)
+    public virtual async Task<List<Product>> GetProductListAsync(Uri productUri)
     {
         var jsonString = await GetStringAsync(productUri);
         if (!string.IsNullOrEmpty(jsonString))
