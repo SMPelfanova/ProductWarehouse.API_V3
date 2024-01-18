@@ -2,11 +2,12 @@
 using AutoFixture;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Infrastructure.Http;
 using ProductWarehouse.Persistence.Repositories;
 using Xunit;
+using Microsoft.Extensions.Options;
+using ProductWarehouse.Infrastructure.Configuration;
 
 namespace ProductWarehouse.UnitTests.Persistence.Repositories
 {
@@ -14,33 +15,50 @@ namespace ProductWarehouse.UnitTests.Persistence.Repositories
     {
         [Fact]
         public async Task GetProductsAsync_ReturnsAllProducts_WhenNoFilter()
-        {
-            string baseUrl = "http://example.com";
-            string productUrl = "/products";
+        {   
             // Arrange
             var fixture = new Fixture();
             fixture.Customize(new AutoMoqCustomization());
+            var httpClientServiceMock = A.Fake<MockyClientService>();
+            var mockOptions = A.Fake<IOptions<MockyClientConfiguration>>();
+            A.CallTo(() => mockOptions.Value).Returns(new MockyClientConfiguration
+            {
+                BaseUrl = "http://example.com",
+                ProductUrl = "/products"
+            });
 
-            var httpClientServiceMock = fixture.Freeze<MockyClientService>();
-            var fakeConfigSection = A.Fake<IConfigurationSection>();
-            A.CallTo(() => fakeConfigSection["BaseUrl"])
-                .Returns(baseUrl);
-
-            var fakeConfig = A.Fake<IConfiguration>();
-            A.CallTo(() => fakeConfig.GetSection("MockyClient"))
-                .Returns(fakeConfigSection);
-
-            //var configurationMock = A.Fake<IConfigurationRoot>();
-            //A.CallTo(() => configurationMock.GetSection("MockyClient:BaseUrl").Value).Returns(baseUrl);
-            //A.CallTo(() => configurationMock.GetSection("MockyClient:ProductUrl").Value).Returns(productUrl);
-
-            var repository = new ProductRepository(httpClientServiceMock, fakeConfig);
-
-            Uri baseUri = new Uri(baseUrl);
-            Uri productUri = new Uri(baseUri, productUrl);
             var products = fixture.CreateMany<Product>(5);
+            Uri uri = new Uri("http://example.com/products");
+            A.CallTo(() => httpClientServiceMock.GetProductListAsync(uri)).Returns(products.ToList());
 
-            A.CallTo(() => httpClientServiceMock.GetProductListAsync(productUri)).Returns(products.ToList());
+            var repository = new ProductRepository(httpClientServiceMock, mockOptions);
+
+            // Act
+            var result = await repository.GetProductsAsync(0, 0, string.Empty);
+
+            // Assert
+            result.Should().BeEquivalentTo(products);
+        }
+
+        [Fact]
+        public async Task GetProductsAsync_ReturnsNoResult()
+        {
+            // Arrange
+            var fixture = new Fixture();
+            fixture.Customize(new AutoMoqCustomization());
+            var httpClientServiceMock = A.Fake<MockyClientService>();
+            var mockOptions = A.Fake<IOptions<MockyClientConfiguration>>();
+            A.CallTo(() => mockOptions.Value).Returns(new MockyClientConfiguration
+            {
+                BaseUrl = "http://example.com",
+                ProductUrl = "/products"
+            });
+
+            var products = fixture.CreateMany<Product>(0);
+            Uri uri = new Uri("http://example.com/products");
+            A.CallTo(() => httpClientServiceMock.GetProductListAsync(uri)).Returns(products.ToList());
+
+            var repository = new ProductRepository(httpClientServiceMock, mockOptions);
 
             // Act
             var result = await repository.GetProductsAsync(null, null, null);

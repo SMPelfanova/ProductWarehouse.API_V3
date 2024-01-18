@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Infrastructure.Configuration;
 
 namespace ProductWarehouse.Infrastructure.Http;
 
@@ -15,9 +17,9 @@ public class MockyClientService
         _logger = logger;
     }
 
-    public virtual async Task<List<Product>> GetProductListAsync(Uri productUri)
+    public virtual async Task<List<Product>> GetProductListAsync(Uri _productUri)
     {
-        var jsonString = await GetStringAsync(productUri);
+        var jsonString = await GetStringAsync(_productUri);
         if (!string.IsNullOrEmpty(jsonString))
         {
             _logger.LogInformation($"Response from mocky.io: {jsonString}");

@@ -13,6 +13,7 @@ public class TestStartup
         services.AddAutoMapper(typeof(AutoMapperProfile), typeof(Application.Mapping.AutoMapperProfile));
 
         var serviceProvider = services.BuildServiceProvider();
+
         return serviceProvider.GetRequiredService<IMapper>();
     }
 }

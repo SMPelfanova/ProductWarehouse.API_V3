@@ -9,9 +9,8 @@ public static class DependencyInjectionExtensions
 {
     public static IServiceCollection DependencyRegistration(this IServiceCollection services, IConfiguration config)
     {
-        services.Configure<MockyClientSettings>(
-            config.GetSection(nameof(MockyClientSettings)));
-
+        services.Configure<MockyClientConfiguration>(
+            config.GetSection(nameof(MockyClientConfiguration)));
         services.AddScoped<MockyClientService>();
 
         return services;

@@ -1,6 +1,6 @@
 ﻿namespace ProductWarehouse.Infrastructure.Configuration;
 
-public class MockyClientSettings
+public class MockyClientConfiguration
 {
     public string BaseUrl { get; set; } = string.Empty;
     public string ProductUrl { get; set; } = string.Empty;
