@@ -3,9 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
-using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
-using System.Net;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -32,8 +30,8 @@ public class ProductsController : BaseController
     /// <response code="200">Returns list of products</response>
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), (int)HttpStatusCode.OK)]
-    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetProducts()
     {
         var result = await _mediator.Send(new ProductsQuery());
@@ -55,32 +53,20 @@ public class ProductsController : BaseController
     /// <response code="200">Returns filtered products</response>
     [HttpGet("filter")]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(ProductFilterResponse), (int)HttpStatusCode.OK)]
-    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ProductFilterResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetProducts([FromQuery] FilterProductsRequest productsFilter)
     {
-        try
+        var productsQueryMap = _mapper.Map<ProductsQuery>(productsFilter);
+        var result = await _mediator.Send(productsQueryMap);
+        var response = _mapper.Map<ProductFilterResponse>(result);
+
+        if (response == null || !response.Products.Any())
         {
-            var productsQueryMap = _mapper.Map<ProductsQuery>(productsFilter);
-            var result = await _mediator.Send(productsQueryMap);
-            var response = _mapper.Map<ProductFilterResponse>(result);
-
-            if (response == null || !response.Products.Any())
-            {
-                return NotFound();
-            }
-
-            return Ok(response);
+            return NotFound();
         }
-        catch (ValidatorException ex)
-        {
-            var validationErrors = ex.Errors.Select(error => new
-            {
-                Property = error.PropertyName,
-                Message = error.ErrorMessage
-            });
 
-            return BadRequest(new { Errors = validationErrors });
-        }
+        return Ok(response);
+
     }
 }

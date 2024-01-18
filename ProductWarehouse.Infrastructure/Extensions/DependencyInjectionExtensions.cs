@@ -7,10 +7,10 @@ namespace ProductWarehouse.Infrastructure.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection DependencyRegistration(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<MockyClientOptions>(
-            config.GetSection(MockyClientOptions.MockyClient));
+            config.GetSection(nameof(MockyClientOptions.MockyClient)));
 
         services.AddScoped<MockyClientService>();
 

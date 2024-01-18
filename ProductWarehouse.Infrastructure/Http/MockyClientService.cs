@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Infrastructure.Configuration;
+using ProductWarehouse.Infrastructure.Logging;
 
 namespace ProductWarehouse.Infrastructure.Http;
 
@@ -27,7 +28,7 @@ public class MockyClientService
         var jsonString = await GetStringAsync(_productUri);
         if (!string.IsNullOrEmpty(jsonString))
         {
-            _logger.LogInformation($"Response from mocky.io: {jsonString}");
+            _logger.LogInformationMessage($"Response from mocky.io: {jsonString}");
             try
             {
                 var products = JsonConvert.DeserializeObject<List<Product>>(jsonString);

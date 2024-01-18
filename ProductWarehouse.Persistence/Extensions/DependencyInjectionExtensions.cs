@@ -6,9 +6,9 @@ namespace ProductWarehouse.Persistence.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection DependencyRegistrationPersistence(this IServiceCollection services)
+    public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
-        services.AddTransient<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
 
         return services;
     }

@@ -13,7 +13,6 @@ using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Models;
-using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.UnitTests;
 using Xunit;
 
@@ -26,7 +25,7 @@ public class ProductsControllerTests
         var loggerMock = A.Fake<ILogger<ProductsController>>();
         var mediatorMock = A.Fake<IMediator>();
         var mapperMock = A.Fake<IMapper>();
-        
+
         var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
 
         A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
@@ -44,7 +43,7 @@ public class ProductsControllerTests
     {
         // Arrange
         var fixture = new Fixture();
-        fixture.Customize(new AutoMoqCustomization()); 
+        fixture.Customize(new AutoMoqCustomization());
         var loggerMock = A.Fake<ILogger<ProductsController>>();
         var mediatorMock = A.Fake<IMediator>();
         var mapperMock = TestStartup.CreateMapper();
@@ -77,20 +76,20 @@ public class ProductsControllerTests
         var mediatorMock = A.Fake<IMediator>();
         var mapperMock = TestStartup.CreateMapper();
 
-        var searchFilter = new ProductsQuery {Highlight = "string", MaxPrice = 13, MinPrice = 1, Size = "Small" };
+        var searchFilter = new ProductsQuery { Highlight = "string", MaxPrice = 13, MinPrice = 1, Size = "Small" };
         var filteredProducts = fixture.CreateMany<ProductResponse>(2);
-       
+
         var products = fixture.CreateMany<ProductDto>(2);
         A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
                    .Returns(new ProductsFilterDto
                    {
                        Products = products
                    });
-           
+
         var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
 
         // Act
-        var result = await controller.GetProducts(new FilterProductsRequest { Size = searchFilter.Size, MinPrice = searchFilter.MinPrice, MaxPrice = searchFilter.MaxPrice, Highlight = searchFilter.Highlight});
+        var result = await controller.GetProducts(new FilterProductsRequest { Size = searchFilter.Size, MinPrice = searchFilter.MinPrice, MaxPrice = searchFilter.MaxPrice, Highlight = searchFilter.Highlight });
 
         // Assert
         result.Should().BeOfType<OkObjectResult>();

@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using ProductWarehouse.Application.Contracts;
+﻿using ProductWarehouse.Application.Contracts;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Infrastructure.Configuration;
 using ProductWarehouse.Infrastructure.Http;
 
 namespace ProductWarehouse.Persistence.Repositories;
@@ -10,7 +7,6 @@ namespace ProductWarehouse.Persistence.Repositories;
 public class ProductRepository : IProductRepository
 {
     private readonly MockyClientService _httpClientService;
-
 
     public ProductRepository(MockyClientService httpClientService)
     {

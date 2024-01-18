@@ -15,9 +15,7 @@ public class StringExtensionsTests
     [InlineData(null, null, null)]
     public void HighlightKeywords_ShouldHighlightKeywords(string inputText, string highlightKeywords, string expectedOutput)
     {
-        // Arrange
-
-        // Act
+        // Arrange && Act
         var result = inputText.HighlightKeywords(highlightKeywords);
 
         // Assert

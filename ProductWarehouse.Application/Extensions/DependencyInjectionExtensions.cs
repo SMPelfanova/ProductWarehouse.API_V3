@@ -8,7 +8,7 @@ namespace ProductWarehouse.Application.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection DependencyRegistration(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         var assembly = typeof(DependencyInjectionExtensions).Assembly;
 

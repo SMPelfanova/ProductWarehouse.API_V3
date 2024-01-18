@@ -10,11 +10,23 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<ProductDto, ProductResponse>();
+        MapFromRequestToQueriesOrCommands();
+        MapFromDtoToResponse();
+       
+    }
+
+    private void MapFromRequestToQueriesOrCommands()
+    {
         CreateMap<FilterProductsRequest, ProductsQuery>();
+    }
+
+    private void MapFromDtoToResponse()
+    {
+        CreateMap<ProductDto, ProductResponse>();
+
         CreateMap<ProductsFilterDto, ProductFilterResponse>()
-           .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products))
-           .ForMember(dest => dest.Filter, opt => opt.MapFrom(src => src));
+          .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products))
+          .ForMember(dest => dest.Filter, opt => opt.MapFrom(src => src));
 
         CreateMap<ProductsFilterDto, FilterResponse>()
            .ForMember(dest => dest.MinPrice, opt => opt.MapFrom(src => src.MinPrice))

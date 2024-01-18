@@ -4,15 +4,19 @@ using System.Reflection;
 using ProductWarehouse.Infrastructure.Extensions;
 using ProductWarehouse.API.Mapping;
 using ProductWarehouse.Persistence.Extensions;
+using ProductWarehouse.API.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
-builder.Services.DependencyRegistration();
-builder.Services.DependencyRegistration(builder.Configuration);
-builder.Services.DependencyRegistrationPersistence();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddPersistence();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -45,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.UseAuthorization();
 
