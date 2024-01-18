@@ -10,22 +10,16 @@ namespace ProductWarehouse.Persistence.Repositories;
 public class ProductRepository : IProductRepository
 {
     private readonly MockyClientService _httpClientService;
-    private readonly MockyClientConfiguration _config;
 
-    private readonly Uri _productUri;
 
-    public ProductRepository(MockyClientService httpClientService, IOptions<MockyClientConfiguration> config)
+    public ProductRepository(MockyClientService httpClientService)
     {
         _httpClientService = httpClientService;
-        _config = config.Value;
-
-        Uri baseUri = new Uri(config.Value.BaseUrl);
-        _productUri = new Uri(baseUri, config.Value.ProductUrl);
     }
 
     public async Task<IEnumerable<Product>> GetProductsAsync(decimal? minPrice, decimal? maxPrice, string? size)
     {
-        var products = await _httpClientService.GetProductListAsync(_productUri);
+        var products = await _httpClientService.GetProductListAsync();
 
         products = products.Where(x => (minPrice == 0 || x.Price >= minPrice))
             .Where(x => (maxPrice == 0 || x.Price <= maxPrice))

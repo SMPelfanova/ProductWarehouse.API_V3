@@ -11,13 +11,18 @@ public class MockyClientService
     private readonly HttpClient _httpClient;
     private readonly ILogger<MockyClientService> _logger;
 
-    public MockyClientService(HttpClient httpClient, ILogger<MockyClientService> logger)
+    private readonly Uri _productUri;
+
+    public MockyClientService(HttpClient httpClient, ILogger<MockyClientService> logger, IOptions<MockyClientOptions> config)
     {
         _httpClient = httpClient;
         _logger = logger;
+
+        Uri baseUri = new Uri(config.Value.BaseUrl);
+        _productUri = new Uri(baseUri, config.Value.ProductUrl);
     }
 
-    public virtual async Task<List<Product>> GetProductListAsync(Uri _productUri)
+    public virtual async Task<List<Product>> GetProductListAsync()
     {
         var jsonString = await GetStringAsync(_productUri);
         if (!string.IsNullOrEmpty(jsonString))
