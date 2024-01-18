@@ -5,8 +5,9 @@ The API endpoint allows users to retrieve products and apply filters, with the a
 This .NET Core solution implements a clean architecture and consist of following projects:
 - ProductWarehouse.API
 - ProductWarehouse.Application
-- ProductWarehouse.Infrastructure
 - ProductWarehouse.Domain
+- ProductWarehouse.Infrastructure
+- ProductWarehouse.Persistence
 - ProductWarehouse.UnitTests
 
 
@@ -14,10 +15,13 @@ This .NET Core solution implements a clean architecture and consist of following
 
 - ASP.NET Core
 - C#
+- Repository, Dependency Injection
 - MediatR and CQRS
-- Logging with Serilog
-- HttpClient for fetching data from the Mocky.io API
-- xUnit for unit testing
+- AutoMapper, FluentValidation
+- Serilog and high-performance logging optimisation
+- xUnit, AutoFixture, FakeItEasy, FluentAssertions for unit testing
+- Swagger UI for documentation
+
 
 ### Endpoint
 
