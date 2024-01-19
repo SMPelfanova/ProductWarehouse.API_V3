@@ -10,6 +10,39 @@ This .NET Core solution implements a clean architecture and consist of following
 - ProductWarehouse.Persistence
 - ProductWarehouse.UnitTests
 
+## Technologies Used
+
+### Core Framework and Language
+- **ASP.NET Core**
+  - Core framework for building cross-platform, high-performance web applications.
+- **C#**
+
+### Architectural Patterns and Practices
+- **Repository Pattern**
+- **Dependency Injection (DI)**
+
+### Mediation and CQRS
+- **MediatR**
+  - Library for implementing the Mediator pattern in .NET applications.
+- **CQRS (Command Query Responsibility Segregation)**
+  - Design pattern for separating read and write operations.
+
+### Object Mapping and Validation
+- **AutoMapper**
+  - Library for object-to-object mapping, simplifying DTO creation.
+- **FluentValidation**
+  - Library for building strongly-typed validation rules.
+
+### Exception Handling
+- **Global Exception Handler**
+  - Custom exception handling logic using ASP.NET Core's `IExceptionHandler`.
+
+
+### Logging
+- **Serilog**
+  - Logging library for .NET applications.
+- **High-Performance Logging Optimization**
+  - Custom optimizations for improving logging performance.
 
 ## Technologies Used
 
