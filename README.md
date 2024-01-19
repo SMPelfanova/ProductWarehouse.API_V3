@@ -14,7 +14,6 @@ This .NET Core solution implements a clean architecture and consist of following
 
 ### Core Framework and Language
 - **ASP.NET Core**
-  - Core framework for building cross-platform, high-performance web applications.
 - **C#**
 
 ### Architectural Patterns and Practices
@@ -44,19 +43,22 @@ This .NET Core solution implements a clean architecture and consist of following
 - **High-Performance Logging Optimization**
   - Custom optimizations for improving logging performance.
 
-## Technologies Used
+### Testing
+- **xUnit**
+  - Testing framework for unit testing .NET applications.
+- **AutoFixture**
+  - Library for simplifying the creation of test objects.
+- **FakeItEasy**
+  - Library for creating fake objects and mocking in unit tests.
+- **FluentAssertions**
+  - Library for fluent assertion syntax in unit tests.
 
-- ASP.NET Core
-- C#
-- Repository, Dependency Injection
-- MediatR and CQRS
-- AutoMapper, FluentValidation
-- Serilog and high-performance logging optimisation
-- xUnit, AutoFixture, FakeItEasy, FluentAssertions for unit testing
-- Swagger UI for documentation
+### Documentation
+- **Swagger UI**
+  - Tool for documenting and visualizing APIs.
 
 
-### Endpoint
+## Endpoint
 
 - **GET products**
   
@@ -73,7 +75,7 @@ This .NET Core solution implements a clean architecture and consist of following
 
   Example: `/filter?MinPrice=10&MaxPrice=89&Highlight=red,blue&Size=Medium`
 
-### Responses
+## Responses
 
 - All products if the request has no parameters.
 - A filtered subset of products if the request has filter parameters.
