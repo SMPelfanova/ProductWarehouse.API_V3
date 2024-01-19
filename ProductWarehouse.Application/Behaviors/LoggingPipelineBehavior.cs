@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using ProductWarehouse.Infrastructure.Logging;
+using ProductWarehouse.Application.Logging;
 
 namespace ProductWarehouse.Application.Behaviors;
 

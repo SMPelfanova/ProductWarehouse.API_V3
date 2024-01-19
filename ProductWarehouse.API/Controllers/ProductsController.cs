@@ -41,7 +41,6 @@ public class ProductsController : BaseController
             return NotFound();
         }
 
-
         return Ok(products);
     }
 
@@ -67,6 +66,5 @@ public class ProductsController : BaseController
         }
 
         return Ok(response);
-
     }
 }

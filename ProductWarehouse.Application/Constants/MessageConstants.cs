@@ -1,6 +1,6 @@
 ﻿namespace ProductWarehouse.Application.Constants;
 
-public class MessageConstants
+public static class MessageConstants
 {
     public const string MinPriceValidationMessage = "MinPrice must be a non-negative value.";
     public const string MaxPriceValidationMessage = "MaxPrice must be a non-negative value.";

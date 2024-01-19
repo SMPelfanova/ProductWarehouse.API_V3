@@ -12,7 +12,6 @@ public class AutoMapperProfile : Profile
     {
         MapFromRequestToQueriesOrCommands();
         MapFromDtoToResponse();
-       
     }
 
     private void MapFromRequestToQueriesOrCommands()

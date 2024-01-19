@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProductWarehouse.Application\ProductWarehouse.Application.csproj" />
-    <ProjectReference Include="..\ProductWarehouse.Infrastructure\ProductWarehouse.Infrastructure.csproj" />
     <ProjectReference Include="..\ProductWarehouse.Persistence\ProductWarehouse.Persistence.csproj" />
   </ItemGroup>
 

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Infrastructure.Configuration;
-using ProductWarehouse.Infrastructure.Logging;
+using ProductWarehouse.Application.Logging;
 
 namespace ProductWarehouse.Infrastructure.Http;
 

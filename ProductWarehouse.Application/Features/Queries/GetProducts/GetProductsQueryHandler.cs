@@ -8,14 +8,14 @@ using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProducts;
 
-public class GetProductsHandler : IRequestHandler<ProductsQuery, ProductsFilterDto>
+public class GetProductsQueryHandler : IRequestHandler<ProductsQuery, ProductsFilterDto>
 {
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
     private readonly IValidator<ProductsQuery> _validator;
-    private readonly ILogger<GetProductsHandler> _logger;
+    private readonly ILogger<GetProductsQueryHandler> _logger;
 
-    public GetProductsHandler(IProductRepository productRepository, IMapper mapper, IValidator<ProductsQuery> validator, ILogger<GetProductsHandler> logger)
+    public GetProductsQueryHandler(IProductRepository productRepository, IMapper mapper, IValidator<ProductsQuery> validator, ILogger<GetProductsQueryHandler> logger)
     {
         _productRepository = productRepository;
         _mapper = mapper;

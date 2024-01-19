@@ -45,7 +45,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(C=>C.EnableFilter());
+    app.UseSwaggerUI(C => C.EnableFilter());
 }
 
 app.UseHttpsRedirection();

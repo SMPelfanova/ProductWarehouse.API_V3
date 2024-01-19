@@ -19,7 +19,7 @@ public class GetProductsHandlerTests
         var validatorMock = A.Fake<IValidator<ProductsQuery>>();
         A.CallTo(() => validatorMock.Validate(A<ProductsQuery>._)).Returns(new FluentValidation.Results.ValidationResult());
         var mapperMock = TestStartup.CreateMapper();
-        var loggerMock = A.Fake<ILogger<GetProductsHandler>>();
+        var loggerMock = A.Fake<ILogger<GetProductsQueryHandler>>();
 
         var productsQuery = new ProductsQuery
         {
@@ -38,7 +38,7 @@ public class GetProductsHandlerTests
         A.CallTo(() => productRepositoryMock.GetProductsAsync(productsQuery.MinPrice, productsQuery.MaxPrice, productsQuery.Size))
                              .Returns(products);
 
-        var handler = new GetProductsHandler(productRepositoryMock, mapperMock, validatorMock, loggerMock);
+        var handler = new GetProductsQueryHandler(productRepositoryMock, mapperMock, validatorMock, loggerMock);
 
         // Act
         var result = await handler.Handle(productsQuery, CancellationToken.None);
