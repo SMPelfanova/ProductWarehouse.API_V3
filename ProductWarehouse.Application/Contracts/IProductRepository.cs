@@ -4,5 +4,5 @@ namespace ProductWarehouse.Application.Contracts;
 
 public interface IProductRepository
 {
-    Task<IEnumerable<Product>> GetProductsAsync(decimal? minPrice, decimal? maxPrice, string? size);
+    Task<List<Product>> GetProductsAsync();
 }

@@ -15,13 +15,13 @@ public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TR
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        _logger.LogInformationMessage(
+        LoggingMessageDefinitions.LogInformationMessage(_logger,
             $"Starting request {typeof(TRequest).Name}");
 
         try
         {
             var response = await next();
-            _logger.LogInformationMessage(
+            LoggingMessageDefinitions.LogInformationMessage(_logger,
                 $"Completed request {typeof(TRequest).Name}. Response: {typeof(TResponse).Name} ");
 
             return response;

@@ -33,7 +33,7 @@ public class ProductRepositoryTests
         var repository = new ProductRepository(mockyClientService);
 
         // Act
-        var result = await repository.GetProductsAsync(null, null, null);
+        var result = await repository.GetProductsAsync();
 
         // Assert
         result.Should().BeEmpty();

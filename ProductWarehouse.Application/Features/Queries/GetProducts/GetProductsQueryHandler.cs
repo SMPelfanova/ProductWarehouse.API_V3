@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using ProductWarehouse.Application.Contracts;
 using ProductWarehouse.Application.Extensions;
+using ProductWarehouse.Application.Logging;
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProducts;
@@ -31,18 +32,23 @@ public class GetProductsQueryHandler : IRequestHandler<ProductsQuery, ProductsFi
             throw new Exceptions.ValidatorException(result.Errors);
         }
 
-        var products = _productRepository.GetProductsAsync(request.MinPrice, request.MaxPrice, request.Size).Result.ToList();
+        var products = await _productRepository.GetProductsAsync();
         if (products.Count <= 0)
         {
-            _logger.LogInformation($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
+            LoggingMessageDefinitions.LogInformationMessage(_logger, $"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
             return new ProductsFilterDto();
         }
 
         var productFilter = _mapper.Map<ProductsFilterDto>(products);
 
+        productFilter.Products = productFilter.Products
+            .Where(x => (request.MinPrice == 0 || x.Price >= request.MinPrice))
+            .Where(x => (request.MaxPrice == 0 || x.Price <= request.MaxPrice))
+            .Where(x => (string.IsNullOrEmpty(request.Size) || x.Sizes.Any(s => s.ToLowerInvariant() == request.Size.ToLowerInvariant()))).ToList();
+
         if (!string.IsNullOrEmpty(request.Highlight))
         {
-            foreach (var product in products)
+            foreach (var product in productFilter.Products)
             {
                 product.Description = product.Description.HighlightKeywords(request.Highlight);
             }

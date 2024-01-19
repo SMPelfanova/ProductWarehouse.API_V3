@@ -34,7 +34,7 @@ public static class StringExtensions
     {
         var allWords = products
             .SelectMany(p => Regex.Replace(p.Description.ToLowerInvariant(), "[^a-zA-Z ]", "", RegexOptions.Compiled)
-            .Split(' ', StringSplitOptions.RemoveEmptyEntries))
+            .Split(new[] { ' ', '.', ',' }, StringSplitOptions.RemoveEmptyEntries))
             .ToList();
 
         var wordFrequency = allWords.GroupBy(word => word)

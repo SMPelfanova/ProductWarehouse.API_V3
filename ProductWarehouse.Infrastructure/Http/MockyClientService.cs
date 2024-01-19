@@ -28,11 +28,11 @@ public class MockyClientService
         var jsonString = await GetStringAsync(_productUri);
         if (!string.IsNullOrEmpty(jsonString))
         {
-            _logger.LogInformationMessage($"Response from mocky.io: {jsonString}");
+            LoggingMessageDefinitions.LogInformationMessage(_logger, $"Response from mocky.io: {jsonString}");
             try
             {
                 var products = JsonConvert.DeserializeObject<List<Product>>(jsonString);
-                _logger.LogInformation($"Returning deserialized product list");
+                LoggingMessageDefinitions.LogInformationMessage(_logger, $"Returning deserialized product list");
                 return products ?? new List<Product>();
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ public class MockyClientService
         }
         else
         {
-            _logger.LogWarning($"No products found with status code: {jsonString}");
+            LoggingMessageDefinitions.LogInformationMessage(_logger, $"No products found with status code: {jsonString}");
             return new List<Product>();
         }
     }
