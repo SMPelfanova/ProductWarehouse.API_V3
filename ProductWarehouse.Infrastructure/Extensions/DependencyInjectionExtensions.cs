@@ -12,7 +12,7 @@ public static class DependencyInjectionExtensions
         services.Configure<MockyClientOptions>(
             config.GetSection(nameof(MockyClientOptions.MockyClient)));
 
-        services.AddScoped<MockyClientService>();
+        services.AddHttpClient<MockyClientService>();
 
         return services;
     }

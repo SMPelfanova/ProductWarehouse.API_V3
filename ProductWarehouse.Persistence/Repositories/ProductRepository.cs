@@ -13,14 +13,10 @@ public class ProductRepository : IProductRepository
         _httpClientService = httpClientService;
     }
 
-    public async Task<IEnumerable<Product>> GetProductsAsync(decimal? minPrice, decimal? maxPrice, string? size)
+    public async Task<List<Product>> GetProductsAsync()
     {
         var products = await _httpClientService.GetProductListAsync();
-
-        products = products.Where(x => (minPrice == 0 || x.Price >= minPrice))
-            .Where(x => (maxPrice == 0 || x.Price <= maxPrice))
-            .Where(x => (string.IsNullOrEmpty(size) || x.Sizes.Any(s => s.ToLowerInvariant() == size.ToLowerInvariant()))).ToList();
-
+    
         return products;
     }
 }

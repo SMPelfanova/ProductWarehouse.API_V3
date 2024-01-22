@@ -35,7 +35,9 @@ public class ProductsController : BaseController
     public async Task<ActionResult> GetProducts()
     {
         var result = await _mediator.Send(new ProductsQuery());
+
         var products = _mapper.Map<IEnumerable<ProductResponse>>(result.Products);
+
         if (products == null || !products.Any())
         {
             return NotFound();
@@ -57,7 +59,9 @@ public class ProductsController : BaseController
     public async Task<ActionResult> GetProducts([FromQuery] FilterProductsRequest productsFilter)
     {
         var productsQueryMap = _mapper.Map<ProductsQuery>(productsFilter);
+
         var result = await _mediator.Send(productsQueryMap);
+
         var response = _mapper.Map<ProductFilterResponse>(result);
 
         if (response == null || !response.Products.Any())
