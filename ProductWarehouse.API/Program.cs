@@ -48,6 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(C => C.EnableFilter());
 }
 
+app.UseSerilogRequestLogging();
+
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using ProductWarehouse.Application.Contracts;
 using ProductWarehouse.Application.Extensions;
 using ProductWarehouse.Application.Logging;
 using ProductWarehouse.Application.Models;
+using Serilog;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProducts;
 
@@ -14,9 +14,9 @@ public class GetProductsQueryHandler : IRequestHandler<ProductsQuery, ProductsFi
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
     private readonly IValidator<ProductsQuery> _validator;
-    private readonly ILogger<GetProductsQueryHandler> _logger;
+    private readonly ILogger _logger;
 
-    public GetProductsQueryHandler(IProductRepository productRepository, IMapper mapper, IValidator<ProductsQuery> validator, ILogger<GetProductsQueryHandler> logger)
+    public GetProductsQueryHandler(IProductRepository productRepository, IMapper mapper, IValidator<ProductsQuery> validator, ILogger logger)
     {
         _productRepository = productRepository;
         _mapper = mapper;
@@ -26,16 +26,10 @@ public class GetProductsQueryHandler : IRequestHandler<ProductsQuery, ProductsFi
 
     public async Task<ProductsFilterDto> Handle(ProductsQuery request, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(request);
-        if (!result.IsValid)
-        {
-            throw new Exceptions.ValidatorException(result.Errors);
-        }
-
         var products = await _productRepository.GetProductsAsync();
         if (products.Count <= 0)
         {
-            LoggingMessageDefinitions.LogInformationMessage(_logger, $"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
+            _logger.Information($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
             return new ProductsFilterDto();
         }
 

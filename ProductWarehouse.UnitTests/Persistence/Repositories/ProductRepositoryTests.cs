@@ -7,7 +7,7 @@ using ProductWarehouse.Persistence.Repositories;
 using Xunit;
 using Microsoft.Extensions.Options;
 using ProductWarehouse.Infrastructure.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace ProductWarehouse.UnitTests.Persistence.Repositories;
 
@@ -21,7 +21,7 @@ public class ProductRepositoryTests
         fixture.Customize(new AutoMoqCustomization());
 
         var httpClient = A.Fake<HttpClient>();
-        var loggerMock = A.Fake<ILogger<MockyClientService>>();
+        var loggerMock = A.Fake<ILogger>();
         var configMock = A.Fake<IOptions<MockyClientOptions>>();
         A.CallTo(() => configMock.Value).Returns(new MockyClientOptions
         {

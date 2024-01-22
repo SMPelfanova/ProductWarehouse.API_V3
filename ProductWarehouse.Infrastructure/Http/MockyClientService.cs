@@ -1,20 +1,19 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Infrastructure.Configuration;
-using ProductWarehouse.Application.Logging;
+using Serilog;
 
 namespace ProductWarehouse.Infrastructure.Http;
 
 public class MockyClientService
 {
     private readonly HttpClient _httpClient;
-    private readonly ILogger<MockyClientService> _logger;
+    private readonly ILogger _logger;
 
     private readonly Uri _productUri;
 
-    public MockyClientService(HttpClient httpClient, ILogger<MockyClientService> logger, IOptions<MockyClientOptions> config)
+    public MockyClientService(HttpClient httpClient, ILogger logger, IOptions<MockyClientOptions> config)
     {
         _httpClient = httpClient;
         _logger = logger;
@@ -28,22 +27,22 @@ public class MockyClientService
         var jsonString = await GetStringAsync(_productUri);
         if (!string.IsNullOrEmpty(jsonString))
         {
-            LoggingMessageDefinitions.LogInformationMessage(_logger, $"Response from mocky.io: {jsonString}");
+            _logger.Information($"Response from mocky.io: {jsonString}");
             try
             {
                 var products = JsonConvert.DeserializeObject<List<Product>>(jsonString);
-                LoggingMessageDefinitions.LogInformationMessage(_logger, $"Returning deserialized product list");
+                _logger.Information($"Returning deserialized product list");
                 return products ?? new List<Product>();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Deserialization of product failed: {ex.Message}");
+                _logger.Error(ex, $"Deserialization of product failed: {ex.Message}");
                 return new List<Product>();
             }
         }
         else
         {
-            LoggingMessageDefinitions.LogInformationMessage(_logger, $"No products found with status code: {jsonString}");
+            _logger.Information($"No products found with status code: {jsonString}");
             return new List<Product>();
         }
     }
@@ -59,5 +58,4 @@ public class MockyClientService
 
         return string.Empty;
     }
-
 }

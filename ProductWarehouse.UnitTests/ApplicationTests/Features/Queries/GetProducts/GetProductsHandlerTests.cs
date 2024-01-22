@@ -1,10 +1,10 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentValidation;
-using Microsoft.Extensions.Logging;
 using ProductWarehouse.Application.Contracts;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Domain.Entities;
+using Serilog;
 using Xunit;
 
 namespace ProductWarehouse.UnitTests.ApplicationTests.Features.Queries.GetProducts;
@@ -19,7 +19,7 @@ public class GetProductsHandlerTests
         var validatorMock = A.Fake<IValidator<ProductsQuery>>();
         A.CallTo(() => validatorMock.Validate(A<ProductsQuery>._)).Returns(new FluentValidation.Results.ValidationResult());
         var mapperMock = TestStartup.CreateMapper();
-        var loggerMock = A.Fake<ILogger<GetProductsQueryHandler>>();
+        var loggerMock = A.Fake<ILogger>();
 
         var productsQuery = new ProductsQuery
         {
