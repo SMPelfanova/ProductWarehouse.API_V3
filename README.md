@@ -1,4 +1,4 @@
-# Product Wherehouse API
+# Phase 1 - Product Wherehouse API
 The API endpoint allows users to retrieve products and apply filters, with the ability to highlight specific keywords in product descriptions.
 
 ## Overview
