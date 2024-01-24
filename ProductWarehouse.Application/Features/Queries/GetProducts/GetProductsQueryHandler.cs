@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using ProductWarehouse.Application.Contracts;
 using ProductWarehouse.Application.Extensions;
-using ProductWarehouse.Application.Logging;
+using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models;
 using Serilog;
 

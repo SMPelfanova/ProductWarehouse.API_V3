@@ -1,4 +1,4 @@
-﻿using ProductWarehouse.Application.Contracts;
+﻿using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Infrastructure.Http;
 

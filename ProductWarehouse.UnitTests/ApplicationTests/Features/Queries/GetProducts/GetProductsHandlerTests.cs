@@ -1,7 +1,7 @@
 ﻿using FakeItEasy;
 using FluentAssertions;
 using FluentValidation;
-using ProductWarehouse.Application.Contracts;
+using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Domain.Entities;
 using Serilog;
@@ -31,8 +31,8 @@ public class GetProductsHandlerTests
 
         var products = new List<Product>
         {
-            new Product { Title = "Test", Description = "test", Price = 10, Sizes = new List<string>{ "Small" } },
-            new Product { Title = "Test 2", Description = "test 2", Price = 11, Sizes = new List<string>{ "Medium" } }
+            new Product { Title = "Test", Description = "test", Price = 10 },
+            new Product { Title = "Test 2", Description = "test 2", Price = 11 }
         };
 
         A.CallTo(() => productRepositoryMock.GetProductsAsync())

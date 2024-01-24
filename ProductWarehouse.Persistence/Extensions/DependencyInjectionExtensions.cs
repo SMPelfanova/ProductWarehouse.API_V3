@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ProductWarehouse.Application.Contracts;
+using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.Repositories;
 
 namespace ProductWarehouse.Persistence.Extensions;

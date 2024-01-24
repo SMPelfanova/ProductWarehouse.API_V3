@@ -5,6 +5,7 @@ using ProductWarehouse.Infrastructure.Extensions;
 using ProductWarehouse.API.Mapping;
 using ProductWarehouse.Persistence.Extensions;
 using ProductWarehouse.API.Infrastructure;
+using ProductWarehouse.Persistence.EF.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPersistence();
+builder.Services.AddPersistenceEF(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
