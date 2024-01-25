@@ -45,7 +45,5 @@ public class GetProductsHandlerTests
 
         // Assert
         result.Should().NotBeNull();
-        //result.Products.Should().NotBeNull().And.HaveCount(2);
-        //products.Count().Should().Be(result.Products.Count());
     }
 }

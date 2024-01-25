@@ -8,6 +8,7 @@ using Xunit;
 using Microsoft.Extensions.Options;
 using ProductWarehouse.Infrastructure.Configuration;
 using Serilog;
+using ProductWarehouse.Application.Interfaces;
 
 namespace ProductWarehouse.UnitTests.Persistence.Repositories;
 
@@ -22,6 +23,7 @@ public class ProductRepositoryTests
 
         var httpClient = A.Fake<HttpClient>();
         var loggerMock = A.Fake<ILogger>();
+        var appDbContext = A.Fake<IApplicationDbContext>();
         var configMock = A.Fake<IOptions<MockyClientOptions>>();
         A.CallTo(() => configMock.Value).Returns(new MockyClientOptions
         {
@@ -30,7 +32,7 @@ public class ProductRepositoryTests
         });
         var mockyClientService = new MockyClientService(httpClient, loggerMock, configMock);
 
-        var repository = new ProductRepository(mockyClientService);
+        var repository = new ProductRepository(appDbContext);
 
         // Act
         var result = await repository.GetProductsAsync();

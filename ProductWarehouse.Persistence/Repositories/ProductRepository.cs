@@ -1,22 +1,48 @@
 ﻿using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Domain.Interfaces;
 using ProductWarehouse.Infrastructure.Http;
 
 namespace ProductWarehouse.Persistence.Repositories;
 
-public class ProductRepository : IProductRepository
+public class ProductRepository : IProductRepository, IRepository<Product>
 {
-    private readonly MockyClientService _httpClientService;
+    private readonly IApplicationDbContext _dbContext;
 
-    public ProductRepository(MockyClientService httpClientService)
+    public ProductRepository(IApplicationDbContext dbContext)
     {
-        _httpClientService = httpClientService;
+        _dbContext = dbContext;
+    }
+
+    public void Add(Product entity)
+    {
+        _dbContext.Products.Add(entity);
+    }
+
+    public Task<Product> DeleteAsync(Product entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IReadOnlyList<Product>> GetAllAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Product> GetByIdAsync(int id)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<List<Product>> GetProductsAsync()
     {
-        var products = await _httpClientService.GetProductListAsync();
+        var products = _dbContext.Products;
     
-        return products;
+        return products.ToList();
+    }
+
+    public Task<Product> UpdateAsync(Product entity)
+    {
+        throw new NotImplementedException();
     }
 }

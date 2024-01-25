@@ -8,7 +8,7 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 {
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
-        builder.ToTable(TableNames.Payments);
+        builder.ToTable(nameof(TableNames.Payments));
 
         builder.HasKey(t => t.Id);
 
@@ -19,7 +19,7 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.Property(t => t.PaymentDate)
             .IsRequired()
             .HasColumnType("Date")
-            .HasDefaultValueSql("GetDate())");
+            .HasDefaultValueSql("GetDate()");
 
     }
 }

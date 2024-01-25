@@ -8,10 +8,14 @@ public class OrderDetailsConfiguration : IEntityTypeConfiguration<OrderDetails>
 {
     public void Configure(EntityTypeBuilder<OrderDetails> builder)
     {
-        builder.ToTable(TableNames.OrderDetails);
+        builder.ToTable(nameof(TableNames.OrderDetails));
+
+        builder.HasKey(pg => new { pg.OrderId, pg.ProductId });
 
         builder.Property(p => p.Quantity).IsRequired();
-        builder.Property(p => p.Price).IsRequired();
+        builder.Property(p => p.Price)
+            .HasColumnType("decimal(18, 2)")
+            .IsRequired();
 
         builder.HasOne(b => b.Orders)
             .WithMany(p => p.OrderDetails)

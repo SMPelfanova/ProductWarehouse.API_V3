@@ -9,17 +9,20 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {
-        builder.ToTable(TableNames.Orders);
+        builder.ToTable(nameof(TableNames.Orders));
 
         builder.HasKey(p => p.Id);
 
-        builder.Property(p => p.TotalAmount).IsRequired();
+        builder.Property(p => p.TotalAmount)
+            .HasColumnType("decimal(18, 2)")
+            .IsRequired();
+
         builder.Property(p => p.OrderDate).IsRequired();
 
         builder.Property(t => t.OrderDate)
             .IsRequired()
             .HasColumnType("Date")
-            .HasDefaultValueSql("GetDate())");
+            .HasDefaultValueSql("GetDate()");
 
         builder.HasOne(b => b.Status)
             .WithMany(p => p.Orders)
@@ -27,12 +30,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasOne(b => b.User)
             .WithMany(p => p.Orders)
-            .HasForeignKey(b => b.Userid)
-            .IsRequired(false);
+            .HasForeignKey(b => b.Userid);
 
         builder.HasOne(b => b.Payment)
             .WithMany(p => p.Orders)
-            .HasForeignKey(b => b.PaymentId)
-            .IsRequired(false);
+            .HasForeignKey(b => b.PaymentId);
     }
 }

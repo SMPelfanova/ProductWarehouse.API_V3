@@ -10,8 +10,9 @@ public static class DependencyInjectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("WerehouseSQLDBConnectionString")));
+        //services.AddDbContext<ApplicationDbContext>(options =>
+        //    options.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Test"))
+        //    .AddOptions();
 
         services.AddScoped<IApplicationDbContext>(sp =>
             sp.GetRequiredService<ApplicationDbContext>());

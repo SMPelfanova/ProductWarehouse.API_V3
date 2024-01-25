@@ -8,5 +8,5 @@ public class OrderDetails
     public int Quantity { get; set; }
     public decimal Price { get; set; }
     public Size Size { get; set; }
-    public string SizeId { get; set; }
+    public Guid SizeId { get; set; }
 }
