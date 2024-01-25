@@ -14,10 +14,10 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer("Server=localhost;Database=newdatabase;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseSqlServer("Server=localhost;Database=newdatabase;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
+    //}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -38,6 +38,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
     public DbSet<OrderStatus> OrderStatus { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDetails> OrderDetails { get; set; }
+
+    IProductRepository IUnitOfWork.Products => throw new NotImplementedException();
 
     private void SeedData(ModelBuilder modelBuilder)
     {
@@ -65,17 +67,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
             new Size { Id = Guid.NewGuid(), Name = "XL" }
         );
     }
-    public void Commit()
-    {
-        throw new NotImplementedException();
-    }
 
-    public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Rallback()
+    public Task<bool> SaveChangesAsync()
     {
         throw new NotImplementedException();
     }

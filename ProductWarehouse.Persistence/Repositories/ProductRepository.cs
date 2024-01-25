@@ -2,36 +2,17 @@
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Domain.Interfaces;
 using ProductWarehouse.Infrastructure.Http;
+using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence.Repositories;
 
-public class ProductRepository : IProductRepository, IRepository<Product>
+public sealed class ProductRepository : Repository<Product>, IProductRepository
 {
-    private readonly IApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public ProductRepository(IApplicationDbContext dbContext)
+    public ProductRepository(ApplicationDbContext dbContext):base(dbContext)
     {
         _dbContext = dbContext;
-    }
-
-    public void Add(Product entity)
-    {
-        _dbContext.Products.Add(entity);
-    }
-
-    public Task<Product> DeleteAsync(Product entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IReadOnlyList<Product>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Product> GetByIdAsync(int id)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<List<Product>> GetProductsAsync()
@@ -39,10 +20,5 @@ public class ProductRepository : IProductRepository, IRepository<Product>
         var products = _dbContext.Products;
     
         return products.ToList();
-    }
-
-    public Task<Product> UpdateAsync(Product entity)
-    {
-        throw new NotImplementedException();
     }
 }

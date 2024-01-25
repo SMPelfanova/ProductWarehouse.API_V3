@@ -1,26 +1,22 @@
 ﻿using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Interfaces;
+using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence;
 internal class UnitOfWork : IUnitOfWork
 {
-    public void Commit()
+    private readonly ApplicationDbContext _dbContext;
+    public IProductRepository Products { get; }
+
+    public UnitOfWork(ApplicationDbContext dbContext,
+                        IProductRepository productRepository)
     {
-        throw new NotImplementedException();
+        _dbContext = dbContext;
+        Products = productRepository;
     }
 
-    public void Dispose()
+    public Task<bool> SaveChangesAsync()
     {
-        throw new NotImplementedException();
-    }
-
-    public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Rallback()
-    {
-        throw new NotImplementedException();
+        return _dbContext.SaveChangesAsync();
     }
 }

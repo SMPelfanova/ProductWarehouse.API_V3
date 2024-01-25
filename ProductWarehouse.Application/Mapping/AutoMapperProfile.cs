@@ -13,7 +13,7 @@ public class AutoMapperProfile : Profile
         CreateMap<IEnumerable<Product>, ProductsFilterDto>()
             .ForMember(dest => dest.MinPrice, opt => opt.MapFrom(src => src.Min(p => p.Price)))
             .ForMember(dest => dest.MaxPrice, opt => opt.MapFrom(src => src.Max(p => p.Price)))
-            .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.SelectMany(p => p.ProductSizes).Distinct()))
+            //.ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.SelectMany(p => p.ProductSizes).Distinct()))
             .ForMember(dest => dest.CommonWords, opt => opt.MapFrom(src => src.FindMostCommonWords()))
             .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src));
     }
