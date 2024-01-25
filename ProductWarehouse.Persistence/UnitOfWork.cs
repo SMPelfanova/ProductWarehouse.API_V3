@@ -15,6 +15,12 @@ internal class UnitOfWork : IUnitOfWork
         Products = productRepository;
     }
 
+    public void Dispose()
+    {
+        _dbContext.Dispose();
+    }
+
+
     public Task<bool> SaveChangesAsync()
     {
         return _dbContext.SaveChangesAsync();

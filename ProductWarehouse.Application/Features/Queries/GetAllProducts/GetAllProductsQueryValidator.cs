@@ -3,9 +3,9 @@ using ProductWarehouse.Application.Constants;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProducts;
 
-public class ProductsQueryValidator : AbstractValidator<ProductsQuery>
+public class GetAllProductsQueryValidator : AbstractValidator<GetAllProductsQuery>
 {
-    public ProductsQueryValidator()
+    public GetAllProductsQueryValidator()
     {
         RuleFor(r => r.MinPrice).GreaterThanOrEqualTo(0).WithMessage(MessageConstants.MinPriceValidationMessage);
         RuleFor(r => r.MaxPrice).GreaterThanOrEqualTo(0).WithMessage(MessageConstants.MaxPriceValidationMessage);

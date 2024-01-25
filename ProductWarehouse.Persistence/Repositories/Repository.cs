@@ -12,7 +12,7 @@ public abstract class Repository<TEntity> where TEntity : class
     {
         _dbContext = context;
     }
-    public async Task<TEntity> GetByIdAsync(int id)
+    public async Task<TEntity> GetByIdAsync(Guid id)
     {
         return await _dbContext.Set<TEntity>().FindAsync(id);
     }

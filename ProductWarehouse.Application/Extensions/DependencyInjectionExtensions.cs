@@ -13,7 +13,7 @@ public static class DependencyInjectionExtensions
     {
         var assembly = typeof(DependencyInjectionExtensions).Assembly;
 
-        services.AddTransient<IValidator<ProductsQuery>, ProductsQueryValidator>();
+        services.AddTransient<IValidator<GetAllProductsQuery>, GetAllProductsQueryValidator>();
 
         services.AddValidatorsFromAssembly(assembly);
 

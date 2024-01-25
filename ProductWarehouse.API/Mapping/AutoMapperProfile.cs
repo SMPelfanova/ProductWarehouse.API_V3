@@ -16,7 +16,7 @@ public class AutoMapperProfile : Profile
 
     private void MapFromRequestToQueriesOrCommands()
     {
-        CreateMap<FilterProductsRequest, ProductsQuery>();
+        CreateMap<FilterProductsRequest, GetAllProductsQuery>();
     }
 
     private void MapFromDtoToResponse()

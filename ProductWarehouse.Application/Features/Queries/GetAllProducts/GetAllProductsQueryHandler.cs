@@ -8,22 +8,20 @@ using Serilog;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProducts;
 
-public class GetProductsQueryHandler : IRequestHandler<ProductsQuery, ProductsFilterDto>
+public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, ProductsFilterDto>
 {
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
-    private readonly IValidator<ProductsQuery> _validator;
     private readonly ILogger _logger;
 
-    public GetProductsQueryHandler(IProductRepository productRepository, IMapper mapper, IValidator<ProductsQuery> validator, ILogger logger)
+    public GetAllProductsQueryHandler(IProductRepository productRepository, IMapper mapper, ILogger logger)
     {
         _productRepository = productRepository;
         _mapper = mapper;
-        _validator = validator;
         _logger = logger;
     }
 
-    public async Task<ProductsFilterDto> Handle(ProductsQuery request, CancellationToken cancellationToken)
+    public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
         var products = await _productRepository.GetAllAsync();
         if (products.Count <= 0)

@@ -28,7 +28,7 @@ public class ProductsControllerTests
 
         var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
 
-        A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
+        A.CallTo(() => mediatorMock.Send(A<GetAllProductsQuery>._, CancellationToken.None))
                     .Returns(new ProductsFilterDto());
 
         // Act
@@ -51,7 +51,7 @@ public class ProductsControllerTests
 
         var products = fixture.CreateMany<ProductDto>(2);
 
-        A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
+        A.CallTo(() => mediatorMock.Send(A<GetAllProductsQuery>._, CancellationToken.None))
                     .Returns(new ProductsFilterDto()
                     {
                         Products = products
@@ -76,11 +76,11 @@ public class ProductsControllerTests
         var mediatorMock = A.Fake<IMediator>();
         var mapperMock = TestStartup.CreateMapper();
 
-        var searchFilter = new ProductsQuery { Highlight = "string", MaxPrice = 13, MinPrice = 1, Size = "Small" };
+        var searchFilter = new GetAllProductsQuery { Highlight = "string", MaxPrice = 13, MinPrice = 1, Size = "Small" };
         var filteredProducts = fixture.CreateMany<ProductResponse>(2);
 
         var products = fixture.CreateMany<ProductDto>(2);
-        A.CallTo(() => mediatorMock.Send(A<ProductsQuery>._, CancellationToken.None))
+        A.CallTo(() => mediatorMock.Send(A<GetAllProductsQuery>._, CancellationToken.None))
                    .Returns(new ProductsFilterDto
                    {
                        Products = products

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
+using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -34,7 +37,7 @@ public class ProductsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetProducts()
     {
-        var result = await _mediator.Send(new ProductsQuery());
+        var result = await _mediator.Send(new GetAllProductsQuery());
 
         var products = _mapper.Map<IEnumerable<ProductResponse>>(result.Products);
 
@@ -58,7 +61,7 @@ public class ProductsController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetProducts([FromQuery] FilterProductsRequest productsFilter)
     {
-        var productsQueryMap = _mapper.Map<ProductsQuery>(productsFilter);
+        var productsQueryMap = _mapper.Map<GetAllProductsQuery>(productsFilter);
 
         var result = await _mediator.Send(productsQueryMap);
 
@@ -70,5 +73,19 @@ public class ProductsController : BaseController
         }
 
         return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetProducts(Guid id)
+    {
+        var product = await _mediator.Send(new GetProductQuery(id));
+
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(product);
     }
 }
