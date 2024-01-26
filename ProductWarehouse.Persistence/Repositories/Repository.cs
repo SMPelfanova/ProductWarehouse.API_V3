@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Domain.Interfaces;
 using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence.Repositories;
@@ -17,9 +15,16 @@ public abstract class Repository<TEntity> where TEntity : class
         return await _dbContext.Set<TEntity>().FindAsync(id);
     }
 
-    public async Task<IReadOnlyList<TEntity>> GetAllAsync()
+    public async Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties)
     {
-        return await _dbContext.Set<TEntity>().ToListAsync();
+        IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+        foreach (var includeProperty in includeProperties)
+        {
+            query = query.Include(includeProperty);
+        }
+
+        return await query.ToListAsync();
     }
 
     public async Task Add(TEntity entity)

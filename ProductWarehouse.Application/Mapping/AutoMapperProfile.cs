@@ -9,12 +9,25 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<Product, ProductDto>();
-        CreateMap<IEnumerable<Product>, ProductsFilterDto>()
+        CreateMap<Brand, BrandDto>().ReverseMap();
+        CreateMap<Size, SizeDto>().ReverseMap();
+        CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
+        CreateMap<Product, ProductDto>()
+            .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.ProductSizes.Select(p => p.Size.Name).Distinct().ToList()))
+            .ReverseMap();
+
+        CreateMap<IReadOnlyList<Product>, ProductsFilterDto>()
             .ForMember(dest => dest.MinPrice, opt => opt.MapFrom(src => src.Min(p => p.Price)))
             .ForMember(dest => dest.MaxPrice, opt => opt.MapFrom(src => src.Max(p => p.Price)))
-            //.ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.SelectMany(p => p.ProductSizes).Distinct()))
+             .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src
+                     .SelectMany(p => p.ProductSizes)
+                     .Where(ps => ps.Size != null) // Exclude potential null values
+                     .SelectMany(ps => ps.Size.Name)
+                     .Distinct()
+                     .ToList()
+             ))
             .ForMember(dest => dest.CommonWords, opt => opt.MapFrom(src => src.FindMostCommonWords()))
             .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src));
+
     }
 }

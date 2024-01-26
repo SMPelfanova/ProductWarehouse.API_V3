@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Domain.Interfaces;
-using ProductWarehouse.Persistence.EF.Configurations;
-
 namespace ProductWarehouse.Persistence.EF;
-public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWork
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext()
     {
@@ -39,7 +36,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderDetails> OrderDetails { get; set; }
 
-    IProductRepository IUnitOfWork.Products => throw new NotImplementedException();
 
     private void SeedData(ModelBuilder modelBuilder)
     {
@@ -66,15 +62,5 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWor
             new Size { Id = Guid.NewGuid(), Name = "L" },
             new Size { Id = Guid.NewGuid(), Name = "XL" }
         );
-    }
-
-    public Task<bool> SaveChangesAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<int> SaveChanges(CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
     }
 }

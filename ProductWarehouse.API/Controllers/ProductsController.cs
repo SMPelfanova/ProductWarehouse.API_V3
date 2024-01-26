@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
-using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -75,11 +74,10 @@ public class ProductsController : BaseController
         return Ok(response);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<ActionResult> GetProducts(Guid id)
     {
         var product = await _mediator.Send(new GetProductQuery(id));
-
 
         if (product == null)
         {
@@ -87,5 +85,13 @@ public class ProductsController : BaseController
         }
 
         return Ok(product);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult>  CreateProduct(CreateProductCommand command)
+    {
+        var result = await _mediator.Send(command);
+
+         return Ok(result);
     }
 }

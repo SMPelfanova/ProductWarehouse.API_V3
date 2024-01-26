@@ -38,7 +38,7 @@ public class GetProductsHandlerTests
         A.CallTo(() => productRepositoryMock.GetAllAsync())
                              .Returns(products);
 
-        var handler = new GetAllProductsQueryHandler(productRepositoryMock, mapperMock, validatorMock, loggerMock);
+        var handler = new GetAllProductsQueryHandler(productRepositoryMock, mapperMock,loggerMock);
 
         // Act
         var result = await handler.Handle(productsQuery, CancellationToken.None);

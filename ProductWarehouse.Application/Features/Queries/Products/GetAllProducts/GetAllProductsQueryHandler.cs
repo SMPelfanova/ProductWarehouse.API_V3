@@ -23,8 +23,8 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
 
     public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await _productRepository.GetAllAsync();
-        if (products.Count <= 0)
+        var products = await _productRepository.GetAllAsync(nameof(ProductDto.ProductGroups), "ProductSizes", "ProductSizes.Size", nameof(ProductDto.Brand));
+        if (products.Count() <= 0)
         {
             _logger.Information($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
             return new ProductsFilterDto();

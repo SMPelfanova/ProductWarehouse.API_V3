@@ -54,7 +54,7 @@ public class ProductsControllerTests
         A.CallTo(() => mediatorMock.Send(A<GetAllProductsQuery>._, CancellationToken.None))
                     .Returns(new ProductsFilterDto()
                     {
-                        Products = products
+                        Products = products.ToList()
                     });
 
         // Act
@@ -83,7 +83,7 @@ public class ProductsControllerTests
         A.CallTo(() => mediatorMock.Send(A<GetAllProductsQuery>._, CancellationToken.None))
                    .Returns(new ProductsFilterDto
                    {
-                       Products = products
+                       Products = products.ToList()
                    });
 
         var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);

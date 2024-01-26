@@ -7,9 +7,9 @@ using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence.Repositories;
 
-public sealed class ProductRepository : Repository<Product>, IProductRepository
+public sealed class BrandRepository : Repository<Brand>, IBrandRepository
 {
-    public ProductRepository(ApplicationDbContext dbContext):base(dbContext)
+    public BrandRepository(ApplicationDbContext dbContext):base(dbContext)
     {
     }
 }
