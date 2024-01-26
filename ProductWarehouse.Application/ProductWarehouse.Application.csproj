@@ -7,13 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Commands\Orders\" />
-    <Folder Include="Features\Queries\Orders\AddOrder\" />
-    <Folder Include="Features\Queries\Orders\EditOrder\" />
-    <Folder Include="Features\Queries\Orders\DeleteOrder\" />
-    <Folder Include="Features\Queries\Products\AddProduct\" />
-    <Folder Include="Features\Queries\Products\EditProduct\" />
-    <Folder Include="Features\Queries\Products\DeleteProduct\" />
+    <Folder Include="Features\Commands\Orders\EditOrder\" />
+    <Folder Include="Features\Commands\Orders\DeleteOrder\" />
+    <Folder Include="Features\Commands\Products\EditProduct\" />
+    <Folder Include="Features\Commands\Products\DeleteProduct\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Features.Commands.Products;
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
+public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
 {
     private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,7 +15,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         await _productRepository.Add(new Product
         {
@@ -38,7 +38,5 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         });
 
         await _unitOfWork.SaveChangesAsync();
-
-        return Guid.NewGuid();
     }
 }

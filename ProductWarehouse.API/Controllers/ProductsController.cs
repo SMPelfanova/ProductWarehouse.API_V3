@@ -32,8 +32,6 @@ public class ProductsController : BaseController
     /// <response code="200">Returns list of products</response>
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetProducts()
     {
         var result = await _mediator.Send(new GetAllProductsQuery());
@@ -56,8 +54,6 @@ public class ProductsController : BaseController
     /// <response code="200">Returns filtered products</response>
     [HttpGet("filter")]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(ProductFilterResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetProducts([FromQuery] FilterProductsRequest productsFilter)
     {
         var productsQueryMap = _mapper.Map<GetAllProductsQuery>(productsFilter);
@@ -90,8 +86,8 @@ public class ProductsController : BaseController
     [HttpPost]
     public async Task<ActionResult>  CreateProduct(CreateProductCommand command)
     {
-        var result = await _mediator.Send(command);
+        await _mediator.Send(command);
 
-         return Ok(result);
+        return Ok();
     }
 }

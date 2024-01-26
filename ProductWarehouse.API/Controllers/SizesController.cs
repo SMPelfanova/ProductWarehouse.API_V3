@@ -1,24 +1,19 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductWarehouse.API.Models.Responses;
-using ProductWarehouse.Application.Features.Queries.GetProduct;
-using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Features.Queries.Sizes;
 
 namespace ProductWarehouse.API.Controllers;
 public class SizesController : BaseController
 {
-    public SizesController(ILogger<OrdersController> logger, IMediator mediator, IMapper mapper)
+    public SizesController(ILogger<SizesController> logger, IMediator mediator, IMapper mapper)
     : base(logger, mediator, mapper)
     {
     }
 
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> Get()
+    public async Task<ActionResult> GetSizes()
     {
         var result = await _mediator.Send(new GetAllSizesQuery());
 

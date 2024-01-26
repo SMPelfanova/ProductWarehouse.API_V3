@@ -10,8 +10,12 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<Brand, BrandDto>().ReverseMap();
+        CreateMap<Group, ProductGroupDto>().ReverseMap();
         CreateMap<Size, SizeDto>().ReverseMap();
+        CreateMap<Order, OrderDto>().ReverseMap();
+        CreateMap<OrderDetails, OrderDetailsDto>().ReverseMap();
         CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
+
         CreateMap<Product, ProductDto>()
             .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.ProductSizes.Select(p => p.Size.Name).Distinct().ToList()))
             .ReverseMap();
@@ -21,7 +25,7 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.MaxPrice, opt => opt.MapFrom(src => src.Max(p => p.Price)))
              .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src
                      .SelectMany(p => p.ProductSizes)
-                     .Where(ps => ps.Size != null) // Exclude potential null values
+                     .Where(ps => ps.Size != null)
                      .SelectMany(ps => ps.Size.Name)
                      .Distinct()
                      .ToList()

@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.Application.Features.Commands.Orders.AddOrder;
 using ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
 using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
-using ProductWarehouse.Application.Features.Queries.OrderStatuses;
-using ProductWarehouse.Application.Features.Queries.Sizes;
 
 namespace ProductWarehouse.API.Controllers;
 public class OrdersController : BaseController
@@ -17,9 +15,7 @@ public class OrdersController : BaseController
 
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> Get()
+    public async Task<ActionResult> GetOrders()
     {
         var result = await _mediator.Send(new GetAllOrdersQuery());
 
@@ -27,7 +23,7 @@ public class OrdersController : BaseController
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult> GetSize(Guid id)
+    public async Task<ActionResult> GetOrder(Guid id)
     {
         var product = await _mediator.Send(new GetOrderQuery(id));
 
@@ -39,14 +35,11 @@ public class OrdersController : BaseController
         return Ok(product);
     }
 
-    [HttpGet]
-    [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<ProductResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> GetOrderStatuses()
+    [HttpPost]
+    public async Task<ActionResult> CreateOrder(CreateOrderCommand command)
     {
-        var result = await _mediator.Send(new GetAllOrderStatusesQuery());
+        await _mediator.Send(command);
 
-        return Ok(result);
+        return Ok();
     }
 }

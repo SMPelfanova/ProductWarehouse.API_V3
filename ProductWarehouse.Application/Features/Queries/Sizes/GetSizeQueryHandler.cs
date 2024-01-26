@@ -17,7 +17,7 @@ public class GetSizeQueryHandler : IRequestHandler<GetSizeQuery, SizeDto>
 
     public async Task<SizeDto> Handle(GetSizeQuery request, CancellationToken cancellationToken)
     {
-        var result = await _sizeRepository.GetAllAsync();
+        var result = await _sizeRepository.GetByIdAsync(request.Id);
         var mapper = _mapper.Map<SizeDto>(result);
 
         return mapper;
