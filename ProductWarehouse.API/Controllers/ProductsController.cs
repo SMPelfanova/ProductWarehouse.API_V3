@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using Azure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Commands.Products;
+using ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
 using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
+using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -21,7 +25,7 @@ public class ProductsController : BaseController
     /// <response code="200">Returns list of products</response>
     [HttpGet]
     [Produces("application/json")]
-    public async Task<ActionResult> GetProducts(
+    public async Task<IActionResult> GetProducts(
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper)
     {
@@ -45,7 +49,7 @@ public class ProductsController : BaseController
     /// <response code="200">Returns filtered products</response>
     [HttpGet("filter")]
     [Produces("application/json")]
-    public async Task<ActionResult> GetProducts(
+    public async Task<IActionResult> GetProducts(
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper,
         [FromQuery] FilterProductsRequest productsFilter)
@@ -65,7 +69,7 @@ public class ProductsController : BaseController
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult> GetProducts([FromServices] IMediator mediator, Guid id)
+    public async Task<IActionResult> GetProduct([FromServices] IMediator mediator, Guid id)
     {
         var product = await mediator.Send(new GetProductQuery(id));
 
@@ -78,11 +82,32 @@ public class ProductsController : BaseController
     }
 
     [HttpPost]
-    public async Task<ActionResult>  CreateProduct([FromServices] IMediator mediator, CreateProductCommand command)
+    public async Task<IActionResult> CreateProduct([FromServices] IMediator mediator, CreateProductCommand command)
     {
         await mediator.Send(command);
 
         return Ok();
+    }
+
+    //[HttpPut("{id:guid}")]
+    //public async Task<IActionResult> UpdateProduct(Guid id, UpdateProductCommand product)
+    //{
+
+    //    return NoContent();
+    //}
+
+    //[HttpPatch]
+    //public async Task<IActionResult> PartiallyUpdateProduct(Guid id, JsonPatchDocument<CreateProductCommand> product)
+    //{
+
+    //    return NoContent();
+    //}
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteProduct([FromServices] IMediator mediator, Guid id)
+    {
+        await mediator.Send(new DeleteProductCommand(id));
+        return NoContent();
     }
    
 }

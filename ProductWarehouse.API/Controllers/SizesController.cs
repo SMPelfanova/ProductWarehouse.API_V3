@@ -11,7 +11,7 @@ public class SizesController : BaseController
 {
     [HttpGet]
     [Produces("application/json")]
-    public async Task<ActionResult> GetSizes([FromServices] IMediator mediator)
+    public async Task<IActionResult> GetSizes([FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetAllSizesQuery());
 
@@ -19,7 +19,7 @@ public class SizesController : BaseController
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult> GetSize([FromServices] IMediator mediator, Guid id)
+    public async Task<IActionResult> GetSize([FromServices] IMediator mediator, Guid id)
     {
         var product = await mediator.Send(new GetSizeQuery(id));
 

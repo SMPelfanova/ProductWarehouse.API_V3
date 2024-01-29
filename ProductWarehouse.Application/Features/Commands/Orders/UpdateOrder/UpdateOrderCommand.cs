@@ -1,7 +1,5 @@
 ﻿using MediatR;
+using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
-public class UpdateOrderCommand : IRequest
-{
-    public Guid OrderId { get; set; }
-}
+public record UpdateOrderCommand(Guid Id, OrderDto order) : IRequest;

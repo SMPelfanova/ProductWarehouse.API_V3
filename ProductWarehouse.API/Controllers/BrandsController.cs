@@ -9,11 +9,12 @@ namespace ProductWarehouse.API.Controllers;
 /// <summary>
 /// Controller for managing product-brands-related operations.
 /// </summary>
+//[Route("api/products/{id:guid}/brand")]
 public class BrandsController : BaseController
 {
     [HttpGet]
     [Produces("application/json")]
-    public async Task<ActionResult> Brands([FromServices] IMediator mediator)
+    public async Task<IActionResult> Brands([FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetAllBrandsQuery());
 
@@ -22,7 +23,7 @@ public class BrandsController : BaseController
 
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult> Brands([FromServices] IMediator mediator, Guid brandId)
+    public async Task<IActionResult> Brands([FromServices] IMediator mediator, Guid brandId)
     {
         var product = await mediator.Send(new GetBrandQuery(brandId));
 

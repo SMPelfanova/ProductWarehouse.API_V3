@@ -2,7 +2,7 @@
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
-public class CreateOrderCommand : IRequest
+public record CreateOrderCommand() : IRequest
 {
     public OrderStatusDto Status { get; set; }
     public Guid StatusId { get; set; }

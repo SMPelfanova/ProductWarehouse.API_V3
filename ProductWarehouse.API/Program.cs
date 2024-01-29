@@ -9,7 +9,7 @@ using ProductWarehouse.Persistence.EF.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 builder.Services.AddHttpClient();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(setupAction =>
     var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
 
     setupAction.IncludeXmlComments(xmlCommentsFullPath);
-});
+}).AddSwaggerGenNewtonsoftSupport();
 
 
 builder.Host.UseSerilog((context, loggerConfiguration) =>

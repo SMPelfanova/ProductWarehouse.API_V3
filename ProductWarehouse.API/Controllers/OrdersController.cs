@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.JsonPatch;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductWarehouse.Application.Features.Commands.Orders.DeleteOrder;
+using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
 using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
+using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -13,7 +16,7 @@ public class OrdersController : BaseController
 {
     [HttpGet]
     [Produces("application/json")]
-    public async Task<ActionResult> GetOrders(
+    public async Task<IActionResult> GetOrders(
         [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetAllOrdersQuery());
@@ -22,7 +25,7 @@ public class OrdersController : BaseController
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult> GetOrders(
+    public async Task<IActionResult> GetOrder(
         [FromServices] IMediator mediator,
         Guid id)
     {
@@ -36,25 +39,34 @@ public class OrdersController : BaseController
         return Ok(product);
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand command)
-    //{
-    //   // var orderId = await _mediator.Send(command);
-    //    return CreatedAtAction(nameof(Application.Features.Queries.Orders.GetOrder), new { orderId });
-    //}
-
-    //[HttpPut("{orderId}")]
-    //public async Task<IActionResult> UpdateOrder(Guid orderId, [FromBody] UpdateOrderCommand command)
-    //{
-    //    command.OrderId = orderId;
-    //    await _mediator.Send(command);
-    //    return NoContent();
-    //}
-
-    [HttpDelete("{orderId}")]
-    public async Task<IActionResult> DeleteOrder(Guid orderId)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateOrder(
+        [FromServices] IMediator mediator,
+        Guid id,
+        [FromBody] UpdateOrderCommand updateOrderCommand)
     {
-       // await _mediator.Send(new DeleteOrderCommand { OrderId = orderId });
+        await mediator.Send(new UpdateOrderCommand(id, updateOrderCommand.order));
+        return NoContent();
+    }
+
+    [HttpPatch("{id:guid}")]
+    public async Task<IActionResult> PartiallyUpdateOrder(
+        [FromServices] IMediator mediator,
+        Guid id,
+        [FromBody] JsonPatchDocument<OrderDto> patchDocument)
+    {
+        await mediator.Send(new PartialUpdateOrderCommand() {Id = id, PatchDocument = patchDocument });
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteOrder(
+        [FromServices] IMediator mediator,
+        Guid id)
+    {
+        await mediator.Send(new DeleteOrderCommand(id));
+
         return NoContent();
     }
 }
