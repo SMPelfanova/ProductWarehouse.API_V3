@@ -26,13 +26,13 @@ public class ProductsControllerTests
         var mediatorMock = A.Fake<IMediator>();
         var mapperMock = A.Fake<IMapper>();
 
-        var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
+        var controller = new ProductsController();
 
         A.CallTo(() => mediatorMock.Send(A<GetAllProductsQuery>._, CancellationToken.None))
                     .Returns(new ProductsFilterDto());
 
         // Act
-        var result = await controller.GetProducts();
+        var result = await controller.GetProducts(mediatorMock, mapperMock);
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
@@ -47,7 +47,7 @@ public class ProductsControllerTests
         var loggerMock = A.Fake<ILogger<ProductsController>>();
         var mediatorMock = A.Fake<IMediator>();
         var mapperMock = TestStartup.CreateMapper();
-        var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
+        var controller = new ProductsController();
 
         var products = fixture.CreateMany<ProductDto>(2);
 
@@ -58,7 +58,7 @@ public class ProductsControllerTests
                     });
 
         // Act
-        var result = await controller.GetProducts();
+        var result = await controller.GetProducts(mediatorMock, mapperMock);
 
         // Assert
         result.Should().BeOfType<OkObjectResult>();
@@ -86,10 +86,10 @@ public class ProductsControllerTests
                        Products = products.ToList()
                    });
 
-        var controller = new ProductsController(loggerMock, mediatorMock, mapperMock);
+        var controller = new ProductsController();
 
         // Act
-        var result = await controller.GetProducts(new FilterProductsRequest { Size = searchFilter.Size, MinPrice = searchFilter.MinPrice, MaxPrice = searchFilter.MaxPrice, Highlight = searchFilter.Highlight });
+        var result = await controller.GetProducts(mediatorMock, mapperMock, new FilterProductsRequest { Size = searchFilter.Size, MinPrice = searchFilter.MinPrice, MaxPrice = searchFilter.MaxPrice, Highlight = searchFilter.Highlight });
 
         // Assert
         result.Should().BeOfType<OkObjectResult>();

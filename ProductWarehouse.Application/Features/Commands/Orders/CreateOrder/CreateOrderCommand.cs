@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ProductWarehouse.Application.Models;
 
-namespace ProductWarehouse.Application.Features.Commands.Orders.AddOrder;
+namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 public class CreateOrderCommand : IRequest
 {
     public OrderStatusDto Status { get; set; }

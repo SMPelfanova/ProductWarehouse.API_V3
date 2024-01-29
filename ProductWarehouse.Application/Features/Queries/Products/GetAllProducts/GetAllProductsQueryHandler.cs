@@ -10,20 +10,21 @@ namespace ProductWarehouse.Application.Features.Queries.GetProducts;
 
 public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, ProductsFilterDto>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
 
-    public GetAllProductsQueryHandler(IProductRepository productRepository, IMapper mapper, ILogger logger)
+    public GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
     {
-        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
         _logger = logger;
     }
 
     public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        var products = await _productRepository.GetAllAsync(nameof(ProductDto.ProductGroups), "ProductSizes", "ProductSizes.Size", nameof(ProductDto.Brand));
+        var products = await _unitOfWork.Products.GetAllAsync(nameof(ProductDto.ProductGroups), "ProductSizes", "ProductSizes.Size", nameof(ProductDto.Brand));
+        
         if (products.Count() <= 0)
         {
             _logger.Information($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");

@@ -6,17 +6,17 @@ using ProductWarehouse.Application.Models;
 namespace ProductWarehouse.Application.Features.Queries.GetProduct;
 public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDto>
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetProductQueryHandler(IProductRepository productRepository, IMapper mapper)
+    public GetProductQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
     public async Task<ProductDto> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
-       var result = await _productRepository.GetByIdAsync(request.Id);
+       var result = await _unitOfWork.Products.GetByIdAsync(request.Id);
 
         return _mapper.Map<ProductDto>(result);
     }

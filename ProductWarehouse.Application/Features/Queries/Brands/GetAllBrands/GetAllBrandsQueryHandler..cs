@@ -3,7 +3,7 @@ using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models;
 
-namespace ProductWarehouse.Application.Features.Queries.Brands;
+namespace ProductWarehouse.Application.Features.Queries.Brands.GetAllBrands;
 public class GetAllBrandsQueryHandler : IRequestHandler<GetAllBrandsQuery, List<BrandDto>>
 {
     private readonly IBrandRepository _brandRepository;

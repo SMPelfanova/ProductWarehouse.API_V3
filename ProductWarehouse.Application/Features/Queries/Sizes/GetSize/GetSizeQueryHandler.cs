@@ -6,18 +6,18 @@ using ProductWarehouse.Application.Models;
 namespace ProductWarehouse.Application.Features.Queries.Sizes;
 public class GetSizeQueryHandler : IRequestHandler<GetSizeQuery, SizeDto>
 {
-    private readonly ISizeRepository _sizeRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GetSizeQueryHandler(ISizeRepository sizeRepository, IMapper mapper)
+    public GetSizeQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _sizeRepository = sizeRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<SizeDto> Handle(GetSizeQuery request, CancellationToken cancellationToken)
     {
-        var result = await _sizeRepository.GetByIdAsync(request.Id);
+        var result = await _unitOfWork.Sizes.GetByIdAsync(request.Id);
         var mapper = _mapper.Map<SizeDto>(result);
 
         return mapper;

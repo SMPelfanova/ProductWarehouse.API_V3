@@ -8,6 +8,12 @@ internal class UnitOfWork : IUnitOfWork
     private readonly ApplicationDbContext _dbContext;
     public IProductRepository Products { get; }
 
+    public ISizeRepository Sizes { get; }
+
+    public IOrderRepository Orders { get; }
+
+    public IBrandRepository Brands { get; }
+
     public UnitOfWork(ApplicationDbContext dbContext,
                         IProductRepository productRepository)
     {

@@ -6,21 +6,15 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext()
     {
-        
     }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseSqlServer("Server=localhost;Database=newdatabase;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
-    //}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        //remove if it's working
-        //modelBuilder.ApplyConfiguration(new ProductConfiguration());
+
         SeedData(modelBuilder);
     }
 

@@ -23,6 +23,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .WithMany(p => p.Products)
             .HasForeignKey(b => b.BrandId)
             .IsRequired();
-
+        //builder.ComplexProperty(p => p.Brand);
     }
 }

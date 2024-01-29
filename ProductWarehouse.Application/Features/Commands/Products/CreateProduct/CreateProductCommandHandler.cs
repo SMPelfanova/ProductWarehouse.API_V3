@@ -6,18 +6,16 @@ using ProductWarehouse.Domain.Entities;
 namespace ProductWarehouse.Application.Features.Commands.Products;
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
 {
-    private readonly IProductRepository _productRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    public CreateProductCommandHandler(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper)
+    public CreateProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _productRepository = productRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
     public async Task Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        await _productRepository.Add(new Product
+        await _unitOfWork.Products.Add(new Product
         {
             Title = request.Title,
             Description = request.Description,

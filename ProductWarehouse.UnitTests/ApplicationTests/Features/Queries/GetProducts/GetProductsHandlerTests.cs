@@ -15,7 +15,7 @@ public class GetProductsHandlerTests
     public async Task Handle_ReturnsExpectedResponse()
     {
         // Arrange
-        var productRepositoryMock = A.Fake<IProductRepository>();
+        var unitOfWorkMock = A.Fake<IUnitOfWork>();
         var validatorMock = A.Fake<IValidator<GetAllProductsQuery>>();
         A.CallTo(() => validatorMock.Validate(A<GetAllProductsQuery>._)).Returns(new FluentValidation.Results.ValidationResult());
         var mapperMock = TestStartup.CreateMapper();
@@ -35,10 +35,10 @@ public class GetProductsHandlerTests
             new Product { Title = "Test 2", Description = "test 2", Price = 11 }
         };
 
-        A.CallTo(() => productRepositoryMock.GetAllAsync())
+        A.CallTo(() => unitOfWorkMock.Products.GetAllAsync())
                              .Returns(products);
 
-        var handler = new GetAllProductsQueryHandler(productRepositoryMock, mapperMock,loggerMock);
+        var handler = new GetAllProductsQueryHandler(unitOfWorkMock, mapperMock,loggerMock);
 
         // Act
         var result = await handler.Handle(productsQuery, CancellationToken.None);
