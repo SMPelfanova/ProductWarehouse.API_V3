@@ -10,5 +10,5 @@ public class ProductDto
     //public required List<SizeDto> Sizes { get; set; }
     public required string Description { get; set; }
     public List<string> Sizes { get; set; }
-    public List<ProductGroups> ProductGroups { get; set; }
+    public List<GroupDto> Groups { get; set; }
 }

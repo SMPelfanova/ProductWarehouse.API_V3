@@ -6,10 +6,12 @@ using ProductWarehouse.API.Mapping;
 using ProductWarehouse.Persistence.Extensions;
 using ProductWarehouse.API.Infrastructure;
 using ProductWarehouse.Persistence.EF.Extensions;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 builder.Services.AddHttpClient();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

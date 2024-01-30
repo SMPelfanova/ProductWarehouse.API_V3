@@ -19,10 +19,14 @@ public class AutoMapperProfile : Profile
         CreateMap<OrderDetails, OrderDetailsDto>().ReverseMap();
         CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
         CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
-        
+
         CreateMap<Product, ProductDto>()
-            .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.ProductSizes.Select(p => p.Size.Name).Distinct().ToList()))
-            .ReverseMap();
+            .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
+            .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.ProductSizes.Select(ps => ps.Size.Name)))
+            .ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.ProductGroups.Select(pg => pg.Group))).ReverseMap();
+        CreateMap<ProductGroups, GroupDto>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Group.Id))
+           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Group.Name)).ReverseMap();
 
         CreateMap<IReadOnlyList<Product>, ProductsFilterDto>()
             .ForMember(dest => dest.MinPrice, opt => opt.MapFrom(src => src.Min(p => p.Price)))

@@ -7,6 +7,5 @@ public interface IOrderRepository : IRepository<Order>
 {
     Task<Order> GetOrderStatus(Guid id);
     Task<Order> GetOrderDetails(Guid id);
-    Task<Order> CreateOrder(Guid id);
 
 }
