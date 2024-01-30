@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ProductWarehouse.Application.Extensions;
+using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Models;
 using ProductWarehouse.Domain.Entities;
 
@@ -9,6 +10,8 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
+        CreateMap<UpdateOrderCommand, Order>();
+
         CreateMap<Brand, BrandDto>().ReverseMap();
         CreateMap<Group, GroupDto>().ReverseMap();
         CreateMap<Size, SizeDto>().ReverseMap();
@@ -16,7 +19,7 @@ public class AutoMapperProfile : Profile
         CreateMap<OrderDetails, OrderDetailsDto>().ReverseMap();
         CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
         CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
-
+        
         CreateMap<Product, ProductDto>()
             .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.ProductSizes.Select(p => p.Size.Name).Distinct().ToList()))
             .ReverseMap();

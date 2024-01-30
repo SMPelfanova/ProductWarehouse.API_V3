@@ -16,11 +16,14 @@ public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand>
 
     public async Task Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
     {
-       var order = _unitOfWork.Orders.GetByIdAsync(request.Id);
+       var order = await _unitOfWork.Orders.GetByIdAsync(request.Id);
+        if (order != null)
+        {
+            order.StatusId = request.StatusId;
+            order.TotalAmount = request.TotalAmount;
 
-        await _mapper.Map(request, order);
-
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
  
 }

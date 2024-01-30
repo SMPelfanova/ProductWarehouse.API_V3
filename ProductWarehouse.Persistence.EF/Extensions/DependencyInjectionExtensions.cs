@@ -13,9 +13,6 @@ public static class DependencyInjectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("WerehouseSQLDBConnectionString")));
 
-        services.AddScoped<IApplicationDbContext>(sp =>
-            sp.GetRequiredService<ApplicationDbContext>());
-
 
         return services;
     }

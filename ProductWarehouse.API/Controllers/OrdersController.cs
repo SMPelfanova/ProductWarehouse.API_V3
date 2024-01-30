@@ -7,6 +7,11 @@ using ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
 using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
 using ProductWarehouse.Application.Models;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
+using ProductWarehouse.API.Models.Requests;
+using AutoMapper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Azure.Core;
+using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -43,7 +48,6 @@ public class OrdersController : BaseController
     [HttpPost]
     public async Task<IActionResult> CreateOrder(
         [FromServices] IMediator mediator,
-        Guid id,
         CreateOrderCommand command)
     {
         await mediator.Send(command);
@@ -54,20 +58,26 @@ public class OrdersController : BaseController
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateOrder(
         [FromServices] IMediator mediator,
+        [FromServices] IMapper mapper,
         Guid id,
-        [FromBody] UpdateOrderCommand updateOrderCommand)
+        [FromBody] UpdateOrderRequest updateOrderRequest)
     {
-        await mediator.Send(new UpdateOrderCommand(id, updateOrderCommand.order));
+        updateOrderRequest.Id = id;
+        var request = mapper.Map<UpdateOrderCommand>(updateOrderRequest);
+        await mediator.Send(request);
+
         return NoContent();
     }
 
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> PartiallyUpdateOrder(
         [FromServices] IMediator mediator,
+        [FromServices] IMapper mapper,
         Guid id,
-        [FromBody] JsonPatchDocument<OrderDto> patchDocument)
+        [FromBody] JsonPatchDocument<UpdateOrderRequest> patchDocument)
     {
-        await mediator.Send(new PartialUpdateOrderCommand() {Id = id, PatchDocument = patchDocument });
+        var command = mapper.Map<JsonPatchDocument<PartialUpdateRequest>>(patchDocument);
+        await mediator.Send(new PartialUpdateOrderCommand() { Id = id, PatchDocument = command });
 
         return NoContent();
     }

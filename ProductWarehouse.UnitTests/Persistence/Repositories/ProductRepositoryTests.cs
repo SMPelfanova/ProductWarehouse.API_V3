@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using ProductWarehouse.Infrastructure.Configuration;
 using Serilog;
 using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.UnitTests.Persistence.Repositories;
 
@@ -23,7 +24,7 @@ public class ProductRepositoryTests
 
         var httpClient = A.Fake<HttpClient>();
         var loggerMock = A.Fake<ILogger>();
-        var appDbContext = A.Fake<IApplicationDbContext>();
+        var appDbContext = A.Fake<ApplicationDbContext>();
         var configMock = A.Fake<IOptions<MockyClientOptions>>();
         A.CallTo(() => configMock.Value).Returns(new MockyClientOptions
         {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
+using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrderCommand>
@@ -21,14 +21,21 @@ public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrd
 
         if (order == null)
         {
+            return;
+        }
+        var partialUpdate = new PartialUpdateRequest();
+
+        request.PatchDocument.ApplyTo(partialUpdate);
+
+        if (partialUpdate.TotalAmount.HasValue)
+        {
+            order.TotalAmount = partialUpdate.TotalAmount.Value;
+        }
+        if (partialUpdate.StatusId.HasValue)
+        {
+            order.StatusId = partialUpdate.StatusId.Value;
         }
 
-        var orderDto = _mapper.Map<OrderDto>(request.PatchDocument);
-
-        //todo:
-        //request.PatchDocument.ApplyTo(order);
-
         await _unitOfWork.SaveChangesAsync();
-
     }
 }

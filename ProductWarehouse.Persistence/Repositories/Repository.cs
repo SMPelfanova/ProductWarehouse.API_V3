@@ -28,11 +28,15 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         return await query.ToListAsync();
     }
 
-    public async Task Add(TEntity entity)
+    public async Task<Guid> Add(TEntity entity)
     {
-        await _dbContext.Set<TEntity>().AddAsync(entity);
-    }
+        var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
 
+        var generatedId = _dbContext.Entry(entity).Property("Id").CurrentValue;
+
+        return (Guid)generatedId;
+    }
     public void Delete(TEntity entity)
     {
         _dbContext.Set<TEntity>().Remove(entity);

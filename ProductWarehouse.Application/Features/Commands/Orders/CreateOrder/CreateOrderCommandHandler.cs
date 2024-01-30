@@ -16,16 +16,35 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
 
     public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
+        var status = await _unitOfWork.OrdersStatuses.GetByIdAsync(request.StatusId);
+        if (status == null)
+        {
+            return;
+        }
+
         var order = new Order
         {
-            Status = new OrderStatus() { Id = request.StatusId },
+            StatusId = request.StatusId,
             OrderDate = request.OrderDate,
             TotalAmount = request.TotalAmount,
-            OrderDetails = _mapper.Map<List<OrderDetails>>(request.OrderDetails)
+            OrderDetails = new List<OrderDetails>()
         };
+        var id = await _unitOfWork.Orders.Add(order);
 
-        await _unitOfWork.Orders.Add(order);
-
+        foreach (var item in request.OrderDetails)
+        {
+            order.OrderDetails.Add(new OrderDetails
+            {
+                OrderId = id,
+                SizeId = item.SizeId,
+                ProductId = item.ProductId,
+                Quantity = item.Quantity,
+                Price = item.Price
+            });
+           
+        }
+        
         await _unitOfWork.SaveChangesAsync();
+
     }
 }

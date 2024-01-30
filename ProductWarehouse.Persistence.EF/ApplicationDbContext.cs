@@ -1,14 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 namespace ProductWarehouse.Persistence.EF;
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext()
     {
+
     }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+
+    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Server=localhost;Database=Werehouse;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -17,7 +25,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
         SeedData(modelBuilder);
     }
-
+ 
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Group> Groups { get; set; }

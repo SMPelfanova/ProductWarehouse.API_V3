@@ -30,10 +30,10 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasOne(b => b.User)
             .WithMany(p => p.Orders)
-            .HasForeignKey(b => b.Userid);
+            .HasForeignKey(b => b.Userid).IsRequired(false);
 
         builder.HasOne(b => b.Payment)
             .WithMany(p => p.Orders)
-            .HasForeignKey(b => b.PaymentId);
+            .HasForeignKey(b => b.PaymentId).IsRequired(false);
     }
 }
