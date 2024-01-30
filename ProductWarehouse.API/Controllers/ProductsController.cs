@@ -4,12 +4,11 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
-using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
+using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
 using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
-using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -109,5 +108,18 @@ public class ProductsController : BaseController
         await mediator.Send(new DeleteProductCommand(id));
         return NoContent();
     }
-   
+
+
+    //[HttpGet("{id:guid}/brand")]
+    //public async Task<IActionResult> GetProductBrand([FromServices] IMediator mediator, Guid productId)
+    //{
+    //    var product = await mediator.Send(new GetProductBrandQuery(productId));
+
+    //    if (product == null)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    return Ok(product);
+    //}
 }

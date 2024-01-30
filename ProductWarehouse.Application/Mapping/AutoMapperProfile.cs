@@ -10,10 +10,11 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<Brand, BrandDto>().ReverseMap();
-        CreateMap<Group, ProductGroupDto>().ReverseMap();
+        CreateMap<Group, GroupDto>().ReverseMap();
         CreateMap<Size, SizeDto>().ReverseMap();
         CreateMap<Order, OrderDto>().ReverseMap();
         CreateMap<OrderDetails, OrderDetailsDto>().ReverseMap();
+        CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
         CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
 
         CreateMap<Product, ProductDto>()

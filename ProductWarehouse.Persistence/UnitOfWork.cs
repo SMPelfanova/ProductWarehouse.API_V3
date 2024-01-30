@@ -1,5 +1,4 @@
 ﻿using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Domain.Interfaces;
 using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence;
@@ -14,11 +13,25 @@ internal class UnitOfWork : IUnitOfWork
 
     public IBrandRepository Brands { get; }
 
+    public IOrderStatusRepository OrdersStatuses { get; }
+    public IGroupRepository Group { get; }
+
     public UnitOfWork(ApplicationDbContext dbContext,
-                        IProductRepository productRepository)
+                        IOrderStatusRepository orderStatusRepository,
+                        IGroupRepository groupRepository,
+                        IProductRepository productRepository,
+                        ISizeRepository sizesRepository,
+                        IOrderRepository ordersRepository,
+                        IBrandRepository brandsRepository
+                        )
     {
         _dbContext = dbContext;
+        OrdersStatuses = orderStatusRepository;
+        Group = groupRepository;
         Products = productRepository;
+        Sizes = sizesRepository;
+        Orders = ordersRepository;
+        Brands = brandsRepository;
     }
 
     public void Dispose()

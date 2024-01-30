@@ -3,9 +3,7 @@ using ProductWarehouse.Domain.Interfaces;
 
 namespace ProductWarehouse.Application.Interfaces;
 
-public interface IOrderRepository : IRepository<Order>
+public interface IOrderStatusRepository : IRepository<OrderStatus>
 {
-    Task<Order> GetOrderStatus(Guid id);
-    Task<Order> GetOrderDetails(Guid id);
 
 }

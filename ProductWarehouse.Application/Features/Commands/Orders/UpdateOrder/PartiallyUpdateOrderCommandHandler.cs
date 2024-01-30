@@ -24,6 +24,7 @@ public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrd
         }
 
         var orderDto = _mapper.Map<OrderDto>(request.PatchDocument);
+
         //todo:
         //request.PatchDocument.ApplyTo(order);
 

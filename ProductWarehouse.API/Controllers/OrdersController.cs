@@ -6,6 +6,7 @@ using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
 using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
 using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -37,6 +38,17 @@ public class OrdersController : BaseController
         }
 
         return Ok(product);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder(
+        [FromServices] IMediator mediator,
+        Guid id,
+        CreateOrderCommand command)
+    {
+        await mediator.Send(command);
+
+        return Ok();
     }
 
     [HttpPut("{id:guid}")]

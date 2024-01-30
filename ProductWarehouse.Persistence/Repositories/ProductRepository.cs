@@ -13,6 +13,11 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
     {
     }
 
+    public Task<Product> GetProductBrand(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<Product> GetProductDetails(Guid id)
     {
         var product = await _dbContext.Products
@@ -22,5 +27,15 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
             .FirstOrDefaultAsync();
 
         return product;
+    }
+
+    public Task<Product> GetProductGroups(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Product> GetProductSizes(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }

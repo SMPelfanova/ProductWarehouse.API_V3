@@ -8,12 +8,15 @@ public static class DependencyInjectionExtensions
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
-        services.AddScoped<IProductRepository, ProductRepository>();
-        services.AddScoped<IBrandRepository, BrandRepository>();
-        services.AddScoped<IOrderRepository, OrderRepository>();
-        services.AddScoped<ISizeRepository, SizeRepository>();
-
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<IGroupRepository, GroupRepository>();
+        services.AddScoped<IBrandRepository, BrandRepository>();
+        services.AddScoped<ISizeRepository, SizeRepository>();
+        services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        
 
         return services;
     }
