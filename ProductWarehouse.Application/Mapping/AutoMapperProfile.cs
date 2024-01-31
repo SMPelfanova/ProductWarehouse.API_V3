@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ProductWarehouse.Application.Extensions;
 using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
+using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 using ProductWarehouse.Application.Models;
 using ProductWarehouse.Domain.Entities;
 
@@ -10,7 +11,6 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<UpdateOrderCommand, Order>();
 
         CreateMap<Brand, BrandDto>().ReverseMap();
         CreateMap<Group, GroupDto>().ReverseMap();
@@ -20,13 +20,19 @@ public class AutoMapperProfile : Profile
         CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
         CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
 
-        CreateMap<Product, ProductDto>()
-            .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
-            .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.ProductSizes.Select(ps => ps.Size.Name)))
-            .ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.ProductGroups.Select(pg => pg.Group))).ReverseMap();
+        CreateMap<ProductSize, SizeDto>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Size.Id))
+           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Size.Name))
+           .ReverseMap();
+
         CreateMap<ProductGroups, GroupDto>()
            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Group.Id))
            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Group.Name)).ReverseMap();
+
+        CreateMap<Product, ProductDto>()
+            .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.Brand.Name))
+            .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.ProductSizes.Select(ps => ps.Size)))
+            .ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.ProductGroups.Select(pg => pg.Group))).ReverseMap();
 
         CreateMap<IReadOnlyList<Product>, ProductsFilterDto>()
             .ForMember(dest => dest.MinPrice, opt => opt.MapFrom(src => src.Min(p => p.Price)))
@@ -40,6 +46,14 @@ public class AutoMapperProfile : Profile
              ))
             .ForMember(dest => dest.CommonWords, opt => opt.MapFrom(src => src.FindMostCommonWords()))
             .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src));
+
+        CreateMap<UpdateProductCommand, Product>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+           .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+           .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+           .ForMember(dest => dest.BrandId, opt => opt.MapFrom(src => src.BrandId))
+           .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
+         
 
     }
 }

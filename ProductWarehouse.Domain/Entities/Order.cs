@@ -12,4 +12,5 @@ public class Order
     public DateTime OrderDate { get; set; }
 
     public ICollection<OrderDetails> OrderDetails { get; set; }
+    public bool IsDeleted { get; set; }
 }

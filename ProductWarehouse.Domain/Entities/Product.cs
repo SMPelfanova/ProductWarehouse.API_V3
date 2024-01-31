@@ -11,4 +11,5 @@ public class Product
     public ICollection<ProductGroups> ProductGroups { get; set; }
     public ICollection<OrderDetails> OrderDetails { get; set; }
     public ICollection<ProductSize> ProductSizes { get; set; }
+    public bool IsDeleted { get; set; }
 }

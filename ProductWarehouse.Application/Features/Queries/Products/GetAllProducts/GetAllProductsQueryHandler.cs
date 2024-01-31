@@ -24,7 +24,7 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
     public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
         //todo: fix
-        var products = await _unitOfWork.Products.GetAllAsync("ProductGroups", "ProductSizes", "ProductSizes.Size", nameof(ProductDto.Brand));
+        var products = await _unitOfWork.Products.GetAllAsync("ProductGroups", "ProductGroups.Group", "ProductSizes", "ProductSizes.Size", nameof(ProductDto.Brand));
         
         if (products.Count() <= 0)
         {
@@ -37,7 +37,7 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
         productFilter.Products = productFilter.Products
             .Where(x => (request.MinPrice == 0 || x.Price >= request.MinPrice))
             .Where(x => (request.MaxPrice == 0 || x.Price <= request.MaxPrice))
-            .Where(x => (string.IsNullOrEmpty(request.Size) || x.Sizes.Any(s => s.ToLowerInvariant() == request.Size.ToLowerInvariant()))).ToList();
+            .Where(x => (string.IsNullOrEmpty(request.Size) || x.Sizes.Any(s => s.Name.ToLowerInvariant() == request.Size.ToLowerInvariant()))).ToList();
 
         if (!string.IsNullOrEmpty(request.Highlight))
         {

@@ -6,5 +6,5 @@ namespace ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 public class PartialUpdateOrderCommand() : IRequest
 {
     public Guid Id { get; set; }
-    public required JsonPatchDocument<PartialUpdateRequest> PatchDocument { get; set; }
+    public required JsonPatchDocument<PartialUpdateOrderRequest> PatchDocument { get; set; }
 }

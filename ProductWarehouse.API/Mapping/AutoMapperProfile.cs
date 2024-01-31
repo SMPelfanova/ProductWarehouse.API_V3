@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
-using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Models;
 
@@ -21,9 +20,8 @@ public class AutoMapperProfile : Profile
     private void MapFromRequestToQueriesOrCommands()
     {
         CreateMap<FilterProductsRequest, GetAllProductsQuery>();
-        CreateMap<UpdateOrderRequest, UpdateOrderCommand>();
-        CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateRequest>>();
-        CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateRequest>>();
+        CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderRequest>>();
+        CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderRequest>>();
     }
 
     private void MapFromDtoToResponse()

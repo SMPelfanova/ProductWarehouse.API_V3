@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Azure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
-using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
+using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 
@@ -88,19 +88,13 @@ public class ProductsController : BaseController
         return Ok();
     }
 
-    //[HttpPut("{id:guid}")]
-    //public async Task<IActionResult> UpdateProduct(Guid id, UpdateProductCommand product)
-    //{
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateProduct([FromServices] IMediator mediator, Guid id, UpdateProductCommand product)
+    {
+        await mediator.Send(product);
 
-    //    return NoContent();
-    //}
-
-    //[HttpPatch]
-    //public async Task<IActionResult> PartiallyUpdateProduct(Guid id, JsonPatchDocument<CreateProductCommand> product)
-    //{
-
-    //    return NoContent();
-    //}
+        return NoContent();
+    }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteProduct([FromServices] IMediator mediator, Guid id)
@@ -110,16 +104,30 @@ public class ProductsController : BaseController
     }
 
 
-    //[HttpGet("{id:guid}/brand")]
-    //public async Task<IActionResult> GetProductBrand([FromServices] IMediator mediator, Guid productId)
-    //{
-    //    var product = await mediator.Send(new GetProductBrandQuery(productId));
+    [HttpGet("{id:guid}/sizes")]
+    public async Task<IActionResult> GetProductSizes([FromServices] IMediator mediator, Guid productId)
+    {
 
-    //    if (product == null)
-    //    {
-    //        return NotFound();
-    //    }
+        return Ok();
+    }
 
-    //    return Ok(product);
-    //}
+    [HttpPost("{id:guid}/sizes")]
+    public async Task<IActionResult> CreateProductSizes([FromServices] IMediator mediator, Guid productId)
+    {
+
+        return Ok();
+    }
+
+    [HttpPut("{id:guid}/sizes/{sizeId:guid}")]
+    public async Task<IActionResult> UpdateProductSizes([FromServices] IMediator mediator, Guid productId)
+    {
+
+        return Ok();
+    }
+
+    [HttpDelete("{id:guid}/sizes/{sizeId:guid}")]
+    public async Task<IActionResult> DeleteProductSizes([FromServices] IMediator mediator, Guid productId)
+    {
+        return Ok();
+    }
 }

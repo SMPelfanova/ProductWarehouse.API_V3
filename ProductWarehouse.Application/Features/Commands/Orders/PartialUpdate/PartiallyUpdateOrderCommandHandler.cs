@@ -23,7 +23,7 @@ public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrd
         {
             return;
         }
-        var partialUpdate = new PartialUpdateRequest();
+        var partialUpdate = new PartialUpdateOrderRequest();
 
         request.PatchDocument.ApplyTo(partialUpdate);
 

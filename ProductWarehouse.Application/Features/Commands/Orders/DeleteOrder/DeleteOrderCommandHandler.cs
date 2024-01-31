@@ -14,7 +14,9 @@ public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand>
     public async Task Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
     {
         var order = await _unitOfWork.Orders.GetByIdAsync(request.Id);
-        _unitOfWork.Orders.Delete(order);
+        order.IsDeleted = true;
+
+        _unitOfWork.Orders.Update(order);
 
         await _unitOfWork.SaveChangesAsync();
     }
