@@ -20,6 +20,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             Title = request.Title,
             Description = request.Description,
             Price = request.Price,
+            Photo = request.Photo,
             BrandId = request.BrandId
         };
 

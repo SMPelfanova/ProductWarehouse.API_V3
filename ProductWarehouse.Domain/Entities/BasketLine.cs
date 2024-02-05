@@ -1,7 +1,6 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
 public class BasketLine
 {
-    public Guid Id { get; set; }
     public Basket Basket { get; set; }
     public Guid BasketId { get; set; }
     public Product Product { get; set; }

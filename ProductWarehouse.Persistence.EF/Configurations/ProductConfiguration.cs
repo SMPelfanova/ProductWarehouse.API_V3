@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
-using System.Reflection.Emit;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
@@ -12,8 +11,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.ToTable(nameof(TableNames.Products));
 
         builder.HasKey(p => p.Id);
-
-        builder.Property(p => p.Title).IsRequired();
+        builder.Property(p=>p.Photo).IsRequired(false);
+        builder.Property(p=>p.IsDeleted).HasDefaultValue(false);
+        builder.Property(p => p.Title).IsRequired().HasMaxLength(100);
         builder.Property(p => p.Description).IsRequired();
         builder.Property(p => p.Price)
             .HasColumnType("decimal(18, 2)")
@@ -23,6 +23,5 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .WithMany(p => p.Products)
             .HasForeignKey(b => b.BrandId)
             .IsRequired();
-        //builder.ComplexProperty(p => p.Brand);
     }
 }

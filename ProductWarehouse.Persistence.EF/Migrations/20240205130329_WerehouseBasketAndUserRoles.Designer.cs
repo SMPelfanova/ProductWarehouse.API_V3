@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductWarehouse.Persistence.EF;
 
@@ -11,9 +12,11 @@ using ProductWarehouse.Persistence.EF;
 namespace ProductWarehouse.Persistence.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240205130329_WerehouseBasketAndUserRoles")]
+    partial class WerehouseBasketAndUserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +48,9 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("BasketId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
@@ -81,23 +87,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Brands", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("cabb3b71-67d1-423d-97d1-24ad195e8f93"),
-                            Name = "Zara"
-                        },
-                        new
-                        {
-                            Id = new Guid("64d0b670-0224-4a52-ba91-a50210e0f060"),
-                            Name = "Bershka"
-                        },
-                        new
-                        {
-                            Id = new Guid("cc3ba321-cbfc-43a2-a63e-dd30b6f59d5a"),
-                            Name = "Stella Nova"
-                        });
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Group", b =>
@@ -114,18 +103,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Groups", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("51945acd-123c-4ded-be93-1980493d8aab"),
-                            Name = "Casual"
-                        },
-                        new
-                        {
-                            Id = new Guid("ab42bf33-1860-418a-aa0f-4656abf962eb"),
-                            Name = "Comfortable"
-                        });
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Order", b =>
@@ -156,9 +133,7 @@ namespace ProductWarehouse.Persistence.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentId")
-                        .IsUnique()
-                        .HasFilter("[PaymentId] IS NOT NULL");
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("StatusId");
 
@@ -209,18 +184,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderStatus", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3f88493d-c546-4e63-8d27-5a90a608f800"),
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            Id = new Guid("066ebde3-ed9f-409f-9e3a-a6d565af31de"),
-                            Name = "Delivered"
-                        });
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Payment", b =>
@@ -263,11 +226,10 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<string>("Photo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
@@ -308,6 +270,9 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Property<Guid>("SizeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("QuantityInStock")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
@@ -318,22 +283,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasIndex("SizeId");
 
                     b.ToTable("ProductSizes", (string)null);
-                });
-
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Size", b =>
@@ -350,39 +299,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sizes", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("784f031d-f568-4725-89cc-612ef01c92ca"),
-                            Name = "XS"
-                        },
-                        new
-                        {
-                            Id = new Guid("6a6a8330-b769-401e-8d7d-6e68c5ca30ff"),
-                            Name = "S"
-                        },
-                        new
-                        {
-                            Id = new Guid("a463beb0-547f-4440-b1be-7110525c862d"),
-                            Name = "M"
-                        },
-                        new
-                        {
-                            Id = new Guid("6ee74602-7b69-400c-8d01-5a48267a3fa2"),
-                            Name = "L"
-                        },
-                        new
-                        {
-                            Id = new Guid("40b7d31a-1ce7-4194-b485-59484ada6472"),
-                            Name = "XL"
-                        });
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
@@ -417,9 +338,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<Guid>("UserRoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
@@ -427,15 +345,16 @@ namespace ProductWarehouse.Persistence.EF.Migrations
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
+                    b.HasKey("Id");
 
                     b.ToTable("UserRoles", (string)null);
                 });
@@ -481,8 +400,8 @@ namespace ProductWarehouse.Persistence.EF.Migrations
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ProductWarehouse.Domain.Entities.Payment", "Payment")
-                        .WithOne("Order")
-                        .HasForeignKey("ProductWarehouse.Domain.Entities.Order", "PaymentId");
+                        .WithMany("Orders")
+                        .HasForeignKey("PaymentId");
 
                     b.HasOne("ProductWarehouse.Domain.Entities.OrderStatus", "Status")
                         .WithMany("Orders")
@@ -577,23 +496,15 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.User", b =>
                 {
-                    b.HasOne("ProductWarehouse.Domain.Entities.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("ProductWarehouse.Domain.Entities.UserRole", "UserRole")
+                        .WithMany("Users")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ProductWarehouse.Domain.Entities.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
+                    b.Navigation("UserRole");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Basket", b =>
@@ -623,8 +534,7 @@ namespace ProductWarehouse.Persistence.EF.Migrations
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Payment", b =>
                 {
-                    b.Navigation("Order")
-                        .IsRequired();
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Product", b =>
@@ -636,11 +546,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Navigation("ProductGroups");
 
                     b.Navigation("ProductSizes");
-                });
-
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Role", b =>
-                {
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Size", b =>
@@ -658,8 +563,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .IsRequired();
 
                     b.Navigation("Orders");
+                });
 
-                    b.Navigation("UserRoles");
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.UserRole", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

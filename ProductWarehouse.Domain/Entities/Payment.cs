@@ -5,5 +5,6 @@ public class Payment
     public string Method { get; set; }
     public string Status { get; set; }
     public DateTime PaymentDate { get; set; }
-    public ICollection<Order> Orders { get; set; }
+    public Order Order { get; set; }
+
 }

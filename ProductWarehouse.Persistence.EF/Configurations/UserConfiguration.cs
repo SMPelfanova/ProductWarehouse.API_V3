@@ -12,11 +12,16 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(p => p.Id);
 
-        builder.Property(p => p.FirstName).IsRequired();
-        builder.Property(p => p.LastName).IsRequired();
-        builder.Property(p => p.Email).IsRequired();
+        builder.Property(p => p.FirstName).IsRequired().HasMaxLength(50);
+        builder.Property(p => p.LastName).IsRequired().HasMaxLength(50);
+        builder.Property(p => p.Email).IsRequired().HasMaxLength(100);
         builder.Property(p => p.Password).IsRequired();
-        builder.Property(p => p.Phone).IsRequired();
-        builder.Property(p => p.Address).IsRequired();
+        builder.Property(p => p.Phone).IsRequired().HasMaxLength(20);
+        builder.Property(p => p.Address).IsRequired().HasMaxLength(255);
+
+        builder.HasOne(b => b.Basket)
+        .WithOne(p => p.User)
+        .HasForeignKey<Basket>(b => b.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
     }
 }

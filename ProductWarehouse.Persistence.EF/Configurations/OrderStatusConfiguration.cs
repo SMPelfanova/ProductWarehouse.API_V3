@@ -12,6 +12,6 @@ public class OrderStatusConfiguration : IEntityTypeConfiguration<OrderStatus>
         
         builder.HasKey(t => t.Id);
 
-        builder.Property(p => p.Name).IsRequired();
+        builder.Property(p => p.Name).IsRequired().HasMaxLength(30);
     }
 }

@@ -12,7 +12,7 @@ public class ProductSizesConfiguration : IEntityTypeConfiguration<ProductSize>
 
         builder.HasKey(pg => new { pg.ProductId, pg.SizeId });
 
-        builder.Property(p => p.QuantityInStock).IsRequired();
+        builder.Property(p => p.QuantityInStock).IsRequired().HasDefaultValue(1);
 
         builder.HasOne(ps => ps.Product)
             .WithMany(ps => ps.ProductSizes)

@@ -8,7 +8,12 @@ public class User
     public string Password { get; set; }
     public string Phone { get; set; }
     public string Address { get; set; }
+    public bool IsDeleted { get; set; }
+
     public ICollection<Order> Orders { get; set; }
-    public UserRole UserRole { get; set; }
+
+    public Guid UserRoleId { get; set; }
+    public ICollection<UserRole> UserRoles { get; set; }
+
     public Basket Basket { get; set; }
 }

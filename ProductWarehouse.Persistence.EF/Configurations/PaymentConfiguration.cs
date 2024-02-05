@@ -12,14 +12,18 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 
         builder.HasKey(t => t.Id);
 
-        builder.Property(p => p.Method).IsRequired();
+        builder.Property(p => p.Method).IsRequired().HasMaxLength(50);
+        builder.Property(p => p.Status).IsRequired().HasMaxLength(50);
 
         builder.Property(p => p.PaymentDate).IsRequired();
-
         builder.Property(t => t.PaymentDate)
             .IsRequired()
             .HasColumnType("Date")
             .HasDefaultValueSql("GetDate()");
 
+        builder.HasOne(b => b.Order)
+            .WithOne(p => p.Payment)
+            .HasForeignKey<Order>(b => b.PaymentId)
+            .IsRequired(false);
     }
 }

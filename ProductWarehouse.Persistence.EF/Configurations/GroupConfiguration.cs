@@ -12,6 +12,6 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
 
         builder.HasKey(t => t.Id);
 
-        builder.Property(p => p.Name).IsRequired();
+        builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
     }
 }

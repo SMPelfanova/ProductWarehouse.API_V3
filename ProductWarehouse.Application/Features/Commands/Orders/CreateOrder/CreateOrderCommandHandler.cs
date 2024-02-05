@@ -27,13 +27,13 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
             StatusId = request.StatusId,
             OrderDate = request.OrderDate,
             TotalAmount = request.TotalAmount,
-            OrderDetails = new List<OrderLine>()
+            OrderLines = new List<OrderLine>()
         };
         var id = await _unitOfWork.Orders.Add(order);
 
         foreach (var item in request.OrderDetails)
         {
-            order.OrderDetails.Add(new OrderLine
+            order.OrderLines.Add(new OrderLine
             {
                 OrderId = id,
                 SizeId = item.SizeId,

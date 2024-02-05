@@ -10,7 +10,8 @@ public class Product
     public decimal Price { get; set; }
     public string Description { get; set; } = string.Empty;
     public ICollection<ProductGroups> ProductGroups { get; set; }
-    public ICollection<OrderLine> OrderDetails { get; set; }
+    public ICollection<OrderLine> OrderLines { get; set; }
+    public ICollection<BasketLine> BasketLines { get; set; }
     public ICollection<ProductSize> ProductSizes { get; set; }
     public bool IsDeleted { get; set; }
 }

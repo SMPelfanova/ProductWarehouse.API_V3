@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
+using System.Reflection.Emit;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
@@ -32,8 +33,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .WithMany(p => p.Orders)
             .HasForeignKey(b => b.Userid).IsRequired(false);
 
-        builder.HasOne(b => b.Payment)
-            .WithMany(p => p.Orders)
-            .HasForeignKey(b => b.PaymentId).IsRequired(false);
+        builder.HasOne(o => o.Payment)
+            .WithOne(p => p.Order)
+            .HasForeignKey<Order>(o => o.PaymentId);
     }
 }
