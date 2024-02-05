@@ -34,10 +34,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<Size> Sizes { get; set; }
     public DbSet<ProductSize> ProductSizes { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Payment> Payments { get; set; }
     public DbSet<OrderStatus> OrderStatus { get; set; }
     public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderDetails> OrderDetails { get; set; }
+    public DbSet<OrderLine> OrderLine { get; set; }
+    public DbSet<Basket> Basket { get; set; }
+    public DbSet<BasketLine> BasketLine { get; set; }
 
 
     //private void SeedData(ModelBuilder modelBuilder)

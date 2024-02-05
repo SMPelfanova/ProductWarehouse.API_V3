@@ -1,5 +1,5 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
-public class OrderDetails
+public class OrderLine
 {
     public Order Orders { get; set; }
     public Guid OrderId { get; set; }

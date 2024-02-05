@@ -4,9 +4,9 @@ using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
-public class OrderDetailsConfiguration : IEntityTypeConfiguration<OrderDetails>
+public class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
 {
-    public void Configure(EntityTypeBuilder<OrderDetails> builder)
+    public void Configure(EntityTypeBuilder<OrderLine> builder)
     {
         builder.ToTable(nameof(TableNames.OrderDetails));
 

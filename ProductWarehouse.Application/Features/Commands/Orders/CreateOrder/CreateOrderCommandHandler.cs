@@ -27,13 +27,13 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
             StatusId = request.StatusId,
             OrderDate = request.OrderDate,
             TotalAmount = request.TotalAmount,
-            OrderDetails = new List<OrderDetails>()
+            OrderDetails = new List<OrderLine>()
         };
         var id = await _unitOfWork.Orders.Add(order);
 
         foreach (var item in request.OrderDetails)
         {
-            order.OrderDetails.Add(new OrderDetails
+            order.OrderDetails.Add(new OrderLine
             {
                 OrderId = id,
                 SizeId = item.SizeId,
@@ -41,8 +41,15 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
                 Quantity = item.Quantity,
                 Price = item.Price
             });
+            var productSize = await _unitOfWork.Products.GetProductSize(item.ProductId, item.SizeId);
+            if (productSize != null)
+            {
+                productSize.QuantityInStock -= item.Quantity;
+                _unitOfWork.Products.UpdateProductSize(productSize);
+            }
         }
-        
+
+        //todo: delete basket and basket line
         await _unitOfWork.SaveChangesAsync();
 
         return id;

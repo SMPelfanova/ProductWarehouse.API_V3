@@ -16,7 +16,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Group, GroupDto>().ReverseMap();
         CreateMap<Size, SizeDto>().ReverseMap();
         CreateMap<Order, OrderDto>().ReverseMap();
-        CreateMap<OrderDetails, OrderDetailsDto>().ReverseMap();
+        CreateMap<OrderLine, OrderDetailsDto>().ReverseMap();
         CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
         CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
 

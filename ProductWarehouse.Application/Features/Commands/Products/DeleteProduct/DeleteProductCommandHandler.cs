@@ -2,11 +2,11 @@
 using ProductWarehouse.Application.Interfaces;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
-public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
+public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteProductCommandHandler(IUnitOfWork unitOfWork)
+    public DeleteProductSizeCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -15,7 +15,7 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
     {
         var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
 
-        //product.IsDeleted = true;
+        product.IsDeleted = true;
 
         _unitOfWork.Products.Update(product);
 

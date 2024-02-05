@@ -6,7 +6,8 @@ namespace ProductWarehouse.Application.Interfaces;
 public interface IProductRepository: IRepository<Product>
 {
     Task<Product> GetProductDetails(Guid id);
-    Task<Product> GetProductBrand(Guid id);
-    Task<Product> GetProductGroups(Guid id);
-    Task<Product> GetProductSizes(Guid id);
+    void DeleteProductGroups(Guid productId, Guid groupId);
+    void DeleteProductSizes(Guid productId, Guid sizeId);
+    void UpdateProductSize(ProductSize productSize);
+    Task<ProductSize> GetProductSize(Guid productId, Guid sizeId);
 }

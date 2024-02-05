@@ -4,7 +4,7 @@ using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Queries.Products.GetProductGroups;
-public class GetProductGroupsQueryHandler : IRequestHandler<GetProductSizesQuery, GroupDto>
+public class GetProductGroupsQueryHandler : IRequestHandler<GetProductGroupsQuery, GroupDto>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -15,7 +15,7 @@ public class GetProductGroupsQueryHandler : IRequestHandler<GetProductSizesQuery
         _mapper = mapper;
     }
 
-    public async Task<GroupDto> Handle(GetProductSizesQuery request, CancellationToken cancellationToken)
+    public async Task<GroupDto> Handle(GetProductGroupsQuery request, CancellationToken cancellationToken)
     {
         var result = await _unitOfWork.Products.GetByIdAsync(request.Id);
         if (result == null)

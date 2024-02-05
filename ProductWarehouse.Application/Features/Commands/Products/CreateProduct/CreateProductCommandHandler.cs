@@ -41,7 +41,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             {
                 product.ProductSizes.Add(new ProductSize
                 {
-                    SizeId = size.Id
+                    SizeId = size.Id,
+                    QuantityInStock = size.QuantityInStock,
                 });
             }
         }

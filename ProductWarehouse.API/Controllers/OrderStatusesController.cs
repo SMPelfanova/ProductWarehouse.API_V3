@@ -1,7 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductWarehouse.Application.Features.Queries.Groups.GetAllGroups;
-using ProductWarehouse.Application.Features.Queries.Groups.GetGroup;
 using ProductWarehouse.Application.Features.Queries.OrderStatuses;
 
 namespace ProductWarehouse.API.Controllers;

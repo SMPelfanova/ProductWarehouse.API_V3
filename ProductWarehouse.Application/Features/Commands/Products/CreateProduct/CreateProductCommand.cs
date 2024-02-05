@@ -10,6 +10,5 @@ public record CreateProductCommand() : IRequest<Guid>
     public List<GroupDto> Groups { get; set; }
     public Guid BrandId { get; set; }
     public decimal Price { get; set; }
-    public int QuantityInStock { get; set; }
 
 }

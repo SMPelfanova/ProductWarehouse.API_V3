@@ -9,4 +9,6 @@ public class User
     public string Phone { get; set; }
     public string Address { get; set; }
     public ICollection<Order> Orders { get; set; }
+    public UserRole UserRole { get; set; }
+    public Basket Basket { get; set; }
 }
