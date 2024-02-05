@@ -1,14 +1,11 @@
 ﻿using AutoFixture.AutoMoq;
 using AutoFixture;
 using FakeItEasy;
-using FluentAssertions;
 using ProductWarehouse.Infrastructure.Http;
-using ProductWarehouse.Persistence.Repositories;
 using Xunit;
 using Microsoft.Extensions.Options;
 using ProductWarehouse.Infrastructure.Configuration;
 using Serilog;
-using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.UnitTests.Persistence.Repositories;

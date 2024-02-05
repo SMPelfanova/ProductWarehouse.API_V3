@@ -9,6 +9,7 @@ using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.API.Models.Requests;
 using AutoMapper;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
+using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -22,9 +23,14 @@ public class OrdersController : BaseController
     public async Task<IActionResult> GetOrders(
         [FromServices] IMediator mediator)
     {
-        var result = await mediator.Send(new GetAllOrdersQuery());
+        var orders = await mediator.Send(new GetAllOrdersQuery());
 
-        return Ok(result);
+        if (orders == null || !orders.Any())
+        {
+            return NotFound();
+        }
+
+        return Ok(orders);
     }
 
     [HttpGet("{id:guid}")]
@@ -47,9 +53,9 @@ public class OrdersController : BaseController
         [FromServices] IMediator mediator,
         CreateOrderCommand command)
     {
-        await mediator.Send(command);
+        var orderId = await mediator.Send(command);
 
-        return Ok();
+        return Ok(orderId);
     }
 
     [HttpPatch("{id:guid}")]

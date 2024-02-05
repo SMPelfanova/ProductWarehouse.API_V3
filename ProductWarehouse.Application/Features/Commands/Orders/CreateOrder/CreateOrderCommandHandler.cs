@@ -4,7 +4,7 @@ using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
-public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
+public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
@@ -14,12 +14,12 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
         _mapper = mapper;
     }
 
-    public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var status = await _unitOfWork.OrdersStatuses.GetByIdAsync(request.StatusId);
         if (status == null)
         {
-            return;
+            throw new ArgumentNullException(nameof(status));
         }
 
         var order = new Order
@@ -41,10 +41,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
                 Quantity = item.Quantity,
                 Price = item.Price
             });
-           
         }
         
         await _unitOfWork.SaveChangesAsync();
 
+        return id;
     }
 }

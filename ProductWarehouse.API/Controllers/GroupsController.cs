@@ -11,6 +11,10 @@ public class GroupsController : BaseController
     public async Task<IActionResult> GetGroups([FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetAllGroupsQuery());
+        if (result == null || !result.Any())
+        {
+            return NotFound();
+        }
 
         return Ok(result);
     }

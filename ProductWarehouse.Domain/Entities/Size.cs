@@ -5,4 +5,5 @@ public class Size
     public string Name { get; set; }
     public ICollection<OrderDetails> OrderDetails { get; set;}
     public ICollection<ProductSize> ProductSizes { get; set; }
+
 }

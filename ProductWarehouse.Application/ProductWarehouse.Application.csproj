@@ -27,6 +27,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProductWarehouse.Domain\ProductWarehouse.Domain.csproj" />
+    <ProjectReference Include="..\ProductWarehouse.Persistence.Abstractions\ProductWarehouse.Persistence.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Commands\Products\DeleteProductSize\" />
+    <Folder Include="Features\Commands\Products\DeleteProductGroup\" />
+    <Folder Include="Features\Commands\Products\CreateProductSize\" />
+    <Folder Include="Features\Commands\Products\CreateProductGroup\" />
   </ItemGroup>
 
 </Project>

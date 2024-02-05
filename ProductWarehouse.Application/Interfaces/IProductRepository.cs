@@ -1,5 +1,5 @@
 ﻿using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Domain.Interfaces;
+using ProductWarehouse.Persistence.Abstractions.Interfaces;
 
 namespace ProductWarehouse.Application.Interfaces;
 

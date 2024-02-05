@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductWarehouse.Application\ProductWarehouse.Application.csproj" />
+	  <ProjectReference Include="..\ProductWarehouse.Application\ProductWarehouse.Application.csproj" />
+	  <ProjectReference Include="..\ProductWarehouse.Persistence.Abstractions\ProductWarehouse.Persistence.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

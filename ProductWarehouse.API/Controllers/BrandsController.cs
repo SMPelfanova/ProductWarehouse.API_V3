@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.Application.Features.Queries.Brands.GetAllBrands;
 using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
+using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -16,6 +17,11 @@ public class BrandsController : BaseController
     public async Task<IActionResult> GetBrands([FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetAllBrandsQuery());
+
+        if (result == null || !result.Any())
+        {
+            return NotFound();
+        }
 
         return Ok(result);
     }

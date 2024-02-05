@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Domain.Entities;
+
 namespace ProductWarehouse.Persistence.EF;
 public class ApplicationDbContext : DbContext
 {

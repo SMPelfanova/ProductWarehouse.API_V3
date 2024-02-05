@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProductWarehouse.Domain.Interfaces;
-using ProductWarehouse.Persistence.EF;
+using ProductWarehouse.Persistence.Abstractions.Interfaces;
 
-namespace ProductWarehouse.Persistence.Repositories;
+namespace ProductWarehouse.Persistence.Abstractions;
 public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
-    protected readonly ApplicationDbContext _dbContext;
+    protected readonly DbContext _dbContext;
 
-    protected Repository(ApplicationDbContext context)
+    protected Repository(DbContext context)
     {
         _dbContext = context;
     }

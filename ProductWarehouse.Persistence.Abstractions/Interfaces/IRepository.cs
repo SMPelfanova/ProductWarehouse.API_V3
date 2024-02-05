@@ -1,4 +1,4 @@
-﻿namespace ProductWarehouse.Domain.Interfaces;
+﻿namespace ProductWarehouse.Persistence.Abstractions.Interfaces;
 public interface IRepository<TEntity> where TEntity : class
 {
     Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties);
