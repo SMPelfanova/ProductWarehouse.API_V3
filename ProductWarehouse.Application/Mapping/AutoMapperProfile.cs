@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ProductWarehouse.Application.Extensions;
-using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 using ProductWarehouse.Application.Models;
 using ProductWarehouse.Domain.Entities;
@@ -11,12 +10,12 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-
         CreateMap<Brand, BrandDto>().ReverseMap();
         CreateMap<Group, GroupDto>().ReverseMap();
+        CreateMap<Basket, BasketDto>().ReverseMap();
         CreateMap<Size, SizeDto>().ReverseMap();
         CreateMap<Order, OrderDto>().ReverseMap();
-        CreateMap<OrderLine, OrderDetailsDto>().ReverseMap();
+        CreateMap<OrderLine, OrderItemDto>().ReverseMap();
         CreateMap<OrderStatus, OrderStatusDto>().ReverseMap();
         CreateMap<ProductSize, ProductSizeDto>().ReverseMap();
 
@@ -53,7 +52,5 @@ public class AutoMapperProfile : Profile
            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
            .ForMember(dest => dest.BrandId, opt => opt.MapFrom(src => src.BrandId))
            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
-         
-
     }
 }

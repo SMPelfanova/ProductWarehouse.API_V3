@@ -9,3 +9,53 @@ GET {{ProductWarehouse.API_HostAddress}}/api/Products/filter?MinPrice=10&MaxPric
 
 
 ###
+### Get all products
+GET {{ProductWarehouse.API_HostAddress}}/api/products
+
+### Get filtered products
+GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?filterParam1=value1&filterParam2=value2
+
+### Get product by ID
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{id}
+
+### Create a new product
+POST {{ProductWarehouse.API_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "property1": "value1",
+    "property2": "value2"
+}
+
+### Delete product by ID
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{id}
+
+### Get product sizes
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{id}/sizes
+
+### Create product size
+POST{{ProductWarehouse.API_HostAddress}}/api/products/{id}/sizes
+Content-Type: application/json
+
+{
+    "property1": "value1",
+    "property2": "value2"
+}
+
+### Delete product size
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{productId}/sizes/{sizeId}
+
+### Get product groups
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{id}/groups
+
+### Create product group
+POST {{ProductWarehouse.API_HostAddress}}/api/products/{id}/groups
+Content-Type: application/json
+
+{
+    "property1": "value1",
+    "property2": "value2"
+}
+
+### Delete product group
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{productId}/groups/{groupId}

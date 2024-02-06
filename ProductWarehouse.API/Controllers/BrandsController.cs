@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.Application.Features.Queries.Brands.GetAllBrands;
 using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
-using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers;
 

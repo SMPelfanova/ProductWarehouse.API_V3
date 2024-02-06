@@ -9,7 +9,6 @@ using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.API.Models.Requests;
 using AutoMapper;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
-using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.API.Controllers;
 

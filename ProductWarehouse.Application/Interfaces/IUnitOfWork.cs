@@ -7,6 +7,7 @@ public interface IUnitOfWork : IDisposable
     IGroupRepository Group { get; }
     IOrderRepository Orders { get; }
     IBrandRepository Brands { get; }
+    IBasketRepository Basket { get; }
     Task<int> SaveChangesAsync();
 
 }

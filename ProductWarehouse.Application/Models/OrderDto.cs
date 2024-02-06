@@ -7,5 +7,5 @@ public class OrderDto
     public decimal TotalAmount { get; set; }
     public DateTime OrderDate { get; set; }
 
-    public ICollection<OrderDetailsDto> OrderDetails { get; set; }
+    public ICollection<OrderItemDto> OrderDetails { get; set; }
 }

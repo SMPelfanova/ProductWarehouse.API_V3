@@ -16,13 +16,16 @@ internal class UnitOfWork : IUnitOfWork
     public IOrderStatusRepository OrdersStatuses { get; }
     public IGroupRepository Group { get; }
 
+    public IBasketRepository Basket { get; }
+
     public UnitOfWork(ApplicationDbContext dbContext,
                         IOrderStatusRepository orderStatusRepository,
                         IGroupRepository groupRepository,
                         IProductRepository productRepository,
                         ISizeRepository sizesRepository,
                         IOrderRepository ordersRepository,
-                        IBrandRepository brandsRepository
+                        IBrandRepository brandsRepository,
+                        IBasketRepository basketRepository
                         )
     {
         _dbContext = dbContext;
@@ -32,6 +35,7 @@ internal class UnitOfWork : IUnitOfWork
         Sizes = sizesRepository;
         Orders = ordersRepository;
         Brands = brandsRepository;
+        Basket = basketRepository;
     }
 
     public void Dispose()

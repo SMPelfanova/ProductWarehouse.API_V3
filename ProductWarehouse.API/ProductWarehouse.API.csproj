@@ -35,4 +35,10 @@
     <ProjectReference Include="..\ProductWarehouse.Persistence\ProductWarehouse.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Requests\Basket\" />
+    <Folder Include="Models\Responses\Basket\" />
+    <Folder Include="Models\Responses\Order\" />
+  </ItemGroup>
+
 </Project>
