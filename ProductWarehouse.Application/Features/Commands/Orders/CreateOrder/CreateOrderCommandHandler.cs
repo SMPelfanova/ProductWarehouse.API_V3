@@ -19,13 +19,14 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
     {
         var order = new Order
         {
+            UserId = request.UserId,
             TotalAmount = request.TotalAmount,
             OrderLines = new List<OrderLine>()
         };
 
         var id = await _unitOfWork.Orders.Add(order);
 
-        foreach (var item in request.OrderDetails)
+        foreach (var item in request.OrderLines)
         {
             order.OrderLines.Add(new OrderLine
             {
@@ -43,7 +44,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
             }
         }
 
-        //todo: delete basket and basket line
+        _unitOfWork.Basket.DeleteBasket(request.UserId);
         await _unitOfWork.SaveChangesAsync();
 
         return id;

@@ -18,7 +18,10 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
     public async Task<Guid> Handle(AddBasketLineCommand request, CancellationToken cancellationToken)
     {
         var basket = _unitOfWork.Basket.GetBasketByUserId(request.UserId);
-        if (basket != null)
+
+        var checkIfProductSizeAvailable = await _unitOfWork.Products.CheckQuantityInStock(request.BasketLine.ProductId, request.BasketLine.SizeId);
+
+        if (basket != null && checkIfProductSizeAvailable >= request.BasketLine.Quantity)
         {
             _unitOfWork.Basket.AddBasketLine(request.UserId, new BasketLine
             {
@@ -33,6 +36,6 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
             return basket.Id;
         }
 
-        throw new ArgumentNullException(nameof(request));
+        throw new ArgumentNullException("No available sizes");
     }
 }

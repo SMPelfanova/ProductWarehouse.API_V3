@@ -10,4 +10,6 @@ public interface IProductRepository: IRepository<Product>
     void DeleteProductSizes(Guid productId, Guid sizeId);
     void UpdateProductSize(ProductSize productSize);
     Task<ProductSize> GetProductSize(Guid productId, Guid sizeId);
+
+    Task<int> CheckQuantityInStock(Guid productId, Guid sizeId);
 }

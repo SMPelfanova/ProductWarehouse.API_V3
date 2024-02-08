@@ -33,7 +33,6 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
         if(entityToDelete != null)
         {
             _dbContext.ProductGroups.Remove(entityToDelete);
-            //_dbContext.SaveChanges();
         }
     }
 
@@ -74,5 +73,12 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
         var productSize = await _dbContext.ProductSizes.FirstOrDefaultAsync(x => x.ProductId == productId && x.SizeId == sizeId);
 
         return productSize;
+    }
+
+    public async Task<int> CheckQuantityInStock(Guid productId, Guid sizeId)
+    {
+        var productSize = await _dbContext.ProductSizes.FirstOrDefaultAsync(x => x.ProductId == productId && x.SizeId == sizeId);
+
+        return productSize.QuantityInStock;
     }
 }

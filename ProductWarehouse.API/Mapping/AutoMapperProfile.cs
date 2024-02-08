@@ -30,7 +30,6 @@ public class AutoMapperProfile : Profile
         CreateMap<UpdateBasketLineRequest, BasketLineDto>();
 
         CreateMap<CreateOrderRequest, CreateOrderCommand>();
-        CreateMap<CreateBasketRequest, AddBasketLineCommand>();
         CreateMap<FilterProductsRequest, GetAllProductsQuery>();
         CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderRequest>>();
         CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderRequest>>();

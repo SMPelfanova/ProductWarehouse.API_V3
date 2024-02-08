@@ -16,13 +16,18 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
 
     public async Task Handle(UpdateBasketLineCommand request, CancellationToken cancellationToken)
     {
-        _unitOfWork.Basket.UpdateBasketLine(request.UserId, new Domain.Entities.BasketLine
+        var checkIfProductSizeAvailable = await _unitOfWork.Products.CheckQuantityInStock(request.BasketLine.ProductId, request.BasketLine.SizeId);
+
+        if (checkIfProductSizeAvailable >= request.BasketLine.Quantity)
         {
-            SizeId = request.BasketLine.SizeId,
-            ProductId = request.BasketLine.ProductId,
-            Price = request.BasketLine.Price,
-            Quantity = request.BasketLine.Quantity
-        });
-        await _unitOfWork.SaveChangesAsync();
+            _unitOfWork.Basket.UpdateBasketLine(request.UserId, new Domain.Entities.BasketLine
+            {
+                SizeId = request.BasketLine.SizeId,
+                Quantity = request.BasketLine.Quantity,
+            });
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        throw new ArgumentNullException("No available sizes");
     }
 }

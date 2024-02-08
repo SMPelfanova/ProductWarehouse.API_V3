@@ -27,7 +27,7 @@ public class OrderConfiguration : EntityConfiguration<Order>
 
         builder.HasOne(b => b.User)
             .WithMany(p => p.Orders)
-            .HasForeignKey(b => b.Userid).IsRequired(false);
+            .HasForeignKey(b => b.UserId).IsRequired(false);
 
         builder.HasOne(o => o.Payment)
             .WithOne(p => p.Order)
