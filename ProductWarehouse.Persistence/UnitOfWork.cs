@@ -18,6 +18,8 @@ internal class UnitOfWork : IUnitOfWork
 
     public IBasketRepository Basket { get; }
 
+    public IUserRepository User { get; }
+
     public UnitOfWork(ApplicationDbContext dbContext,
                         IOrderStatusRepository orderStatusRepository,
                         IGroupRepository groupRepository,
@@ -25,6 +27,7 @@ internal class UnitOfWork : IUnitOfWork
                         ISizeRepository sizesRepository,
                         IOrderRepository ordersRepository,
                         IBrandRepository brandsRepository,
+                        IUserRepository userRepository,
                         IBasketRepository basketRepository
                         )
     {
@@ -36,16 +39,29 @@ internal class UnitOfWork : IUnitOfWork
         Orders = ordersRepository;
         Brands = brandsRepository;
         Basket = basketRepository;
+        User = userRepository;
     }
-
-    public void Dispose()
-    {
-        _dbContext.Dispose();
-    }
-
 
     public Task<int> SaveChangesAsync()
     {
         return _dbContext.SaveChangesAsync();
+    }
+
+    public void Rollback()
+    {
+        _dbContext.Database.RollbackTransaction();
+    }
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _dbContext.Dispose();
+        }
     }
 }

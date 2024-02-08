@@ -9,6 +9,7 @@ using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.API.Models.Requests;
 using AutoMapper;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
+using ProductWarehouse.API.Models.Requests.Order;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -17,12 +18,13 @@ namespace ProductWarehouse.API.Controllers;
 /// </summary>
 public class OrdersController : BaseController
 {
-    [HttpGet]
+    [HttpGet("{userId:long}")]
     [Produces("application/json")]
     public async Task<IActionResult> GetOrders(
+        Guid userId,
         [FromServices] IMediator mediator)
     {
-        var orders = await mediator.Send(new GetAllOrdersQuery());
+        var orders = await mediator.Send(new GetAllOrdersQuery(userId));
 
         if (orders == null || !orders.Any())
         {
@@ -32,7 +34,7 @@ public class OrdersController : BaseController
         return Ok(orders);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:long}")]
     public async Task<IActionResult> GetOrder(
         [FromServices] IMediator mediator,
         Guid id)
@@ -49,12 +51,19 @@ public class OrdersController : BaseController
 
     [HttpPost]
     public async Task<IActionResult> CreateOrder(
-        [FromServices] IMediator mediator,
-        CreateOrderCommand command)
+    [FromBody] CreateOrderRequest createOrderRequest,
+    [FromServices] IMapper mapper,
+    [FromServices] IMediator mediator)
     {
+        if (createOrderRequest == null)
+        {
+            return BadRequest("Request body is null");
+        }
+
+        var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
         var orderId = await mediator.Send(command);
 
-        return Ok(orderId);
+        return CreatedAtAction(nameof(GetOrder), new { id = orderId }, createOrderRequest);
     }
 
     [HttpPatch("{id:guid}")]

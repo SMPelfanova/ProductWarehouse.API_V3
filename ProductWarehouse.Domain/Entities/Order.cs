@@ -1,7 +1,6 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
-public class Order
+public class Order : Entity
 {
-    public Guid Id { get; set; }
     public OrderStatus Status { get; set; }
     public Guid StatusId { get; set; }
     public User User { get; set; }

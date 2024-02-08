@@ -1,7 +1,6 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
-public class Group
+public class Group : Entity
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public ICollection<ProductGroups> ProductGroups { get; set; }
 }

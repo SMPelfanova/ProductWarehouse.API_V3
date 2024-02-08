@@ -1,16 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
-public class BrandConfiguration : IEntityTypeConfiguration<Brand>
+public class BrandConfiguration : EntityConfiguration<Brand>
 {
-    public void Configure(EntityTypeBuilder<Brand> builder)
+    public override void Configure(EntityTypeBuilder<Brand> builder)
     {
-        builder.ToTable(nameof(TableNames.Brands));
-
-        builder.HasKey(t => t.Id);
+        base.Configure(builder);
 
         builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
     }

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
@@ -26,5 +24,4 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
             await _unitOfWork.SaveChangesAsync();
         }
     }
-
 }

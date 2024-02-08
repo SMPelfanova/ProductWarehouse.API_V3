@@ -1,19 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
-public class RoleConfiguration : IEntityTypeConfiguration<Role>
+public class RoleConfiguration : EntityConfiguration<Role>
 {
-    public void Configure(EntityTypeBuilder<Role> builder)
+    public override void Configure(EntityTypeBuilder<Role> builder)
     {
-        {
-            builder.ToTable(nameof(TableNames.Roles));
+        base.Configure(builder);
 
-            builder.HasKey(t => t.Id);
-
-            builder.Property(p => p.Name).IsRequired().HasMaxLength(50);
-        }
+        builder.Property(p => p.Name).IsRequired().HasMaxLength(50);
     }
 }

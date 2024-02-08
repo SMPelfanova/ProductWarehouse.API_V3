@@ -2,6 +2,7 @@
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
@@ -45,6 +46,18 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
             _dbContext.ProductSizes.Remove(entityToDelete);
         }
     }
+
+    //public void UpdateProductGroupd(Product product)
+    //{
+    //    var resutl = _dbContext.ProductGroups.FirstOrDefault(x => x.ProductId == product.Id);
+
+        
+    //    if (entityToUpdate != null)
+    //    {
+    //        entityToUpdate.QuantityInStock = productSize.QuantityInStock;
+    //        _dbContext.ProductSizes.Update(entityToUpdate);
+    //    }
+    //}
 
     public void UpdateProductSize(ProductSize productSize)
     {

@@ -2,8 +2,13 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using ProductWarehouse.API.Models.Requests;
+using ProductWarehouse.API.Models.Requests.Basket;
+using ProductWarehouse.API.Models.Requests.Order;
 using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.Application.Features.Commands.Basket.CreateBasketItem;
+using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
+using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Models;
 
@@ -19,6 +24,9 @@ public class AutoMapperProfile : Profile
 
     private void MapFromRequestToQueriesOrCommands()
     {
+        CreateMap<CreateProductRequest, CreateProductCommand>();
+        CreateMap<CreateOrderRequest, CreateOrderCommand>();
+        CreateMap<CreateBasketRequest, CreateBasketCommand>();
         CreateMap<FilterProductsRequest, GetAllProductsQuery>();
         CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderRequest>>();
         CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderRequest>>();

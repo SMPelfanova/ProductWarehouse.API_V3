@@ -4,14 +4,14 @@ using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
-public class OrderStatusConfiguration : IEntityTypeConfiguration<OrderStatus>
+public class OrderStatusConfiguration : EntityConfiguration<OrderStatus>
 {
-    public void Configure(EntityTypeBuilder<OrderStatus> builder)
+    public override void Configure(EntityTypeBuilder<OrderStatus> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable(nameof(TableNames.OrderStatus));
         
-        builder.HasKey(t => t.Id);
-
         builder.Property(p => p.Name).IsRequired().HasMaxLength(30);
     }
 }

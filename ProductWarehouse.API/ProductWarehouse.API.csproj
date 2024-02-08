@@ -36,8 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Requests\Basket\" />
-    <Folder Include="Models\Responses\Basket\" />
     <Folder Include="Models\Responses\Order\" />
   </ItemGroup>
 

@@ -56,10 +56,10 @@ public class ApplicationDbContext : DbContext
             new Group { Id = Guid.NewGuid(), Name = "Comfortable" }
         );
 
-        modelBuilder.Entity<OrderStatus>().HasData(
-            new OrderStatus { Id = Guid.NewGuid(), Name = "Pending" },
-            new OrderStatus { Id = Guid.NewGuid(), Name = "Delivered" }
-        );
+        //modelBuilder.Entity<OrderStatus>().HasData(
+        //    new OrderStatus { Id = Guid.NewGuid(), Name = "Pending" },
+        //    new OrderStatus { Id = Guid.NewGuid(), Name = "Delivered" }
+        //);
 
         modelBuilder.Entity<Size>().HasData(
             new Size { Id = Guid.NewGuid(), Name = "XS" },

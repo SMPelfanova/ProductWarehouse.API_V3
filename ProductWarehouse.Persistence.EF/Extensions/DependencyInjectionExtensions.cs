@@ -15,6 +15,7 @@ public static class DependencyInjectionExtensions
             options.UseSqlServer(configuration.GetConnectionString("WerehouseSQLDBConnectionString")));
      
         services.AddScoped<IGroupRepository, GroupRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<ISizeRepository, SizeRepository>();

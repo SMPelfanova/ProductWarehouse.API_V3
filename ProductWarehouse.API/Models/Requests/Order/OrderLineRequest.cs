@@ -1,5 +1,8 @@
-﻿namespace ProductWarehouse.Application.Models;
-public class BasketItemDto
+﻿using ProductWarehouse.API.Controllers.Enums;
+
+namespace ProductWarehouse.API.Models.Requests.Order;
+
+public class OrderLineRequest
 {
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }

@@ -5,6 +5,7 @@ using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
+using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 
@@ -79,14 +80,35 @@ public class ProductsController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct([FromServices] IMediator mediator, CreateProductCommand command)
+    public async Task<IActionResult> CreateProduct(
+        [FromBody] CreateProductRequest request,
+        [FromServices] IMediator mediator,
+        [FromServices] IMapper mapper)
     {
-        var productId = await mediator.Send(command);
-        var createdResourcePath = Url.Action("api/products", new { id = productId });
+        if (request == null)
+        {
+            return BadRequest("Request body is null");
+        }
 
-        return CreatedAtAction(actionName: createdResourcePath, command);
+        var command = mapper.Map<CreateProductCommand>(request);
+
+        var productId = await mediator.Send(command);
+
+        return CreatedAtAction(nameof(GetProduct), new { id = productId }, request);
     }
 
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateProduct(
+        Guid id,
+        [FromBody] UpdateProductCommand request,
+        [FromServices] IMediator mediator,
+        [FromServices] IMapper mapper)
+    {
+        request.Id = id;
+        await mediator.Send(request);
+
+        return Ok();
+    }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteProduct([FromServices] IMediator mediator, Guid id)

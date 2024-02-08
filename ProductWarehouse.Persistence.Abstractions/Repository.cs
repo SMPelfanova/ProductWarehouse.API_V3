@@ -41,14 +41,9 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
         _dbContext.Set<TEntity>().Remove(entity);
     }
 
-    //public void Delete(Guid id)
-    //{
-    //    var entity = _dbContext.Set<TEntity>().FindAsync(id);
-    //    Delete(entity);
-    //}
-
     public void Update(TEntity entity)
     {
         _dbContext.Set<TEntity>().Update(entity);
+        _dbContext.Entry(entity).State = EntityState.Modified;
     }
 }

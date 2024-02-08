@@ -4,8 +4,6 @@ using ProductWarehouse.Application.Models;
 namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 public record CreateOrderCommand() : IRequest<Guid>
 {
-    public Guid StatusId { get; set; }
     public decimal TotalAmount { get; set; }
-    public DateTime OrderDate { get; set; }
-    public List<OrderItemDto> OrderDetails { get; set; }
+    public List<OrderLineDto> OrderDetails { get; set; }
 }

@@ -28,6 +28,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -73,6 +78,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -85,17 +95,20 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cabb3b71-67d1-423d-97d1-24ad195e8f93"),
+                            Id = new Guid("aa49e975-8160-4e65-b0ff-93d9ed8a9891"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Zara"
                         },
                         new
                         {
-                            Id = new Guid("64d0b670-0224-4a52-ba91-a50210e0f060"),
+                            Id = new Guid("83db5644-d1e2-44cb-8def-9c59a6a43498"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Bershka"
                         },
                         new
                         {
-                            Id = new Guid("cc3ba321-cbfc-43a2-a63e-dd30b6f59d5a"),
+                            Id = new Guid("b74d1a65-c18a-4703-9946-ede7edada82c"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Stella Nova"
                         });
                 });
@@ -105,6 +118,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -118,12 +136,14 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("51945acd-123c-4ded-be93-1980493d8aab"),
+                            Id = new Guid("482ca165-22c2-4d10-854a-0aae13ebad60"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Casual"
                         },
                         new
                         {
-                            Id = new Guid("ab42bf33-1860-418a-aa0f-4656abf962eb"),
+                            Id = new Guid("0a6ae99d-40d8-4ad3-9771-12c9a04ac621"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Comfortable"
                         });
                 });
@@ -133,6 +153,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -201,6 +226,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -209,18 +239,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderStatus", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3f88493d-c546-4e63-8d27-5a90a608f800"),
-                            Name = "Pending"
-                        },
-                        new
-                        {
-                            Id = new Guid("066ebde3-ed9f-409f-9e3a-a6d565af31de"),
-                            Name = "Delivered"
-                        });
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Payment", b =>
@@ -228,6 +246,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
 
                     b.Property<string>("Method")
                         .IsRequired()
@@ -257,6 +280,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
 
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -326,6 +354,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -342,6 +375,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -354,27 +392,32 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("784f031d-f568-4725-89cc-612ef01c92ca"),
+                            Id = new Guid("bf587050-bfc0-4c95-8625-238c27f56a3d"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XS"
                         },
                         new
                         {
-                            Id = new Guid("6a6a8330-b769-401e-8d7d-6e68c5ca30ff"),
+                            Id = new Guid("f2da654d-4cd6-4cf9-a267-10bb8e676d25"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "S"
                         },
                         new
                         {
-                            Id = new Guid("a463beb0-547f-4440-b1be-7110525c862d"),
+                            Id = new Guid("24e3d3df-2a54-4d50-8fc3-46a55cdc4064"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "M"
                         },
                         new
                         {
-                            Id = new Guid("6ee74602-7b69-400c-8d01-5a48267a3fa2"),
+                            Id = new Guid("9b15417d-ff3d-4d85-8cb6-0e0c854f22b7"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "L"
                         },
                         new
                         {
-                            Id = new Guid("40b7d31a-1ce7-4194-b485-59484ada6472"),
+                            Id = new Guid("f7e44ca1-13d0-4418-b3f9-2a909308dfb7"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XL"
                         });
                 });
@@ -389,6 +432,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("Date")
+                        .HasDefaultValueSql("GetDate()");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -416,9 +464,6 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid>("UserRoleId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

@@ -1,18 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Persistence.EF.Constants;
-using System.Reflection.Emit;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
-public class OrderConfiguration : IEntityTypeConfiguration<Order>
+public class OrderConfiguration : EntityConfiguration<Order>
 {
-    public void Configure(EntityTypeBuilder<Order> builder)
+    public override void Configure(EntityTypeBuilder<Order> builder)
     {
-        builder.ToTable(nameof(TableNames.Orders));
-
-        builder.HasKey(p => p.Id);
+        base.Configure(builder);
 
         builder.Property(p => p.TotalAmount)
             .HasColumnType("decimal(18, 2)")

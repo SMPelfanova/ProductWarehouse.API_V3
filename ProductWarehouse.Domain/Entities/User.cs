@@ -1,7 +1,6 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
-public class User
+public class User : Entity
 {
-    public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -12,7 +11,6 @@ public class User
 
     public ICollection<Order> Orders { get; set; }
 
-    public Guid UserRoleId { get; set; }
     public ICollection<UserRole> UserRoles { get; set; }
 
     public Basket Basket { get; set; }

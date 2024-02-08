@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : EntityConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public override void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable(nameof(TableNames.Users));
-
-        builder.HasKey(p => p.Id);
+        base.Configure(builder);
 
         builder.Property(p => p.FirstName).IsRequired().HasMaxLength(50);
         builder.Property(p => p.LastName).IsRequired().HasMaxLength(50);

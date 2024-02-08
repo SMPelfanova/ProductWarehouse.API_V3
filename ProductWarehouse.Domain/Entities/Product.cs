@@ -1,8 +1,7 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
 
-public class Product
+public class Product : Entity
 {
-    public Guid Id { get; set; }
     public Brand Brand { get; set; }
     public Guid BrandId { get; set; }
     public string Title { get; set; } = string.Empty;
