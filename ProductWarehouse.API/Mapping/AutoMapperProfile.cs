@@ -5,6 +5,7 @@ using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Requests.Basket;
 using ProductWarehouse.API.Models.Requests.Order;
 using ProductWarehouse.API.Models.Responses;
+using ProductWarehouse.API.Models.Responses.Basket;
 using ProductWarehouse.Application.Features.Commands.Basket.CreateBasketItem;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
@@ -25,8 +26,11 @@ public class AutoMapperProfile : Profile
     private void MapFromRequestToQueriesOrCommands()
     {
         CreateMap<CreateProductRequest, CreateProductCommand>();
+        CreateMap<BasketLineRequest, BasketLineDto>();
+        CreateMap<UpdateBasketLineRequest, BasketLineDto>();
+
         CreateMap<CreateOrderRequest, CreateOrderCommand>();
-        CreateMap<CreateBasketRequest, CreateBasketCommand>();
+        CreateMap<CreateBasketRequest, AddBasketLineCommand>();
         CreateMap<FilterProductsRequest, GetAllProductsQuery>();
         CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderRequest>>();
         CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderRequest>>();
@@ -35,6 +39,10 @@ public class AutoMapperProfile : Profile
     private void MapFromDtoToResponse()
     {
         CreateMap<ProductDto, ProductResponse>();
+        CreateMap<BasketDto, BasketResponse>()
+            .ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.Items));
+
+        CreateMap<BasketLineDto, BasketLineResponse>();
 
         CreateMap<ProductsFilterDto, ProductFilterResponse>()
           .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products))

@@ -12,8 +12,12 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Brand, BrandDto>().ReverseMap();
         CreateMap<Group, GroupDto>().ReverseMap();
-        CreateMap<Basket, BasketDto>().ReverseMap();
         CreateMap<BasketLine, BasketLineDto>().ReverseMap();
+        CreateMap<Basket, BasketDto>()
+           .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.BasketLines));
+        CreateMap<BasketDto, Basket>()
+            .ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.Items));
+
         CreateMap<Size, SizeDto>().ReverseMap();
         CreateMap<Order, OrderDto>().ReverseMap();
         CreateMap<OrderLine, OrderLineDto>().ReverseMap();

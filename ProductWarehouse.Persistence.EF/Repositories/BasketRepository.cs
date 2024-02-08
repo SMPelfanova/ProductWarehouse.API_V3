@@ -12,7 +12,14 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
         _dbContext = dbContext;
     }
 
-    public Basket AddBasketItem(Guid userId, BasketLine basketLine)
+    public Basket GetBasketByUserId(Guid userId)
+    {
+        var basket = _dbContext.Basket.Include(b => b.BasketLines).FirstOrDefault(b => b.UserId == userId);
+
+        return basket;
+    }
+
+    public Basket AddBasketLine(Guid userId, BasketLine basketLine)
     {
         var basket = _dbContext.Basket.FirstOrDefault(x => x.UserId == userId);
         if (basket != null)
@@ -23,30 +30,14 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
         return basket;
     }
 
-    public Basket AddBasketLine(Guid userId, BasketLine basketLine)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Guid CreateBasket(Basket basket)
-    {
-         _dbContext.Basket.Add(new Basket { UserId = basket.UserId, BasketLines = basket.BasketLines });
-        return basket.UserId;
-    }
-
-    public void DeleteBasket(Basket basket)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void DeleteBasketLine(Guid userId, Guid basketId)
+    public void DeleteBasketLine(Guid userId, Guid productId)
     {
         var basket = _dbContext.Basket
                               .Include(b => b.BasketLines)
-                              .FirstOrDefault(x => x.UserId == userId && x.BasketLines.Any(bl => bl.BasketId == basketId));
+                              .FirstOrDefault(x => x.UserId == userId && x.BasketLines.Any(bl => bl.ProductId == productId));
         if (basket != null)
         {
-            var basketLine = basket.BasketLines.FirstOrDefault(bl => bl.BasketId == basketId);
+            var basketLine = basket.BasketLines.FirstOrDefault(bl => bl.ProductId == productId);
 
             if (basketLine != null)
             {
@@ -56,25 +47,31 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
         }
     }
 
-    public Basket GetBasketByUserId(Guid userId)
+    public void UpdateBasketLine(Guid userId, BasketLine basketLine)
     {
-        var basket = _dbContext.Basket.Include(b => b.BasketLines).FirstOrDefault(b=>b.UserId == userId);
-       
-        return basket;
+        var basket = _dbContext.Basket
+                          .Include(b => b.BasketLines)
+                          .FirstOrDefault(x => x.UserId == userId);
+
+        if (basket != null)
+        {
+            var existingBasketLine = basket.BasketLines.FirstOrDefault(bl => bl.ProductId == basketLine.ProductId);
+            if (existingBasketLine != null)
+            {
+                existingBasketLine.Quantity = basketLine.Quantity;
+                existingBasketLine.SizeId = basketLine.SizeId;
+            }
+        }
     }
 
-    public void UpdateBasket(Basket basket)
+    public void DeleteBasket(Guid userId)
     {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateBasketLine(Guid basketId, BasketLine basketLine)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateBasketLine(Guid userId, Guid basketId, BasketLine basketLine)
-    {
-        throw new NotImplementedException();
+        var basket = _dbContext.Basket
+                          .Include(b => b.BasketLines)
+                          .FirstOrDefault(x => x.UserId == userId);
+        if (basket != null)
+        {
+            _dbContext.BasketLine.RemoveRange(basket.BasketLines);
+        }
     }
 }

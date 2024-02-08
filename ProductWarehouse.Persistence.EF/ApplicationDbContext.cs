@@ -24,9 +24,9 @@ public class ApplicationDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-       SeedData(modelBuilder);
+        SeedData(modelBuilder);
     }
- 
+
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Group> Groups { get; set; }
@@ -42,9 +42,28 @@ public class ApplicationDbContext : DbContext
     public DbSet<Basket> Basket { get; set; }
     public DbSet<BasketLine> BasketLine { get; set; }
 
-
     private void SeedData(ModelBuilder modelBuilder)
     {
+        Guid userid = Guid.NewGuid();
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = userid,
+                FirstName = "First",
+                LastName = "Last",
+                Password = "asd",
+                Phone = "0888888877",
+                Email = "test@email.com",
+                Address = "Street default"
+            });
+
+        modelBuilder.Entity<Basket>().HasData(
+            new Basket
+            {
+                Id = Guid.NewGuid(),
+                UserId = userid
+            });
+
         modelBuilder.Entity<Brand>().HasData(
             new Brand { Id = Guid.NewGuid(), Name = "Zara" },
             new Brand { Id = Guid.NewGuid(), Name = "Bershka" },
@@ -56,10 +75,10 @@ public class ApplicationDbContext : DbContext
             new Group { Id = Guid.NewGuid(), Name = "Comfortable" }
         );
 
-        //modelBuilder.Entity<OrderStatus>().HasData(
-        //    new OrderStatus { Id = Guid.NewGuid(), Name = "Pending" },
-        //    new OrderStatus { Id = Guid.NewGuid(), Name = "Delivered" }
-        //);
+        modelBuilder.Entity<OrderStatus>().HasData(
+            new OrderStatus { Id = Guid.NewGuid(), Name = "Pending" },
+            new OrderStatus { Id = Guid.NewGuid(), Name = "Delivered" }
+        );
 
         modelBuilder.Entity<Size>().HasData(
             new Size { Id = Guid.NewGuid(), Name = "XS" },
