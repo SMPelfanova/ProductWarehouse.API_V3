@@ -89,7 +89,7 @@ public class ProductsControllerTests
         var controller = new ProductsController();
 
         // Act
-        var result = await controller.GetProducts(mediatorMock, mapperMock, new FilterProductsRequest { Size = searchFilter.Size, MinPrice = searchFilter.MinPrice, MaxPrice = searchFilter.MaxPrice, Highlight = searchFilter.Highlight });
+        var result = await controller.GetProducts(mediatorMock, mapperMock);
 
         // Assert
         result.Should().BeOfType<OkObjectResult>();

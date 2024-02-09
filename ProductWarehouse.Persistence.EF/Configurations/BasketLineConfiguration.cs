@@ -1,24 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
-public class BasketLineConfiguration : IEntityTypeConfiguration<BasketLine>
+public class BasketLineConfiguration : EntityConfiguration<BasketLine>
 {
     public void Configure(EntityTypeBuilder<BasketLine> builder)
     {
-        builder.ToTable(nameof(TableNames.BasketLines));
-
-        builder.HasKey(pg => new { pg.ProductId, pg.BasketId });
-
         builder.Property(p => p.Quantity)
             .IsRequired()
             .HasDefaultValue(1);
 
         builder.Property(p => p.Price)
-            .HasColumnType("decimal(18, 2)")
-            .IsRequired();
+       .HasColumnType("decimal(18, 2)")
+       .IsRequired();
 
         builder.HasOne(bl => bl.Basket)
             .WithMany(bl => bl.BasketLines)

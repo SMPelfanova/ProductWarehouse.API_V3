@@ -18,7 +18,7 @@ namespace ProductWarehouse.API.Controllers;
 /// </summary>
 public class OrdersController : BaseController
 {
-    [HttpGet("{userId:long}")]
+    [HttpGet("{userId:guid}")]
     [Produces("application/json")]
     public async Task<IActionResult> GetOrders(
         Guid userId,
@@ -34,12 +34,13 @@ public class OrdersController : BaseController
         return Ok(orders);
     }
 
-    [HttpGet("{id:long}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetOrder(
-        [FromServices] IMediator mediator,
-        Guid id)
+        Guid id,
+        Guid userId,
+        [FromServices] IMediator mediator)
     {
-        var product = await mediator.Send(new GetOrderQuery(id));
+        var product = await mediator.Send(new GetOrderQuery(id, userId));
 
         if (product == null)
         {
@@ -68,10 +69,10 @@ public class OrdersController : BaseController
 
     [HttpPatch("{id:guid}")]
     public async Task<IActionResult> PartiallyUpdateOrder(
-        [FromServices] IMediator mediator,
-        [FromServices] IMapper mapper,
         Guid id,
-        [FromBody] JsonPatchDocument<UpdateOrderRequest> patchDocument)
+        [FromBody] JsonPatchDocument<UpdateOrderRequest> patchDocument,
+        [FromServices] IMediator mediator,
+        [FromServices] IMapper mapper)
     {
         var command = mapper.Map<JsonPatchDocument<PartialUpdateOrderRequest>>(patchDocument);
         await mediator.Send(new PartialUpdateOrderCommand() { Id = id, PatchDocument = command });
@@ -79,10 +80,10 @@ public class OrdersController : BaseController
         return NoContent();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteOrder(
-        [FromServices] IMediator mediator,
-        Guid id)
+        Guid id,
+        [FromServices] IMediator mediator)
     {
         await mediator.Send(new DeleteOrderCommand(id));
 

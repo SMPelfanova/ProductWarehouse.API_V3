@@ -1,6 +1,7 @@
 ﻿namespace ProductWarehouse.Application.Models;
 public class BasketLineDto
 {
+    public Guid Id { get; set; }
     public Guid BasketId { get; set; }
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }

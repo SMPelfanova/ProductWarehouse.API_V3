@@ -17,6 +17,7 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IGroupRepository, GroupRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBasketRepository, BasketRepository>();
+        services.AddScoped<IBasketLineRepository, BasketLineRepository>();
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<ISizeRepository, SizeRepository>();
         services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();

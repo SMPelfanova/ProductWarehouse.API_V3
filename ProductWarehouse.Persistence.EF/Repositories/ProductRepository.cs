@@ -2,7 +2,6 @@
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
@@ -12,6 +11,17 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
     public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
         _dbContext = dbContext;
+    }
+    public async Task<List<Product>> GetProducts()
+    {
+        var products = await _dbContext.Products
+            .Where(x => !x.IsDeleted)
+            .Include(p => p.Brand)
+            .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
+            .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
+            .ToListAsync();
+
+        return products;
     }
 
     public async Task<Product> GetProductDetails(Guid id)

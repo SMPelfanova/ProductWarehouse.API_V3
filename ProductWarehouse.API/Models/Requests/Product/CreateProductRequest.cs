@@ -1,6 +1,4 @@
-﻿using ProductWarehouse.Application.Models;
-
-namespace ProductWarehouse.API.Models.Requests;
+﻿namespace ProductWarehouse.API.Models.Requests;
 
 public class CreateProductRequest
 {

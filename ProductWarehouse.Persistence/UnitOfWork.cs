@@ -1,4 +1,5 @@
 ﻿using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence;
@@ -17,6 +18,7 @@ internal class UnitOfWork : IUnitOfWork
     public IGroupRepository Group { get; }
 
     public IBasketRepository Basket { get; }
+    public IBasketLineRepository BasketLines { get; }
 
     public IUserRepository User { get; }
 
@@ -28,7 +30,8 @@ internal class UnitOfWork : IUnitOfWork
                         IOrderRepository ordersRepository,
                         IBrandRepository brandsRepository,
                         IUserRepository userRepository,
-                        IBasketRepository basketRepository
+                        IBasketRepository basketRepository,
+                        IBasketLineRepository basketLineRepository
                         )
     {
         _dbContext = dbContext;
@@ -39,6 +42,7 @@ internal class UnitOfWork : IUnitOfWork
         Orders = ordersRepository;
         Brands = brandsRepository;
         Basket = basketRepository;
+        BasketLines = basketLineRepository;
         User = userRepository;
     }
 

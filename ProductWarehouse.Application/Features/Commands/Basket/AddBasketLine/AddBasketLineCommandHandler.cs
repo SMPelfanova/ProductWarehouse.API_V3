@@ -3,7 +3,7 @@ using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 
-namespace ProductWarehouse.Application.Features.Commands.Basket.CreateBasketItem;
+namespace ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -23,7 +23,7 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 
         if (basket != null && checkIfProductSizeAvailable >= request.BasketLine.Quantity)
         {
-            _unitOfWork.Basket.AddBasketLine(request.UserId, new BasketLine
+            await _unitOfWork.BasketLines.Add(new BasketLine
             {
                 BasketId = basket.Id,
                 SizeId = request.BasketLine.SizeId,

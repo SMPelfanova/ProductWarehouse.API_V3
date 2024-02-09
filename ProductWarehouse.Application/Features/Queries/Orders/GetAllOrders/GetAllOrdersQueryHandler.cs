@@ -2,7 +2,6 @@
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models;
-using ProductWarehouse.Domain.Entities;
 using Serilog;
 
 namespace ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
@@ -20,8 +19,7 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, List<
 
     public async Task<List<OrderDto>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
     {
-        string[] includeProperties = { nameof(OrderDto.OrderDetails), nameof(OrderDto.Status) };
-        var result = await _unitOfWork.Orders.GetAllAsync(includeProperties);
+        var result = await _unitOfWork.Orders.GetOrdersByUserId(request.UserId);
         var orders = _mapper.Map<List<OrderDto>>(result);
         if (orders.Count() <= 0)
         {

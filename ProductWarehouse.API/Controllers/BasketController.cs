@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Basket;
 using ProductWarehouse.API.Models.Responses.Basket;
-using ProductWarehouse.Application.Features.Commands.Basket.CreateBasketItem;
+using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasket;
-using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasketItem;
-using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketItem;
+using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasketLine;
+using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 using ProductWarehouse.Application.Features.Queries.Basket;
 using ProductWarehouse.Application.Models;
 
@@ -52,13 +52,13 @@ public class BasketController : BaseController
         return Ok(result);
     }
 
-    [HttpDelete("{userId:guid}/{productId:guid}")]
+    [HttpDelete("{userId:guid}/{basketLineId:guid}")]
     public async Task<IActionResult> DeleteBaskeLine(
          Guid userId,
-         Guid productId,
+         Guid basketLineId,
          [FromServices] IMediator mediator)
     {
-        await mediator.Send(new DeleteBasketItemCommand(userId, productId));
+        await mediator.Send(new DeleteBasketLineCommand(userId, basketLineId));
 
         return NoContent();
     }

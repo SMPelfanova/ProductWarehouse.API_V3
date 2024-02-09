@@ -19,52 +19,7 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
         return basket;
     }
 
-    public Basket AddBasketLine(Guid userId, BasketLine basketLine)
-    {
-        var basket = _dbContext.Basket.FirstOrDefault(x => x.UserId == userId);
-        if (basket != null)
-        {
-            basket.BasketLines.Add(basketLine);
-        }
-
-        return basket;
-    }
-
-    public void DeleteBasketLine(Guid userId, Guid productId)
-    {
-        var basket = _dbContext.Basket
-                              .Include(b => b.BasketLines)
-                              .FirstOrDefault(x => x.UserId == userId && x.BasketLines.Any(bl => bl.ProductId == productId));
-        if (basket != null)
-        {
-            var basketLine = basket.BasketLines.FirstOrDefault(bl => bl.ProductId == productId);
-
-            if (basketLine != null)
-            {
-                _dbContext.BasketLine.Remove(basketLine);
-                _dbContext.SaveChanges();
-            }
-        }
-    }
-
-    public void UpdateBasketLine(Guid userId, BasketLine basketLine)
-    {
-        var basket = _dbContext.Basket
-                          .Include(b => b.BasketLines)
-                          .FirstOrDefault(x => x.UserId == userId);
-
-        if (basket != null)
-        {
-            var existingBasketLine = basket.BasketLines.FirstOrDefault(bl => bl.ProductId == basketLine.ProductId);
-            if (existingBasketLine != null)
-            {
-                existingBasketLine.Quantity = basketLine.Quantity;
-                existingBasketLine.SizeId = basketLine.SizeId;
-            }
-        }
-    }
-
-    public void DeleteBasket(Guid userId)
+    public void DeleteBasketLines(Guid userId)
     {
         var basket = _dbContext.Basket
                           .Include(b => b.BasketLines)

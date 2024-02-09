@@ -15,7 +15,7 @@ public class DeleteBasketCommandHandler : IRequestHandler<DeleteBasketCommand>
         var basketToDelete = _unitOfWork.Basket.GetBasketByUserId(request.userId);
         if (basketToDelete != null)
         {
-            _unitOfWork.Basket.DeleteBasket(request.userId);
+            _unitOfWork.Basket.DeleteBasketLines(request.userId);
             await _unitOfWork.SaveChangesAsync();
         }
     }

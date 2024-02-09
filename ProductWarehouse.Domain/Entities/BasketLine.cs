@@ -1,5 +1,5 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
-public class BasketLine
+public class BasketLine : Entity
 {
     public Basket Basket { get; set; }
     public Guid BasketId { get; set; }

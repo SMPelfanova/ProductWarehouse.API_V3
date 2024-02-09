@@ -6,5 +6,4 @@ public static class TableNames
     public const string UserRoles = "UserRoles";
     public const string ProductGroups = "ProductGroups";
     public const string ProductSizes = "ProductSizes";
-    public const string BasketLines = "BasketLines";
 }

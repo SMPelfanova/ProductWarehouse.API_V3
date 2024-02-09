@@ -2,4 +2,4 @@
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
-public record GetOrderQuery(Guid Id) : IRequest<OrderDto>;
+public record GetOrderQuery(Guid Id, Guid UserId) : IRequest<OrderDto>;

@@ -51,11 +51,6 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.CommonWords, opt => opt.MapFrom(src => src.FindMostCommonWords()))
             .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src));
 
-        CreateMap<UpdateProductCommand, Product>()
-           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-           .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
-           .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-           .ForMember(dest => dest.BrandId, opt => opt.MapFrom(src => src.BrandId))
-           .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price));
+        CreateMap<UpdateProductCommand, Product>();
     }
 }

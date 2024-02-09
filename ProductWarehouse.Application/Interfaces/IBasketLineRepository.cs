@@ -2,8 +2,6 @@
 using ProductWarehouse.Persistence.Abstractions.Interfaces;
 
 namespace ProductWarehouse.Application.Interfaces;
-public interface IBasketRepository : IRepository<Basket>
+public interface IBasketLineRepository : IRepository<BasketLine>
 {
-    Basket GetBasketByUserId(Guid userId);
-    void DeleteBasketLines(Guid userId);
 }

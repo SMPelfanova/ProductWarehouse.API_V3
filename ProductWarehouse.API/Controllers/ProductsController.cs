@@ -31,7 +31,7 @@ public class ProductsController : BaseController
 
         var products = mapper.Map<IEnumerable<ProductResponse>>(result.Products);
 
-        if (products == null || !products.Any())
+        if (!products.Any())
         {
             return NotFound();
         }
@@ -48,9 +48,9 @@ public class ProductsController : BaseController
     [HttpGet("filter")]
     [Produces("application/json")]
     public async Task<IActionResult> GetProducts(
+        [FromQuery] FilterProductsRequest productsFilter,
         [FromServices] IMediator mediator,
-        [FromServices] IMapper mapper,
-        [FromQuery] FilterProductsRequest productsFilter)
+        [FromServices] IMapper mapper)
     {
         var productsQueryMap = mapper.Map<GetAllProductsQuery>(productsFilter);
 
@@ -58,7 +58,7 @@ public class ProductsController : BaseController
 
         var response = mapper.Map<ProductFilterResponse>(result);
 
-        if (response == null || !response.Products.Any())
+        if (!response.Products.Any())
         {
             return NotFound();
         }
@@ -67,7 +67,9 @@ public class ProductsController : BaseController
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetProduct([FromServices] IMediator mediator, Guid id)
+    public async Task<IActionResult> GetProduct(
+        Guid id,
+        [FromServices] IMediator mediator)
     {
         var product = await mediator.Send(new GetProductQuery(id));
 
@@ -97,21 +99,22 @@ public class ProductsController : BaseController
         return CreatedAtAction(nameof(GetProduct), new { id = productId }, request);
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut]
     public async Task<IActionResult> UpdateProduct(
-        Guid id,
-        [FromBody] UpdateProductCommand request,
+        [FromBody] UpdateProductRequest request,
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper)
     {
-        request.Id = id;
-        await mediator.Send(request);
+        var command = mapper.Map<UpdateProductCommand>(request);
+        await mediator.Send(command);
 
         return Ok();
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteProduct([FromServices] IMediator mediator, Guid id)
+    public async Task<IActionResult> DeleteProduct(
+        Guid id,
+        [FromServices] IMediator mediator)
     {
         await mediator.Send(new DeleteProductCommand(id));
         return NoContent();

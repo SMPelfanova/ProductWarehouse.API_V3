@@ -4,6 +4,7 @@ using ProductWarehouse.Persistence.Abstractions.Interfaces;
 namespace ProductWarehouse.Application.Interfaces;
 public interface IOrderRepository : IRepository<Order>
 {
+    Task<List<Order>> GetOrdersByUserId(Guid userId);
     Task<Order> GetOrderStatus(Guid id);
     Task<Order> GetOrderDetails(Guid id);
 }

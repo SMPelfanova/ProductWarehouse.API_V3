@@ -2,7 +2,7 @@
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
 
-namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketItem;
+namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -16,18 +16,24 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
 
     public async Task Handle(UpdateBasketLineCommand request, CancellationToken cancellationToken)
     {
+        var basketLine = await _unitOfWork.BasketLines.GetByIdAsync(request.BasketLine.Id);
+        if (basketLine == null)
+        {
+            throw new Exception("Basket line not found");
+        }
+
         var checkIfProductSizeAvailable = await _unitOfWork.Products.CheckQuantityInStock(request.BasketLine.ProductId, request.BasketLine.SizeId);
 
         if (checkIfProductSizeAvailable >= request.BasketLine.Quantity)
         {
-            _unitOfWork.Basket.UpdateBasketLine(request.UserId, new Domain.Entities.BasketLine
-            {
-                SizeId = request.BasketLine.SizeId,
-                Quantity = request.BasketLine.Quantity,
-            });
+            basketLine.SizeId = request.BasketLine.SizeId;
+            basketLine.Quantity = request.BasketLine.Quantity;
+            _unitOfWork.BasketLines.Update(basketLine);
             await _unitOfWork.SaveChangesAsync();
         }
-
-        throw new ArgumentNullException("No available sizes");
+        else
+        {
+            throw new ArgumentNullException("No available sizes");
+        }
     }
 }

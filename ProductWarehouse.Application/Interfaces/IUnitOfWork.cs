@@ -8,6 +8,7 @@ public interface IUnitOfWork : IDisposable
     IOrderRepository Orders { get; }
     IBrandRepository Brands { get; }
     IBasketRepository Basket { get; }
+    IBasketLineRepository BasketLines { get; }
     IUserRepository User { get; }
     Task<int> SaveChangesAsync();
     void Rollback();
