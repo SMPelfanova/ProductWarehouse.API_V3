@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Repositories;
 
 namespace ProductWarehouse.Persistence.EF.Extensions;
@@ -15,7 +14,7 @@ public static class DependencyInjectionExtensions
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("WerehouseSQLDBConnectionString")),
             ServiceLifetime.Scoped);
-     
+        services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBasketRepository, BasketRepository>();
@@ -23,7 +22,6 @@ public static class DependencyInjectionExtensions
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<ISizeRepository, SizeRepository>();
         services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
-        services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IProductSizeRepository, ProductSizeRepository>();
 

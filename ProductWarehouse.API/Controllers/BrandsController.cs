@@ -26,7 +26,7 @@ public class BrandsController : BaseController
 
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetBrand([FromServices] IMediator mediator, Guid id)
+    public async Task<IActionResult> GetBrand(Guid id, [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetBrandQuery(id));
 

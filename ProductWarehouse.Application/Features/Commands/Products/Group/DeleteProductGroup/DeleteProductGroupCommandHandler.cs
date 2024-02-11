@@ -13,7 +13,7 @@ public class DeleteProductGroupCommandHandler : IRequestHandler<DeleteProductGro
 
     public async Task Handle(DeleteProductGroupCommand request, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
+        var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
         var group = await _unitOfWork.Group.GetByIdAsync(request.GroupId);
         if (product == null || group == null)
         {

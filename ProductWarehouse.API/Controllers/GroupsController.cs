@@ -21,7 +21,7 @@ public class GroupsController : BaseController
 
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetGroup([FromServices] IMediator mediator, Guid id)
+    public async Task<IActionResult> GetGroup(Guid id, [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetGroupQuery(id));
 

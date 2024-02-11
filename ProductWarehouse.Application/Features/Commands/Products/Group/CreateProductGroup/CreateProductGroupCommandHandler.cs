@@ -16,7 +16,6 @@ public class CreateProductGroupCommandHandler : IRequestHandler<CreateProductGro
     public async Task<Guid> Handle(CreateProductGroupCommand request, CancellationToken cancellationToken)
     {
         var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
-       // var group = await _unitOfWork.Group.GetByIdAsync(request.GroupId);
 
         if (product != null && !product.ProductGroups.Any(x=>x.Group.Id == request.GroupId))
         {

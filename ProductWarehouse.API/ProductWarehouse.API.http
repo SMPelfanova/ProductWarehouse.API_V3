@@ -1,4 +1,105 @@
 @ProductWarehouse.API_HostAddress = https://localhost:7092
+@ProductId = d81284fb-4492-4521-1671-08dc2b0eadce
+@UserId = 96174bfc-383a-464b-ac51-ed81fd55842c
+@SizeId = 2a5b8d45-bfcd-4ae7-b351-ac6658d2bbb4
+@GroupId = cc458d23-fae6-4b7b-bfc5-399e272442c6
+
+### Get Basket
+GET {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
+
+### Delete Basket
+DELETE {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
+
+### Add Basket Line
+POST {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
+Content-Type: application/json
+
+{
+    "productId": "{{ProductId}}",
+    "quantity": 5
+}
+
+### Delete Basket Line
+DELETE {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}/{{ProductId}}
+
+### Update Basket Line
+PUT {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
+Content-Type: application/json
+
+{
+    "basketLine": {
+        "productId": "{{ProductId}}",
+        "quantity": 10
+    }
+}
+
+### Get Orders
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
+
+### Get Order
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
+
+### Create Order
+POST {{ProductWarehouse.API_HostAddress}}/api/orders
+Content-Type: application/json
+
+{
+    "userId": "{{UserId}}",
+    "orderLines": [
+        {
+            "productId": "{{ProductId}}",
+            "quantity": 5
+        }
+    ]
+}
+
+### Partially Update Order
+PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
+Content-Type: application/json-patch+json
+
+[
+    {
+        "op": "replace",
+        "path": "/orderStatus",
+        "value": "Shipped"
+    }
+]
+
+### Delete Order
+DELETE {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
+
+### Get Products
+GET {{ProductWarehouse.API_HostAddress}}/api/products
+
+### Get Products by Filter
+GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
+
+### Get Product
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}
+
+### Create Product
+POST {{ProductWarehouse.API_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "name": "Product Name",
+    "price": 50.99
+}
+
+### Update Product
+PUT {{ProductWarehouse.API_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+    "id": "{{ProductId}}",
+    "name": "Updated Product Name",
+    "price": 60.99
+}
+
+### Delete Product
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}
+
+
 
 GET {{ProductWarehouse.API_HostAddress}}/api/Products
 Accept: application/json
@@ -7,55 +108,34 @@ Accept: application/json
 
 GET {{ProductWarehouse.API_HostAddress}}/api/Products/filter?MinPrice=10&MaxPrice=89&Highlight=red,blue&Size=Medium
 
+### Get Product Groups
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
 
-###
-### Get all products
-GET {{ProductWarehouse.API_HostAddress}}/api/products
-
-### Get filtered products
-GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?filterParam1=value1&filterParam2=value2
-
-### Get product by ID
-GET {{ProductWarehouse.API_HostAddress}}/api/products/{id}
-
-### Create a new product
-POST {{ProductWarehouse.API_HostAddress}}/api/products
+### Create Product Group
+POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
 Content-Type: application/json
 
 {
-    "property1": "value1",
-    "property2": "value2"
+    "groupId": "{{GroupId}}"
 }
 
-### Delete product by ID
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{id}
+### Delete Product Group
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups/{{GroupId}}
 
-### Get product sizes
-GET {{ProductWarehouse.API_HostAddress}}/api/products/{id}/sizes
+### Get Product Sizes
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes
 
-### Create product size
-POST{{ProductWarehouse.API_HostAddress}}/api/products/{id}/sizes
+### Create Product Size
+POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes
 Content-Type: application/json
 
 {
-    "property1": "value1",
-    "property2": "value2"
+    "sizeId": "{{SizeId}}",
+    "quantityInStock": 10
 }
 
-### Delete product size
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{productId}/sizes/{sizeId}
+### Delete Product Size
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/{{SizeId}}
 
-### Get product groups
-GET {{ProductWarehouse.API_HostAddress}}/api/products/{id}/groups
-
-### Create product group
-POST {{ProductWarehouse.API_HostAddress}}/api/products/{id}/groups
-Content-Type: application/json
-
-{
-    "property1": "value1",
-    "property2": "value2"
-}
-
-### Delete product group
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{productId}/groups/{groupId}
+### Update Product Size
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/{{SizeId}}?QuantityInStock=15

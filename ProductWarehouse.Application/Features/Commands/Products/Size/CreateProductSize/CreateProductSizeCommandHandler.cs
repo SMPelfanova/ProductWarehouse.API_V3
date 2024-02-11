@@ -17,9 +17,9 @@ public class CreateProductSizeCommandHandler : IRequestHandler<CreateProductSize
     {
         var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
 
-        if (product != null && !product.ProductSizes.Any(x => x.Size.Id == request.SizeId))
+        if (product != null && !product.ProductSizes.Any(x => x.SizeId == request.SizeId))
         {
-             await _unitOfWork.ProductSizes.Add(new ProductSize
+            await _unitOfWork.ProductSizes.Add(new ProductSize
             {
                 ProductId = request.ProductId,
                 SizeId = request.SizeId,

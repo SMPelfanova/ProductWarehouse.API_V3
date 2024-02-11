@@ -5,7 +5,7 @@ using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
-public sealed class ProductRepository : Repository<Product>, IProductRepository
+public class ProductRepository : Repository<Product>, IProductRepository
 {
     private readonly ApplicationDbContext _dbContext;
     public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
@@ -24,24 +24,19 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
         return products;
     }
 
-    public async Task<Product?> GetProductDetailsAsync(Guid id)
+    public async Task<Product> GetProductDetailsAsync(Guid id)
     {
-        //var product = await _dbContext.Products
-        //    .Where(p => p.Id == id)
-        //    .Include(p => p.Brand)
-        //    .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
-        //    .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-        //    .FirstOrDefaultAsync();
-
-        //return product;
+      
         try
         {
-            return await _dbContext.Products
-                .Where(x => !x.IsDeleted)
+            var product = await _dbContext.Products
+                .Where(p => p.Id == id)
                 .Include(p => p.Brand)
                 .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
-                .Include(p => p.ProductSizes).ThenInclude(ps => ps.Size)
+                .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
                 .FirstOrDefaultAsync();
+
+            return product;
         }
         catch (Exception ex)
         {

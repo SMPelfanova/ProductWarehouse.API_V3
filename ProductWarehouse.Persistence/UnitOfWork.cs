@@ -1,5 +1,5 @@
-﻿using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence;
@@ -41,13 +41,13 @@ internal class UnitOfWork : IUnitOfWork
         OrdersStatuses = orderStatusRepository;
         Group = groupRepository;
         Products = productRepository;
-        ProductSizes = productSizeRepository;
         Sizes = sizesRepository;
         Orders = ordersRepository;
         Brands = brandsRepository;
         Basket = basketRepository;
         BasketLines = basketLineRepository;
         User = userRepository;
+        ProductSizes = productSizeRepository;
     }
 
     public Task<int> SaveChangesAsync()

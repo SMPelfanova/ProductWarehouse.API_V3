@@ -18,7 +18,7 @@ public class ProductSizesController : BaseController
         [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetProductSizesQuery(id));
-        if (result == null)
+        if (!result.Any())
         {
             return NotFound();
         }
@@ -33,8 +33,7 @@ public class ProductSizesController : BaseController
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper)
     {
-        var command = mapper.Map<CreateProductSizeCommand>(request);
-        var resultId = mediator.Send(command);
+        var resultId = await mediator.Send(new CreateProductSizeCommand(request.Id, request.SizeId, request.QuantityInStock));
 
         return CreatedAtAction(nameof(GetProductSizes), new { id = id }, request);
     }

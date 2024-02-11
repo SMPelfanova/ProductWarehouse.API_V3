@@ -16,7 +16,7 @@ public class ProductGroupsController : BaseController
         [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetProductGroupsQuery(id));
-        if (result == null)
+        if (!result.Any())
         {
             return NotFound();
         }
@@ -30,7 +30,7 @@ public class ProductGroupsController : BaseController
         [FromBody] CreateProductGroupRequest request,
         [FromServices] IMediator mediator)
     {
-        var resultId = mediator.Send(new CreateProductGroupCommand(id, request.GroupId));
+        var resultId = await mediator.Send(new CreateProductGroupCommand(id, request.GroupId));
 
         return CreatedAtAction(nameof(GetProductGroups), new { id = id }, request);
     }
