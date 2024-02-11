@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Requests.Basket;
 using ProductWarehouse.API.Models.Requests.Order;
+using ProductWarehouse.API.Models.Requests.Product.Size;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.API.Models.Responses.Basket;
 using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
@@ -27,7 +28,9 @@ public class AutoMapperProfile : Profile
     private void MapFromRequestToQueriesOrCommands()
     {
         CreateMap<SizeRequest, SizeDto>();
-        CreateMap<ProductGroupRequest, GroupDto>(); 
+        CreateMap<ProductGroupRequest, GroupDto>();
+
+        CreateMap<CreateProductSizeRequest, CreateProductSizeCommand>();
 
         CreateMap<CreateProductRequest, CreateProductCommand>()
             .ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes))

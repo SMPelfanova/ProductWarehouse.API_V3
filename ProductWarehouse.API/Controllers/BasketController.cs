@@ -7,7 +7,7 @@ using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasket;
 using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
-using ProductWarehouse.Application.Features.Queries.Basket;
+using ProductWarehouse.Application.Features.Queries.Basket.GetBasket;
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.API.Controllers;

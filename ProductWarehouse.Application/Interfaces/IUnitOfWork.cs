@@ -2,6 +2,7 @@
 public interface IUnitOfWork : IDisposable
 {
     IProductRepository Products { get; }
+    IProductSizeRepository ProductSizes { get; }
     ISizeRepository Sizes { get; }
     IOrderStatusRepository OrdersStatuses { get; }
     IGroupRepository Group { get; }

@@ -14,7 +14,7 @@ public sealed class OrderRepository : Repository<Order>, IOrderRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Order> GetOrderDetails(Guid id)
+    public async Task<Order> GetOrderDetailsAsync(Guid id)
     {
         var order = await _dbContext.Orders
             .Include(o => o.OrderLines)
@@ -24,12 +24,12 @@ public sealed class OrderRepository : Repository<Order>, IOrderRepository
         return order;
     }
 
-    public Task<Order> GetOrderStatus(Guid id)
+    public Task<Order> GetOrderStatusAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<List<Order>> GetOrdersByUserId(Guid userId)
+    public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
     {
         var orders = await _dbContext.Orders
           .Where(o => o.UserId == userId && !o.IsDeleted)

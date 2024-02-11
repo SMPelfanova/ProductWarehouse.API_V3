@@ -12,7 +12,7 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<List<Product>> GetProducts()
+    public async Task<List<Product>> GetProductsAsync()
     {
         var products = await _dbContext.Products
             .Where(x => !x.IsDeleted)
@@ -24,19 +24,33 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
         return products;
     }
 
-    public async Task<Product> GetProductDetails(Guid id)
+    public async Task<Product?> GetProductDetailsAsync(Guid id)
     {
-        var product = await _dbContext.Products
-            .Where(p => p.Id == id)
-            .Include(p => p.Brand)
-            .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
-            .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-            .FirstOrDefaultAsync();
+        //var product = await _dbContext.Products
+        //    .Where(p => p.Id == id)
+        //    .Include(p => p.Brand)
+        //    .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
+        //    .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
+        //    .FirstOrDefaultAsync();
 
-        return product;
+        //return product;
+        try
+        {
+            return await _dbContext.Products
+                .Where(x => !x.IsDeleted)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
+                .Include(p => p.ProductSizes).ThenInclude(ps => ps.Size)
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+        
+            throw;
+        }
     }
 
-    public void DeleteProductGroups(Guid productId, Guid groupId)
+    public void DeleteProductGroup(Guid productId, Guid groupId)
     {
         var entityToDelete = _dbContext.ProductGroups.FirstOrDefault(x=>x.ProductId == productId && x.GroupId == groupId);
         
@@ -45,28 +59,6 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
             _dbContext.ProductGroups.Remove(entityToDelete);
         }
     }
-
-    public void DeleteProductSizes(Guid productId, Guid sizeId)
-    {
-        var entityToDelete = _dbContext.ProductSizes.FirstOrDefault(x => x.ProductId == productId && x.SizeId == sizeId);
-
-        if (entityToDelete != null)
-        {
-            _dbContext.ProductSizes.Remove(entityToDelete);
-        }
-    }
-
-    //public void UpdateProductGroupd(Product product)
-    //{
-    //    var resutl = _dbContext.ProductGroups.FirstOrDefault(x => x.ProductId == product.Id);
-
-        
-    //    if (entityToUpdate != null)
-    //    {
-    //        entityToUpdate.QuantityInStock = productSize.QuantityInStock;
-    //        _dbContext.ProductSizes.Update(entityToUpdate);
-    //    }
-    //}
 
     public void UpdateProductSize(ProductSize productSize)
     {
@@ -78,14 +70,14 @@ public sealed class ProductRepository : Repository<Product>, IProductRepository
         }
     }
 
-    public async Task<ProductSize> GetProductSize(Guid productId, Guid sizeId)
+    public async Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId)
     {
         var productSize = await _dbContext.ProductSizes.FirstOrDefaultAsync(x => x.ProductId == productId && x.SizeId == sizeId);
 
         return productSize;
     }
 
-    public async Task<int> CheckQuantityInStock(Guid productId, Guid sizeId)
+    public async Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId)
     {
         var productSize = await _dbContext.ProductSizes.FirstOrDefaultAsync(x => x.ProductId == productId && x.SizeId == sizeId);
 

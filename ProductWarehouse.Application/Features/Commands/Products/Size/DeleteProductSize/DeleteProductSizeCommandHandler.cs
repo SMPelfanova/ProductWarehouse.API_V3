@@ -13,11 +13,14 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductSize
 
     public async Task Handle(DeleteProductSizeCommand request, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
-        var group = await _unitOfWork.Sizes.GetByIdAsync(request.SizeId);
+        var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
+        var productSizeToDelete = product.ProductSizes.FirstOrDefault(x => x.SizeId == request.SizeId);
+        if (productSizeToDelete != null)
+        {
+            _unitOfWork.ProductSizes.Delete(productSizeToDelete);
 
-        _unitOfWork.Products.DeleteProductSizes(request.ProductId, request.SizeId);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
-        await _unitOfWork.SaveChangesAsync();
     }
 }

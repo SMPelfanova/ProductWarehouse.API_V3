@@ -19,7 +19,7 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, List<
 
     public async Task<List<OrderDto>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.Orders.GetOrdersByUserId(request.UserId);
+        var result = await _unitOfWork.Orders.GetOrdersByUserIdAsync(request.UserId);
         var orders = _mapper.Map<List<OrderDto>>(result);
         if (orders.Count() <= 0)
         {

@@ -15,19 +15,18 @@ public class CreateProductGroupCommandHandler : IRequestHandler<CreateProductGro
     }
     public async Task<Guid> Handle(CreateProductGroupCommand request, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
-        var group = await _unitOfWork.Group.GetByIdAsync(request.GroupId);
+        var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
+       // var group = await _unitOfWork.Group.GetByIdAsync(request.GroupId);
 
-        if (product != null && group != null && !product.ProductGroups.Any(x=>x.Group.Id == group.Id))
+        if (product != null && !product.ProductGroups.Any(x=>x.Group.Id == request.GroupId))
         {
             product.ProductGroups.Add(new ProductGroups
             {
                 ProductId = request.ProductId,
                 GroupId = request.GroupId,
             });
+            await _unitOfWork.SaveChangesAsync();
         }
-
-        await _unitOfWork.SaveChangesAsync();
 
         return request.ProductId;
     }

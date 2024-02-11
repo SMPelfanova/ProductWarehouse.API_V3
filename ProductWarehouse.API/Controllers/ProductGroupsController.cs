@@ -1,41 +1,47 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ProductWarehouse.Application.Features.Commands.Products.DeleteProductGroup;
+using ProductWarehouse.API.Models.Requests.Product.Group;
 using ProductWarehouse.Application.Features.Commands.Products;
+using ProductWarehouse.Application.Features.Commands.Products.DeleteProductGroup;
 using ProductWarehouse.Application.Features.Queries.Products.GetProductGroups;
 
 namespace ProductWarehouse.API.Controllers;
 
-[Route("api/products")]
+[Route("api/products/{id:guid}/groups")]
 public class ProductGroupsController : BaseController
 {
-
-    [HttpGet("{id:guid}/groups")]
-    public async Task<IActionResult> GetProductGroups([FromServices] IMediator mediator, Guid productId)
+    [HttpGet]
+    public async Task<IActionResult> GetProductGroups(
+        Guid id,
+        [FromServices] IMediator mediator)
     {
-        var result = await mediator.Send(new GetProductGroupsQuery(productId));
+        var result = await mediator.Send(new GetProductGroupsQuery(id));
         if (result == null)
         {
             return NotFound();
         }
-        return Ok();
+
+        return Ok(result);
     }
 
-    [HttpPost("{id:guid}/groups")]
+    [HttpPost]
     public async Task<IActionResult> CreateProductGroup(
-        [FromServices] IMediator mediator,
-        Guid productId,
-        [FromBody] CreateProductGroupCommand createProductGroupCommand)
+        Guid id,
+        [FromBody] CreateProductGroupRequest request,
+        [FromServices] IMediator mediator)
     {
-        var resultId = mediator.Send(createProductGroupCommand);
+        var resultId = mediator.Send(new CreateProductGroupCommand(id, request.GroupId));
 
-        return Ok(resultId);
+        return CreatedAtAction(nameof(GetProductGroups), new { id = id }, request);
     }
 
-    [HttpDelete("{productId:guid}/groups/{groupId:guid}")]
-    public async Task<IActionResult> DeleteProductGroup([FromServices] IMediator mediator, Guid productId, Guid groupId)
+    [HttpDelete("{groupId:guid}")]
+    public async Task<IActionResult> DeleteProductGroup(
+        Guid id,
+        Guid groupId,
+        [FromServices] IMediator mediator)
     {
-        await mediator.Send(new DeleteProductGroupCommand(productId, groupId));
+        await mediator.Send(new DeleteProductGroupCommand(id, groupId));
 
         return NoContent();
     }

@@ -5,12 +5,10 @@ namespace ProductWarehouse.Application.Interfaces;
 
 public interface IProductRepository: IRepository<Product>
 {
-    Task<List<Product>> GetProducts();
-    Task<Product> GetProductDetails(Guid id);
-    void DeleteProductGroups(Guid productId, Guid groupId);
-    void DeleteProductSizes(Guid productId, Guid sizeId);
+    Task<List<Product>> GetProductsAsync();
+    Task<Product?> GetProductDetailsAsync(Guid id);
+    void DeleteProductGroup(Guid productId, Guid groupId);
+    Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId);
     void UpdateProductSize(ProductSize productSize);
-    Task<ProductSize> GetProductSize(Guid productId, Guid sizeId);
-
-    Task<int> CheckQuantityInStock(Guid productId, Guid sizeId);
+    Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId);
 }

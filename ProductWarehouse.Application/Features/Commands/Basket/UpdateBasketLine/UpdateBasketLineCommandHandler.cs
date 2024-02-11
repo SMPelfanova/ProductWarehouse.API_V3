@@ -22,7 +22,7 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
             throw new Exception("Basket line not found");
         }
 
-        var checkIfProductSizeAvailable = await _unitOfWork.Products.CheckQuantityInStock(request.BasketLine.ProductId, request.BasketLine.SizeId);
+        var checkIfProductSizeAvailable = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
 
         if (checkIfProductSizeAvailable >= request.BasketLine.Quantity)
         {

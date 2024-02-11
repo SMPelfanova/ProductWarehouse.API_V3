@@ -15,19 +15,19 @@ public class CreateProductSizeCommandHandler : IRequestHandler<CreateProductSize
     }
     public async Task<Guid> Handle(CreateProductSizeCommand request, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
-        var size = await _unitOfWork.Sizes.GetByIdAsync(request.SizeId);
+        var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
 
-        if (product != null && size != null && !product.ProductSizes.Any(x => x.Size.Id == size.Id))
+        if (product != null && !product.ProductSizes.Any(x => x.Size.Id == request.SizeId))
         {
-            product.ProductSizes.Add(new ProductSize
+             await _unitOfWork.ProductSizes.Add(new ProductSize
             {
                 ProductId = request.ProductId,
                 SizeId = request.SizeId,
+                QuantityInStock = request.QuantityInStock
             });
-        }
 
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         return request.ProductId;
     }

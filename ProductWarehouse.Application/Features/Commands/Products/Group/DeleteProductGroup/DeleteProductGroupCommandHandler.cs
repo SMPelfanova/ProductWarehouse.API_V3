@@ -13,10 +13,13 @@ public class DeleteProductGroupCommandHandler : IRequestHandler<DeleteProductGro
 
     public async Task Handle(DeleteProductGroupCommand request, CancellationToken cancellationToken)
     {
-        var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
+        var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
         var group = await _unitOfWork.Group.GetByIdAsync(request.GroupId);
-        
-        _unitOfWork.Products.DeleteProductGroups(request.ProductId, request.GroupId);
+        if (product == null || group == null)
+        {
+            throw new ArgumentException("Not found.");
+        }
+        _unitOfWork.Products.DeleteProductGroup(request.ProductId, request.GroupId);
 
         await _unitOfWork.SaveChangesAsync();
     }

@@ -3,7 +3,7 @@ using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models;
 
-namespace ProductWarehouse.Application.Features.Queries.Basket;
+namespace ProductWarehouse.Application.Features.Queries.Basket.GetBasket;
 public class GetBasketQueryHandler : IRequestHandler<GetBasketQuery, BasketDto>
 {
     private readonly IUnitOfWork _unitOfWork;

@@ -36,7 +36,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
                 Quantity = item.Quantity,
                 Price = item.Price
             });
-            var productSize = await _unitOfWork.Products.GetProductSize(item.ProductId, item.SizeId);
+            var productSize = await _unitOfWork.Products.GetProductSizeAsync(item.ProductId, item.SizeId);
             if (productSize != null)
             {
                 productSize.QuantityInStock -= item.Quantity;

@@ -22,10 +22,13 @@ internal class UnitOfWork : IUnitOfWork
 
     public IUserRepository User { get; }
 
+    public IProductSizeRepository ProductSizes { get; }
+
     public UnitOfWork(ApplicationDbContext dbContext,
                         IOrderStatusRepository orderStatusRepository,
                         IGroupRepository groupRepository,
                         IProductRepository productRepository,
+                        IProductSizeRepository productSizeRepository,
                         ISizeRepository sizesRepository,
                         IOrderRepository ordersRepository,
                         IBrandRepository brandsRepository,
@@ -38,6 +41,7 @@ internal class UnitOfWork : IUnitOfWork
         OrdersStatuses = orderStatusRepository;
         Group = groupRepository;
         Products = productRepository;
+        ProductSizes = productSizeRepository;
         Sizes = sizesRepository;
         Orders = ordersRepository;
         Brands = brandsRepository;

@@ -19,7 +19,7 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
     {
         var basket = _unitOfWork.Basket.GetBasketByUserId(request.UserId);
 
-        var checkIfProductSizeAvailable = await _unitOfWork.Products.CheckQuantityInStock(request.BasketLine.ProductId, request.BasketLine.SizeId);
+        var checkIfProductSizeAvailable = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
 
         if (basket != null && checkIfProductSizeAvailable >= request.BasketLine.Quantity)
         {
