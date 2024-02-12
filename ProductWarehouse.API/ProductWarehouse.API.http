@@ -1,4 +1,4 @@
-@ProductWarehouse.API_HostAddress = https://localhost:7092
+@ProductWarehouse.API_HostAddress = http://localhost:5068
 @ProductId = d81284fb-4492-4521-1671-08dc2b0eadce
 @UserId = 96174bfc-383a-464b-ac51-ed81fd55842c
 @SizeId = 2a5b8d45-bfcd-4ae7-b351-ac6658d2bbb4

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 
@@ -7,12 +6,10 @@ namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
-    public CreateOrderCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public CreateOrderCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)

@@ -5,8 +5,10 @@ using ProductWarehouse.Domain.Entities;
 namespace ProductWarehouse.Persistence.EF.Configurations;
 public class BasketLineConfiguration : EntityConfiguration<BasketLine>
 {
-    public void Configure(EntityTypeBuilder<BasketLine> builder)
+    public override void Configure(EntityTypeBuilder<BasketLine> builder)
     {
+        base.Configure(builder);
+
         builder.Property(p => p.Quantity)
             .IsRequired()
             .HasDefaultValue(1);

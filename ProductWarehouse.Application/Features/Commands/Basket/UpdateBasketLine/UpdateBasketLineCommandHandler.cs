@@ -23,8 +23,15 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
 			_logger.Error($"No basket found with id: {request.BasketLine.Id}");
 			throw new BasketNotFoundException($"No basket found with id: {request.BasketLine.Id}");
 		}
+        if (request.BasketLine.Quantity == 0)
+        {
+            _unitOfWork.BasketLines.Delete(basketLine);
+			await _unitOfWork.SaveChangesAsync();
 
-        var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
+            return Guid.Empty;
+		}
+
+		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
 
         if (availableSizes >= request.BasketLine.Quantity)
         {
