@@ -17,10 +17,12 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
+        var orderStatuses = await _unitOfWork.OrdersStatuses.GetAllAsync();
         var order = new Order
         {
             UserId = request.UserId,
             TotalAmount = request.TotalAmount,
+            StatusId = orderStatuses.FirstOrDefault(x=>x.Name.ToLowerInvariant() == "initial").Id,
             OrderLines = new List<OrderLine>()
         };
 

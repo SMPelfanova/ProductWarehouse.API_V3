@@ -34,7 +34,7 @@ public class OrdersController : BaseController
         return Ok(orders);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{userId:guid}/{id:guid}")]
     public async Task<IActionResult> GetOrder(
         Guid id,
         Guid userId,

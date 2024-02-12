@@ -17,9 +17,10 @@ public sealed class OrderRepository : Repository<Order>, IOrderRepository
     public async Task<Order> GetOrderDetailsAsync(Guid id)
     {
         var order = await _dbContext.Orders
+            .Where(o=>o.Id == id)
             .Include(o => o.OrderLines)
             .Include(o => o.Status)
-            .FirstOrDefaultAsync(o => o.Id == id);
+            .FirstOrDefaultAsync();
 
         return order;
     }
@@ -34,7 +35,7 @@ public sealed class OrderRepository : Repository<Order>, IOrderRepository
         var orders = await _dbContext.Orders
           .Where(o => o.UserId == userId && !o.IsDeleted)
           .Include(o => o.Status)
-          .Include(o => o.OrderLines).ThenInclude(pg => pg.Orders)
+          .Include(o => o.OrderLines)
           .ToListAsync();
 
         return orders;
