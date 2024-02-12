@@ -23,7 +23,6 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
 
     public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
     {
-        //todo: fix
         var products = await _unitOfWork.Products.GetProductsAsync();
         
         if (products.Count() <= 0)

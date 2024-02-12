@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using ProductWarehouse.Application.Features.Queries.Sizes;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models;
 
@@ -19,9 +18,9 @@ public class GetAllGroupsQueryHandler : IRequestHandler<GetAllGroupsQuery, List<
 
     public async Task<List<GroupDto>> Handle(GetAllGroupsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.Group.GetAllAsync();
-        var mapper = _mapper.Map<List<GroupDto>>(result);
+        var groups = await _unitOfWork.Group.GetAllAsync();
+        var result = _mapper.Map<List<GroupDto>>(groups);
 
-        return mapper;
+        return result;
     }
 }

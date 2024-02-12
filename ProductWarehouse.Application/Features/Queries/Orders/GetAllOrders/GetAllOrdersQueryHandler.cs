@@ -19,14 +19,14 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, List<
 
     public async Task<List<OrderDto>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.Orders.GetOrdersByUserIdAsync(request.UserId);
-        var orders = _mapper.Map<List<OrderDto>>(result);
+        var orders = await _unitOfWork.Orders.GetOrdersByUserIdAsync(request.UserId);
         if (orders.Count() <= 0)
         {
-            _logger.Information($"No orders found.");
+            _logger.Information($"No orders found for userId {request.UserId}.");
             return new List<OrderDto>();
         }
+        var result = _mapper.Map<List<OrderDto>>(orders);
 
-        return orders;
+        return result;
     }
 }

@@ -3,4 +3,4 @@ using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Queries.Sizes;
 
-public class GetAllSizesQuery() : IRequest<List<SizeDto>>;
+public record GetAllSizesQuery() : IRequest<List<SizeDto>>;

@@ -2,4 +2,4 @@
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Queries.Brands.GetAllBrands;
-public class GetAllBrandsQuery() : IRequest<List<BrandDto>>;
+public record GetAllBrandsQuery() : IRequest<List<BrandDto>>;

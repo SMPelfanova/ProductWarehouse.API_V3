@@ -17,9 +17,9 @@ public class GetOrderStatusQueryHandler : IRequestHandler<GetOrderStatusQuery, O
 
     public async Task<OrderStatusDto> Handle(GetOrderStatusQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.OrdersStatuses.GetByIdAsync(request.Id);
-        var mapper = _mapper.Map<OrderStatusDto>(result);
+        var orderStatus = await _unitOfWork.OrdersStatuses.GetByIdAsync(request.Id);
+        var result = _mapper.Map<OrderStatusDto>(orderStatus);
 
-        return mapper;
+        return result;
     }
 }

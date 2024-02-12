@@ -17,9 +17,9 @@ public class GetBrandQueryHandler : IRequestHandler<GetBrandQuery, BrandDto>
 
     public async Task<BrandDto> Handle(GetBrandQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.Sizes.GetByIdAsync(request.Id);
-        var mapper = _mapper.Map<BrandDto>(result);
+        var brand = await _unitOfWork.Sizes.GetByIdAsync(request.Id);
+        var result = _mapper.Map<BrandDto>(brand);
 
-        return mapper;
+        return result;
     }
 }
