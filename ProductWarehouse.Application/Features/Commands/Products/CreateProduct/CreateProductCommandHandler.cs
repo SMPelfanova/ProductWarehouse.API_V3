@@ -2,16 +2,16 @@
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
+using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Products;
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    public CreateProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+
+	public CreateProductCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
     public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {

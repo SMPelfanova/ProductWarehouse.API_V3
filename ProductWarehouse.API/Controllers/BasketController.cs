@@ -48,6 +48,10 @@ public class BasketController : BaseController
     {
         var mappedLine = mapper.Map<BasketLineDto>(basketLineRequest);
         var result = await mediator.Send(new AddBasketLineCommand(userId, mappedLine));
+        if (result == Guid.Empty)
+        {
+            return NotFound("No products found with requested size.");
+        }
 
         return Ok(result);
     }

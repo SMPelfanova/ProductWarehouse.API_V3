@@ -18,75 +18,76 @@ namespace ProductWarehouse.API.Controllers;
 /// </summary>
 public class OrdersController : BaseController
 {
-    [HttpGet("{userId:guid}")]
-    [Produces("application/json")]
-    public async Task<IActionResult> GetOrders(
-        Guid userId,
-        [FromServices] IMediator mediator)
-    {
-        var orders = await mediator.Send(new GetAllOrdersQuery(userId));
+	[HttpGet("{userId:guid}")]
+	[Produces("application/json")]
+	public async Task<IActionResult> GetOrders(
+		Guid userId,
+		[FromServices] IMediator mediator)
+	{
+		var orders = await mediator.Send(new GetAllOrdersQuery(userId));
 
-        if (orders == null || !orders.Any())
-        {
-            return NotFound();
-        }
+		if (orders == null || !orders.Any())
+		{
+			return NotFound();
+		}
 
-        return Ok(orders);
-    }
+		return Ok(orders);
+	}
 
-    [HttpGet("{userId:guid}/{id:guid}")]
-    public async Task<IActionResult> GetOrder(
-        Guid id,
-        Guid userId,
-        [FromServices] IMediator mediator)
-    {
-        var product = await mediator.Send(new GetOrderQuery(id, userId));
+	[HttpGet("{userId:guid}/{id:guid}")]
+	public async Task<IActionResult> GetOrder(
+		Guid id,
+		Guid userId,
+		[FromServices] IMediator mediator)
+	{
+		var order = await mediator.Send(new GetOrderQuery(id, userId));
 
-        if (product == null)
-        {
-            return NotFound();
-        }
+		if (order == null)
+		{
+			return NotFound();
+		}
 
-        return Ok(product);
-    }
+		return Ok(order);
+	}
 
-    [HttpPost]
-    public async Task<IActionResult> CreateOrder(
-    [FromBody] CreateOrderRequest createOrderRequest,
-    [FromServices] IMapper mapper,
-    [FromServices] IMediator mediator)
-    {
-        if (createOrderRequest == null)
-        {
-            return BadRequest("Request body is null");
-        }
+	[HttpPost]
+	public async Task<IActionResult> CreateOrder(
+	[FromBody] CreateOrderRequest createOrderRequest,
+	[FromServices] IMapper mapper,
+	[FromServices] IMediator mediator)
+	{
+		if (createOrderRequest == null)
+		{
+			return BadRequest("Request body is null");
+		}
 
-        var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
-        var orderId = await mediator.Send(command);
+		var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
 
-        return CreatedAtAction(nameof(GetOrder), new { id = orderId }, createOrderRequest);
-    }
+		var orderId = await mediator.Send(command);
 
-    [HttpPatch("{id:guid}")]
-    public async Task<IActionResult> PartiallyUpdateOrder(
-        Guid id,
-        [FromBody] JsonPatchDocument<UpdateOrderRequest> patchDocument,
-        [FromServices] IMediator mediator,
-        [FromServices] IMapper mapper)
-    {
-        var command = mapper.Map<JsonPatchDocument<PartialUpdateOrderRequest>>(patchDocument);
-        await mediator.Send(new PartialUpdateOrderCommand() { Id = id, PatchDocument = command });
+		return CreatedAtAction(nameof(GetOrder), new { id = orderId }, createOrderRequest);
+	}
 
-        return NoContent();
-    }
+	[HttpPatch("{id:guid}")]
+	public async Task<IActionResult> PartiallyUpdateOrder(
+		Guid id,
+		[FromBody] JsonPatchDocument<UpdateOrderRequest> patchDocument,
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
+	{
+		var command = mapper.Map<JsonPatchDocument<PartialUpdateOrderRequest>>(patchDocument);
+		await mediator.Send(new PartialUpdateOrderCommand() { Id = id, PatchDocument = command });
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteOrder(
-        Guid id,
-        [FromServices] IMediator mediator)
-    {
-        await mediator.Send(new DeleteOrderCommand(id));
+		return NoContent();
+	}
 
-        return NoContent();
-    }
+	[HttpDelete("{id:guid}")]
+	public async Task<IActionResult> DeleteOrder(
+		Guid id,
+		[FromServices] IMediator mediator)
+	{
+		await mediator.Send(new DeleteOrderCommand(id));
+
+		return NoContent();
+	}
 }

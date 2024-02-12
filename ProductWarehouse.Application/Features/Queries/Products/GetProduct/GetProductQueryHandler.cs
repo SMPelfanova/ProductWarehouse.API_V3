@@ -24,8 +24,8 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDt
         if (product == null)
         {
             _logger.Warning($"No product found with id:{request.Id}");
-            throw new ProductNotFoundException($"No product found with id:{request.Id}");
-        }
+            return null;
+		}
 
         var result = _mapper.Map<ProductDto>(product);
 

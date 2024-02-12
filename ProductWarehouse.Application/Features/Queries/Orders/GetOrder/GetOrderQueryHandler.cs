@@ -24,8 +24,8 @@ public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, OrderDto>
         var order = await _unitOfWork.Orders.GetOrderDetailsAsync(request.Id);
         if (order == null)
         {
-            _logger.Error($"Order with id {request.Id} not found.");
-            throw new OrderNotFoundException($"Order with id {request.Id} not found.");
+            _logger.Warning($"Order with id {request.Id} not found.");
+            return null;
         }
         var result = _mapper.Map<OrderDto>(order);
 

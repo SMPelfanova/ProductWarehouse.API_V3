@@ -95,7 +95,7 @@ public class ProductsController : BaseController
         var command = mapper.Map<CreateProductCommand>(request);
 
         var productId = await mediator.Send(command);
-
+   
         return CreatedAtAction(nameof(GetProduct), new { id = productId }, request);
     }
 
