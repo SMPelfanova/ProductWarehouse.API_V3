@@ -1,4 +1,6 @@
-﻿namespace ProductWarehouse.API.Models.Requests;
+﻿using ProductWarehouse.API.Models.Requests.Product.Group;
+
+namespace ProductWarehouse.API.Models.Requests;
 
 public class CreateProductRequest
 {

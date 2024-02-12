@@ -1,7 +1,6 @@
 ﻿using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.API.Models.Responses;
-
 public class ProductResponse
 {
     public Guid Id { get; set; }

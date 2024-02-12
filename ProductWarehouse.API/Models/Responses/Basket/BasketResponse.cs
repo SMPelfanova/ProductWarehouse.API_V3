@@ -1,5 +1,4 @@
-﻿
-namespace ProductWarehouse.API.Models.Responses.Basket;
+﻿namespace ProductWarehouse.API.Models.Responses.Basket;
 
 public class BasketResponse
 {

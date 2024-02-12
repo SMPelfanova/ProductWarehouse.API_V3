@@ -29,12 +29,12 @@ public class ProductsController : BaseController
     {
         var result = await mediator.Send(new GetAllProductsQuery());
 
-        var products = mapper.Map<IEnumerable<ProductResponse>>(result.Products);
+		if (!result.Products.Any())
+		{
+			return NotFound();
+		}
 
-        if (!products.Any())
-        {
-            return NotFound();
-        }
+		var products = mapper.Map<IEnumerable<ProductResponse>>(result.Products);
 
         return Ok(products);
     }
@@ -53,15 +53,13 @@ public class ProductsController : BaseController
         [FromServices] IMapper mapper)
     {
         var productsQueryMap = mapper.Map<GetAllProductsQuery>(productsFilter);
-
         var result = await mediator.Send(productsQueryMap);
+		if (!result.Products.Any())
+		{
+			return NotFound();
+		}
 
-        var response = mapper.Map<ProductFilterResponse>(result);
-
-        if (!response.Products.Any())
-        {
-            return NotFound();
-        }
+		var response = mapper.Map<ProductFilterResponse>(result);
 
         return Ok(response);
     }

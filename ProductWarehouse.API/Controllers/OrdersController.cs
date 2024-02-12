@@ -10,6 +10,8 @@ using ProductWarehouse.API.Models.Requests;
 using AutoMapper;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.API.Models.Requests.Order;
+using ProductWarehouse.API.Models.Responses.Basket;
+using ProductWarehouse.API.Models.Responses.Order;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -22,32 +24,36 @@ public class OrdersController : BaseController
 	[Produces("application/json")]
 	public async Task<IActionResult> GetOrders(
 		Guid userId,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
 	{
 		var orders = await mediator.Send(new GetAllOrdersQuery(userId));
 
-		if (orders == null || !orders.Any())
+		if (!orders.Any())
 		{
 			return NotFound();
 		}
+		var result = mapper.Map<List<OrderResponse>>(orders);
 
-		return Ok(orders);
+		return Ok(result);
 	}
 
 	[HttpGet("{userId:guid}/{id:guid}")]
 	public async Task<IActionResult> GetOrder(
 		Guid id,
 		Guid userId,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
 	{
 		var order = await mediator.Send(new GetOrderQuery(id, userId));
-
 		if (order == null)
 		{
 			return NotFound();
 		}
 
-		return Ok(order);
+		var result = mapper.Map<BasketResponse>(order);
+
+		return Ok(result);
 	}
 
 	[HttpPost]
@@ -56,11 +62,6 @@ public class OrdersController : BaseController
 	[FromServices] IMapper mapper,
 	[FromServices] IMediator mediator)
 	{
-		if (createOrderRequest == null)
-		{
-			return BadRequest("Request body is null");
-		}
-
 		var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
 
 		var orderId = await mediator.Send(command);

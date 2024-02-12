@@ -8,7 +8,7 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
     {
 		RuleFor(command => command.UserId)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.UserId));
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.UserId)));
 	
 		RuleFor(command => command.BasketLine)
 			.NotNull().WithMessage("Basket line cannot be null.");

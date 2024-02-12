@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ProductWarehouse.Application.Constants;
-using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLineCommand>

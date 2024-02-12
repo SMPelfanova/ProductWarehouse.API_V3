@@ -20,13 +20,13 @@ public class BasketController : BaseController
         [FromServices] IMediator mediator)
     {
         var result = await mediator.Send(new GetBasketQuery(userId));
-        var basket = mapper.Map<BasketResponse>(result);
-        if (basket == null)
+        if (result == null)
         {
             return NotFound();
         }
+		var basket = mapper.Map<BasketResponse>(result);
 
-        return Ok(basket);
+		return Ok(basket);
     }
 
     [HttpDelete("{userId:guid}")]

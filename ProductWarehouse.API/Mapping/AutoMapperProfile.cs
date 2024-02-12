@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Requests.Basket;
 using ProductWarehouse.API.Models.Requests.Order;
+using ProductWarehouse.API.Models.Requests.Product.Group;
 using ProductWarehouse.API.Models.Requests.Product.Size;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.API.Models.Responses.Basket;
-using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
+using ProductWarehouse.API.Models.Responses.Order;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.Application.Features.Commands.Products;
@@ -48,13 +49,18 @@ public class AutoMapperProfile : Profile
 
     private void MapFromDtoToResponse()
     {
-        CreateMap<ProductDto, ProductResponse>();
         CreateMap<BasketDto, BasketResponse>()
             .ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.Items));
 
         CreateMap<BasketLineDto, BasketLineResponse>();
+		CreateMap<BasketDto, BasketResponse>()
+		 .ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.Items));
 
-        CreateMap<ProductsFilterDto, ProductFilterResponse>()
+		CreateMap<OrderLineDto, OrderLineResponse>();
+
+        CreateMap<OrderDto, OrderResponse>();
+
+		CreateMap<ProductsFilterDto, ProductFilterResponse>()
           .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products))
           .ForMember(dest => dest.Filter, opt => opt.MapFrom(src => src));
 

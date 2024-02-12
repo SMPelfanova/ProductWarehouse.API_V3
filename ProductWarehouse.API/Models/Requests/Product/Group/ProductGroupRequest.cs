@@ -1,4 +1,4 @@
-﻿namespace ProductWarehouse.API.Models.Requests;
+﻿namespace ProductWarehouse.API.Models.Requests.Product.Group;
 
 public class ProductGroupRequest
 {
