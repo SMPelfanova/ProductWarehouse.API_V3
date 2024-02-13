@@ -4,33 +4,32 @@ using ProductWarehouse.Application.Features.Queries.Groups.GetAllGroups;
 using ProductWarehouse.Application.Features.Queries.Groups.GetGroup;
 
 namespace ProductWarehouse.API.Controllers;
+
 public class GroupsController : BaseController
 {
-    [HttpGet]
-    [Produces("application/json")]
-    public async Task<IActionResult> GetGroups([FromServices] IMediator mediator)
-    {
-        var result = await mediator.Send(new GetAllGroupsQuery());
-        if (result == null || !result.Any())
-        {
-            return NotFound();
-        }
+	[HttpGet]
+	[Produces("application/json")]
+	public async Task<IActionResult> GetGroups([FromServices] IMediator mediator)
+	{
+		var result = await mediator.Send(new GetAllGroupsQuery());
+		if (result == null || !result.Any())
+		{
+			return NotFound();
+		}
 
-        return Ok(result);
-    }
+		return Ok(result);
+	}
 
+	[HttpGet("{id:guid}")]
+	public async Task<IActionResult> GetGroup(Guid id, [FromServices] IMediator mediator)
+	{
+		var result = await mediator.Send(new GetGroupQuery(id));
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetGroup(Guid id, [FromServices] IMediator mediator)
-    {
-        var result = await mediator.Send(new GetGroupQuery(id));
+		if (result == null)
+		{
+			return NotFound();
+		}
 
-        if (result == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(result);
-    }
-
+		return Ok(result);
+	}
 }

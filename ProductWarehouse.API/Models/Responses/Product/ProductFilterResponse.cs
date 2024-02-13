@@ -2,6 +2,6 @@
 
 public class ProductFilterResponse
 {
-    public FilterResponse Filter { get; set; } = new FilterResponse();
-    public IEnumerable<ProductResponse> Products { get; set; } = Enumerable.Empty<ProductResponse>();
+	public FilterResponse Filter { get; set; } = new FilterResponse();
+	public IEnumerable<ProductResponse> Products { get; set; } = Enumerable.Empty<ProductResponse>();
 }

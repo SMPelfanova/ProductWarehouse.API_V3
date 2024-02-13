@@ -60,7 +60,7 @@ public class AutoMapperProfile : Profile
 
 		CreateMap<OrderDto, OrderResponse>()
 			.ForMember(dest => dest.OrderLines, opt => opt.MapFrom(src => src.OrderLines));
-		
+
 		CreateMap<ProductDto, ProductResponse>();
 		CreateMap<ProductsFilterDto, ProductFilterResponse>()
 			.ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products))

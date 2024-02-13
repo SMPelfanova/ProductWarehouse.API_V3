@@ -2,6 +2,6 @@
 
 public class SizeRequest
 {
-    public Guid Id { get; set; }
-    public int QuantityInStock { get; set; }
+	public Guid Id { get; set; }
+	public int QuantityInStock { get; set; }
 }

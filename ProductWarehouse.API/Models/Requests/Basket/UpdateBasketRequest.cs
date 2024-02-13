@@ -2,6 +2,6 @@
 
 public class UpdateBasketRequest
 {
-    public Guid UserId { get; set; }
-    public UpdateBasketLineRequest BasketLine { get; set; }
+	public Guid UserId { get; set; }
+	public UpdateBasketLineRequest BasketLine { get; set; }
 }

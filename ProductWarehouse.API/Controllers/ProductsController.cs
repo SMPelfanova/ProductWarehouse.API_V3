@@ -16,18 +16,18 @@ namespace ProductWarehouse.API.Controllers;
 /// </summary>
 public class ProductsController : BaseController
 {
-    /// <summary>
-    /// Get all products.
-    /// </summary>
-    /// <returns>List of products.</returns>
-    /// <response code="200">Returns list of products</response>
-    [HttpGet]
-    [Produces("application/json")]
-    public async Task<IActionResult> GetProducts(
-        [FromServices] IMediator mediator,
-        [FromServices] IMapper mapper)
-    {
-        var result = await mediator.Send(new GetAllProductsQuery());
+	/// <summary>
+	/// Get all products.
+	/// </summary>
+	/// <returns>List of products.</returns>
+	/// <response code="200">Returns list of products</response>
+	[HttpGet]
+	[Produces("application/json")]
+	public async Task<IActionResult> GetProducts(
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
+	{
+		var result = await mediator.Send(new GetAllProductsQuery());
 
 		if (!result.Products.Any())
 		{
@@ -36,24 +36,24 @@ public class ProductsController : BaseController
 
 		var products = mapper.Map<List<ProductResponse>>(result.Products);
 
-        return Ok(products);
-    }
+		return Ok(products);
+	}
 
-    /// <summary>
-    /// Get products based on filter criteria.
-    /// </summary>
-    /// <param name="productsFilter">Filter criteria.</param>
-    /// <returns>Filtered products.</returns>
-    /// <response code="200">Returns filtered products</response>
-    [HttpGet("filter")]
-    [Produces("application/json")]
-    public async Task<IActionResult> GetProducts(
-        [FromQuery] FilterProductsRequest productsFilter,
-        [FromServices] IMediator mediator,
-        [FromServices] IMapper mapper)
-    {
-        var productsQueryMap = mapper.Map<GetAllProductsQuery>(productsFilter);
-        var result = await mediator.Send(productsQueryMap);
+	/// <summary>
+	/// Get products based on filter criteria.
+	/// </summary>
+	/// <param name="productsFilter">Filter criteria.</param>
+	/// <returns>Filtered products.</returns>
+	/// <response code="200">Returns filtered products</response>
+	[HttpGet("filter")]
+	[Produces("application/json")]
+	public async Task<IActionResult> GetProducts(
+		[FromQuery] FilterProductsRequest productsFilter,
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
+	{
+		var productsQueryMap = mapper.Map<GetAllProductsQuery>(productsFilter);
+		var result = await mediator.Send(productsQueryMap);
 		if (!result.Products.Any())
 		{
 			return NotFound();
@@ -61,60 +61,60 @@ public class ProductsController : BaseController
 
 		var response = mapper.Map<ProductFilterResponse>(result);
 
-        return Ok(response);
-    }
+		return Ok(response);
+	}
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetProduct(
-        Guid id,
-        [FromServices] IMediator mediator)
-    {
-        var product = await mediator.Send(new GetProductQuery(id));
+	[HttpGet("{id:guid}")]
+	public async Task<IActionResult> GetProduct(
+		Guid id,
+		[FromServices] IMediator mediator)
+	{
+		var product = await mediator.Send(new GetProductQuery(id));
 
-        if (product == null)
-        {
-            return NotFound();
-        }
+		if (product == null)
+		{
+			return NotFound();
+		}
 
-        return Ok(product);
-    }
+		return Ok(product);
+	}
 
-    [HttpPost]
-    public async Task<IActionResult> CreateProduct(
-        [FromBody] CreateProductRequest request,
-        [FromServices] IMediator mediator,
-        [FromServices] IMapper mapper)
-    {
-        if (request == null)
-        {
-            return BadRequest("Request body is null");
-        }
+	[HttpPost]
+	public async Task<IActionResult> CreateProduct(
+		[FromBody] CreateProductRequest request,
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
+	{
+		if (request == null)
+		{
+			return BadRequest("Request body is null");
+		}
 
-        var command = mapper.Map<CreateProductCommand>(request);
+		var command = mapper.Map<CreateProductCommand>(request);
 
-        var productId = await mediator.Send(command);
-   
-        return CreatedAtAction(nameof(GetProduct), new { id = productId }, request);
-    }
+		var productId = await mediator.Send(command);
 
-    [HttpPut]
-    public async Task<IActionResult> UpdateProduct(
-        [FromBody] UpdateProductRequest request,
-        [FromServices] IMediator mediator,
-        [FromServices] IMapper mapper)
-    {
-        var command = mapper.Map<UpdateProductCommand>(request);
-        await mediator.Send(command);
+		return CreatedAtAction(nameof(GetProduct), new { id = productId }, request);
+	}
 
-        return Ok();
-    }
+	[HttpPut]
+	public async Task<IActionResult> UpdateProduct(
+		[FromBody] UpdateProductRequest request,
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
+	{
+		var command = mapper.Map<UpdateProductCommand>(request);
+		await mediator.Send(command);
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteProduct(
-        Guid id,
-        [FromServices] IMediator mediator)
-    {
-        await mediator.Send(new DeleteProductCommand(id));
-        return NoContent();
-    }
+		return Ok();
+	}
+
+	[HttpDelete("{id:guid}")]
+	public async Task<IActionResult> DeleteProduct(
+		Guid id,
+		[FromServices] IMediator mediator)
+	{
+		await mediator.Send(new DeleteProductCommand(id));
+		return NoContent();
+	}
 }

@@ -1,17 +1,16 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using ProductWarehouse.API.Models.Requests;
+using ProductWarehouse.API.Models.Requests.Order;
+using ProductWarehouse.API.Models.Responses.Order;
+using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.DeleteOrder;
+using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
 using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
-using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
-using ProductWarehouse.API.Models.Requests;
-using AutoMapper;
-using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
-using ProductWarehouse.API.Models.Requests.Order;
-using ProductWarehouse.API.Models.Responses.Basket;
-using ProductWarehouse.API.Models.Responses.Order;
 
 namespace ProductWarehouse.API.Controllers;
 

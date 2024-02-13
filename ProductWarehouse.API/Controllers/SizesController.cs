@@ -9,30 +9,29 @@ namespace ProductWarehouse.API.Controllers;
 /// </summary>
 public class SizesController : BaseController
 {
-    [HttpGet]
-    [Produces("application/json")]
-    public async Task<IActionResult> GetSizes([FromServices] IMediator mediator)
-    {
-        var result = await mediator.Send(new GetAllSizesQuery());
-        if (result == null || !result.Any())
-        {
-            return NotFound();
-        }
+	[HttpGet]
+	[Produces("application/json")]
+	public async Task<IActionResult> GetSizes([FromServices] IMediator mediator)
+	{
+		var result = await mediator.Send(new GetAllSizesQuery());
+		if (result == null || !result.Any())
+		{
+			return NotFound();
+		}
 
-        return Ok(result);
-    }
+		return Ok(result);
+	}
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetSize([FromServices] IMediator mediator, Guid id)
-    {
-        var size = await mediator.Send(new GetSizeQuery(id));
+	[HttpGet("{id:guid}")]
+	public async Task<IActionResult> GetSize([FromServices] IMediator mediator, Guid id)
+	{
+		var size = await mediator.Send(new GetSizeQuery(id));
 
-        if (size == null)
-        {
-            return NotFound();
-        }
+		if (size == null)
+		{
+			return NotFound();
+		}
 
-        return Ok(size);
-    }
-
+		return Ok(size);
+	}
 }

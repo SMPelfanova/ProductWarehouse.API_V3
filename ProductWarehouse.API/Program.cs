@@ -1,17 +1,16 @@
+using ProductWarehouse.API.Infrastructure;
+using ProductWarehouse.API.Mapping;
 using ProductWarehouse.Application.Extensions;
+using ProductWarehouse.Infrastructure.Extensions;
+using ProductWarehouse.Persistence.EF.Extensions;
+using ProductWarehouse.Persistence.Extensions;
 using Serilog;
 using System.Reflection;
-using ProductWarehouse.Infrastructure.Extensions;
-using ProductWarehouse.API.Mapping;
-using ProductWarehouse.Persistence.Extensions;
-using ProductWarehouse.API.Infrastructure;
-using ProductWarehouse.Persistence.EF.Extensions;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 builder.Services.AddHttpClient();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -27,20 +26,19 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(setupAction =>
 {
-    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+	var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
 
-    setupAction.IncludeXmlComments(xmlCommentsFullPath);
+	setupAction.IncludeXmlComments(xmlCommentsFullPath);
 }).AddSwaggerGenNewtonsoftSupport();
-
 
 builder.Host.UseSerilog((context, loggerConfiguration) =>
 {
-    loggerConfiguration
-        .ReadFrom.Configuration(context.Configuration)
-        .Enrich.FromLogContext()
-        .WriteTo.Console()
-        .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day); // Specify the file path
+	loggerConfiguration
+		.ReadFrom.Configuration(context.Configuration)
+		.Enrich.FromLogContext()
+		.WriteTo.Console()
+		.WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day); // Specify the file path
 });
 
 var app = builder.Build();
@@ -48,8 +46,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(C => C.EnableFilter());
+	app.UseSwagger();
+	app.UseSwaggerUI(C => C.EnableFilter());
 }
 
 app.UseSerilogRequestLogging();
