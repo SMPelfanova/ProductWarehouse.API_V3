@@ -3,6 +3,6 @@ using ProductWarehouse.Persistence.Abstractions.Interfaces;
 
 namespace ProductWarehouse.Application.Interfaces;
 
-public interface ISizeRepository: IRepository<Size>
+public interface ISizeRepository : IRepository<Size>
 {
 }

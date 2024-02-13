@@ -2,10 +2,11 @@
 using ProductWarehouse.Application.Constants;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
+
 public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLineCommand>
 {
-    public UpdateBasketLineCommandValidator()
-    {
+	public UpdateBasketLineCommandValidator()
+	{
 		RuleFor(command => command.UserId)
 			.NotEmpty()
 			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(UpdateBasketLineCommand.UserId)));

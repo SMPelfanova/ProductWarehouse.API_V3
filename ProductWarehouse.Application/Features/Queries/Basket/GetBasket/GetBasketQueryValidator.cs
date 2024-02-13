@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 
 namespace ProductWarehouse.Application.Features.Queries.Basket.GetBasket;
+
 public class GetBasketQueryValidator : AbstractValidator<GetBasketQuery>
 {
 	public GetBasketQueryValidator()

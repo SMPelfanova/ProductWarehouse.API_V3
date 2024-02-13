@@ -1,4 +1,5 @@
 ﻿namespace ProductWarehouse.Application.Models;
+
 public class UserDto
 {
 	public Guid Id { get; set; }

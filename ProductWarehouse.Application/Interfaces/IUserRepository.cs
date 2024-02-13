@@ -5,5 +5,4 @@ namespace ProductWarehouse.Application.Interfaces;
 
 public interface IUserRepository : IRepository<User>
 {
-
 }

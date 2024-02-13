@@ -1,4 +1,5 @@
 ﻿namespace ProductWarehouse.Application.Interfaces;
+
 public interface IUnitOfWork : IDisposable
 {
 	IProductRepository Products { get; }
@@ -11,6 +12,8 @@ public interface IUnitOfWork : IDisposable
 	IBasketRepository Basket { get; }
 	IBasketLineRepository BasketLines { get; }
 	IUserRepository User { get; }
+
 	Task<int> SaveChangesAsync();
+
 	void Rollback();
 }

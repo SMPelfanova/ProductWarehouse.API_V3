@@ -5,24 +5,25 @@ using ProductWarehouse.Application.Interfaces;
 using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
+
 public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
+	private readonly IUnitOfWork _unitOfWork;
+	private readonly IMapper _mapper;
 	private readonly ILogger _logger;
 
 	public UpdateProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _logger = logger;
-    }
+	{
+		_unitOfWork = unitOfWork;
+		_mapper = mapper;
+		_logger = logger;
+	}
 
-    public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
-    {
-        var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
-        if (product == null)
-        {
+	public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+	{
+		var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
+		if (product == null)
+		{
 			_logger.Error($"No product found with id: {request.Id}");
 			throw new ProductNotFoundException($"No product found with id: {request.Id}");
 		}

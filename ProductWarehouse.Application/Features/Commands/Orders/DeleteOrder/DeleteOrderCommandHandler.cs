@@ -4,6 +4,7 @@ using ProductWarehouse.Application.Interfaces;
 using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.DeleteOrder;
+
 public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand>
 {
 	private readonly IUnitOfWork _unitOfWork;

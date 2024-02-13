@@ -9,26 +9,24 @@ namespace ProductWarehouse.Application.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
-    {
-        var assembly = typeof(DependencyInjectionExtensions).Assembly;
+	public static IServiceCollection AddApplication(this IServiceCollection services)
+	{
+		var assembly = typeof(DependencyInjectionExtensions).Assembly;
 
-        services.AddTransient<IValidator<GetAllProductsQuery>, GetAllProductsQueryValidator>();
+		services.AddTransient<IValidator<GetAllProductsQuery>, GetAllProductsQueryValidator>();
 
-        services.AddValidatorsFromAssembly(assembly);
+		services.AddValidatorsFromAssembly(assembly);
 
-        services.AddMediatR(configuration =>
-        {
-            configuration.RegisterServicesFromAssembly(assembly);
-            configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+		services.AddMediatR(configuration =>
+		{
+			configuration.RegisterServicesFromAssembly(assembly);
+			configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+		});
 
-        });
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
 
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
+		services.AddAutoMapper(typeof(AutoMapperProfile));
 
-        services.AddAutoMapper(typeof(AutoMapperProfile));
-
-
-        return services;
-    }
+		return services;
+	}
 }

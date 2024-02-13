@@ -10,42 +10,42 @@ namespace ProductWarehouse.Application.Features.Queries.GetProducts;
 
 public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, ProductsFilterDto>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    private readonly ILogger _logger;
+	private readonly IUnitOfWork _unitOfWork;
+	private readonly IMapper _mapper;
+	private readonly ILogger _logger;
 
-    public GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-        _logger = logger;
-    }
+	public GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
+	{
+		_unitOfWork = unitOfWork;
+		_mapper = mapper;
+		_logger = logger;
+	}
 
-    public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
-    {
-        var products = await _unitOfWork.Products.GetProductsAsync();
-        
-        if (products.Count() <= 0)
-        {
-            _logger.Information($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
-            return new ProductsFilterDto();
-        }
+	public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
+	{
+		var products = await _unitOfWork.Products.GetProductsAsync();
 
-        var productFilter = _mapper.Map<ProductsFilterDto>(products);
+		if (products.Count() <= 0)
+		{
+			_logger.Information($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
+			return new ProductsFilterDto();
+		}
 
-        productFilter.Products = productFilter.Products
-            .Where(x => (request.MinPrice == 0 || x.Price >= request.MinPrice))
-            .Where(x => (request.MaxPrice == 0 || x.Price <= request.MaxPrice))
-            .Where(x => (string.IsNullOrEmpty(request.Size) || x.Sizes.Any(s => s.Name.ToLowerInvariant() == request.Size.ToLowerInvariant()))).ToList();
+		var productFilter = _mapper.Map<ProductsFilterDto>(products);
 
-        if (!string.IsNullOrEmpty(request.Highlight))
-        {
-            foreach (var product in productFilter.Products)
-            {
-                product.Description = product.Description.HighlightKeywords(request.Highlight);
-            }
-        }
+		productFilter.Products = productFilter.Products
+			.Where(x => (request.MinPrice == 0 || x.Price >= request.MinPrice))
+			.Where(x => (request.MaxPrice == 0 || x.Price <= request.MaxPrice))
+			.Where(x => (string.IsNullOrEmpty(request.Size) || x.Sizes.Any(s => s.Name.ToLowerInvariant() == request.Size.ToLowerInvariant()))).ToList();
 
-        return productFilter;
-    }
+		if (!string.IsNullOrEmpty(request.Highlight))
+		{
+			foreach (var product in productFilter.Products)
+			{
+				product.Description = product.Description.HighlightKeywords(request.Highlight);
+			}
+		}
+
+		return productFilter;
+	}
 }

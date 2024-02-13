@@ -1,57 +1,57 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
-using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Products;
+
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
 {
-    private readonly IUnitOfWork _unitOfWork;
+	private readonly IUnitOfWork _unitOfWork;
 
 	public CreateProductCommandHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-    public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
-    {
-        var product = new Product
-        {
-            Title = request.Title,
-            Description = request.Description,
-            Price = request.Price,
-            Photo = request.Photo,
-            BrandId = request.BrandId
-        };
+	{
+		_unitOfWork = unitOfWork;
+	}
 
-        if (request.Groups != null)
-        {
-            product.ProductGroups = new List<ProductGroups>();
-            foreach(var group in request.Groups)
-            {
-                product.ProductGroups.Add(new ProductGroups
-                {
-                    GroupId = group.Id
-                });
-            }
-        }
-        if (request.Sizes != null)
-        {
-            product.ProductSizes = new List<ProductSize>();
-            foreach (var size in request.Sizes)
-            {
-                product.ProductSizes.Add(new ProductSize
-                {
-                    SizeId = size.Id,
-                    QuantityInStock = size.QuantityInStock,
-                });
-            }
-        }
-     
-        var productId = await _unitOfWork.Products.Add(product);
+	public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+	{
+		var product = new Product
+		{
+			Title = request.Title,
+			Description = request.Description,
+			Price = request.Price,
+			Photo = request.Photo,
+			BrandId = request.BrandId
+		};
 
-        await _unitOfWork.SaveChangesAsync();
+		if (request.Groups != null)
+		{
+			product.ProductGroups = new List<ProductGroups>();
+			foreach (var group in request.Groups)
+			{
+				product.ProductGroups.Add(new ProductGroups
+				{
+					GroupId = group.Id
+				});
+			}
+		}
+		if (request.Sizes != null)
+		{
+			product.ProductSizes = new List<ProductSize>();
+			foreach (var size in request.Sizes)
+			{
+				product.ProductSizes.Add(new ProductSize
+				{
+					SizeId = size.Id,
+					QuantityInStock = size.QuantityInStock,
+				});
+			}
+		}
 
-        return productId;
-    }
+		var productId = await _unitOfWork.Products.Add(product);
+
+		await _unitOfWork.SaveChangesAsync();
+
+		return productId;
+	}
 }

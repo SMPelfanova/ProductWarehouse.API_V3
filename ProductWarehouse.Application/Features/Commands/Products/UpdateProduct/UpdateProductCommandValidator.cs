@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
+
 public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
 {
-    public UpdateProductCommandValidator()
-    {
+	public UpdateProductCommandValidator()
+	{
 		RuleFor(command => command.Id).NotEmpty().WithMessage("Id is required.");
 		RuleFor(command => command.Title).NotEmpty().WithMessage("Title is required.");
 		RuleFor(command => command.Title).MaximumLength(100).WithMessage("Title maximum length is 100.");

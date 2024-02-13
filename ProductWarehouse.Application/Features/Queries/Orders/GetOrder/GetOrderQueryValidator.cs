@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 
 namespace ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
+
 public class GetOrderQueryValidator : AbstractValidator<GetOrderQuery>
 {
 	public GetOrderQueryValidator()

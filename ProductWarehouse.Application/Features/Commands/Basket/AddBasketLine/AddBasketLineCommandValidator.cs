@@ -2,14 +2,15 @@
 using ProductWarehouse.Application.Constants;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
+
 public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineCommand>
 {
-    public AddBasketLineCommandValidator()
-    {
+	public AddBasketLineCommandValidator()
+	{
 		RuleFor(command => command.UserId)
 			.NotEmpty()
 			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.UserId)));
-	
+
 		RuleFor(command => command.BasketLine)
 			.NotNull().WithMessage("Basket line cannot be null.");
 

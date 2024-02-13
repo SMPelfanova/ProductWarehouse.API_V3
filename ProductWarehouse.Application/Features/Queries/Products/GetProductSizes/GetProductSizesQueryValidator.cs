@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 
 namespace ProductWarehouse.Application.Features.Queries.Products.GetProductSizes;
+
 public class GetProductSizesQueryValidator : AbstractValidator<GetProductSizesQuery>
 {
 	public GetProductSizesQueryValidator()

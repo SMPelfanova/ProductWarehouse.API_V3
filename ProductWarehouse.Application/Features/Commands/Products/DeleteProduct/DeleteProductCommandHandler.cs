@@ -4,20 +4,21 @@ using ProductWarehouse.Application.Interfaces;
 using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
+
 public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductCommand>
 {
-    private readonly IUnitOfWork _unitOfWork;
+	private readonly IUnitOfWork _unitOfWork;
 	private readonly ILogger _logger;
 
 	public DeleteProductSizeCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
-    {
-        _unitOfWork = unitOfWork;
-        _logger = logger;
-    }
+	{
+		_unitOfWork = unitOfWork;
+		_logger = logger;
+	}
 
-    public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
-    {
-        var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
+	public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+	{
+		var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
 		if (product == null)
 		{
 			_logger.Error($"No product found with id: {request.Id}");
@@ -25,8 +26,8 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductComm
 		}
 
 		product.IsDeleted = true;
-        _unitOfWork.Products.Update(product);
+		_unitOfWork.Products.Update(product);
 
-        await _unitOfWork.SaveChangesAsync();
-    }
+		await _unitOfWork.SaveChangesAsync();
+	}
 }
