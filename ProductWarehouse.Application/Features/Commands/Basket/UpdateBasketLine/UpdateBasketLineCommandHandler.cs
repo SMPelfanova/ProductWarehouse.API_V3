@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Domain.Entities;
 using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
@@ -8,11 +10,13 @@ namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine
 public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCommand, Guid>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly IMapper _mapper;
 	private readonly ILogger _logger;
 
-	public UpdateBasketLineCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+	public UpdateBasketLineCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
 	{
 		_unitOfWork = unitOfWork;
+		_mapper = mapper;
 		_logger = logger;
 	}
 
@@ -36,11 +40,8 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
 
 		if (availableSizes >= request.BasketLine.Quantity)
 		{
-			basketLine.Id = request.BasketLine.Id;
-			basketLine.SizeId = request.BasketLine.SizeId;
-			basketLine.Quantity = request.BasketLine.Quantity;
-			basketLine.Price = request.BasketLine.Price;
-			_unitOfWork.BasketLines.Update(basketLine);
+			var updateBasketLine = _mapper.Map<BasketLine>(request.BasketLine);
+			_unitOfWork.BasketLines.Update(updateBasketLine);
 			await _unitOfWork.SaveChangesAsync();
 
 			return basketLine.Id;

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
@@ -9,11 +10,13 @@ namespace ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand, Guid>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly IMapper _mapper;
 	private readonly ILogger _logger;
 
-	public AddBasketLineCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+	public AddBasketLineCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
 	{
 		_unitOfWork = unitOfWork;
+		_mapper = mapper;
 		_logger = logger;
 	}
 
@@ -29,14 +32,10 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
 		if (availableSizes >= request.BasketLine.Quantity)
 		{
-			await _unitOfWork.BasketLines.Add(new BasketLine
-			{
-				BasketId = basket.Id,
-				SizeId = request.BasketLine.SizeId,
-				ProductId = request.BasketLine.ProductId,
-				Quantity = request.BasketLine.Quantity,
-				Price = request.BasketLine.Price
-			});
+			request.BasketLine.Id = basket.Id;
+			var basketLine = _mapper.Map<BasketLine>(request.BasketLine);
+			await _unitOfWork.BasketLines.Add(basketLine);
+
 			await _unitOfWork.SaveChangesAsync();
 
 			return basket.Id;

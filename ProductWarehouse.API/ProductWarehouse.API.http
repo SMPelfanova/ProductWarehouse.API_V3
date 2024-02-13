@@ -147,7 +147,7 @@ POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
 Content-Type: application/json
 
 {
-    "groupId": "0e596ec6-bc97-4e5d-9593-69387ac3cb03"
+    "groupId": "cd95a5b4-efb0-4755-9379-73a81a3a2f9f"
 }
 
 ### Delete Product Group
@@ -162,7 +162,7 @@ Content-Type: application/json
 
 {
     "id": "{{ProductId}}",
-    "sizeId": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
+    "sizeId": "2aef86e1-2190-455a-890f-c19b276c97e1",
     "quantityInStock": 10
 }
 ### Update Product Size

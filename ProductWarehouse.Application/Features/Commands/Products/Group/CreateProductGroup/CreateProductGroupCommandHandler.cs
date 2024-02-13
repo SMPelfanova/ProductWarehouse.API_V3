@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
@@ -9,11 +10,13 @@ namespace ProductWarehouse.Application.Features.Commands.Products;
 public class CreateProductGroupCommandHandler : IRequestHandler<CreateProductGroupCommand, Guid>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly IMapper _mapper;
 	private readonly ILogger _logger;
 
-	public CreateProductGroupCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+	public CreateProductGroupCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
 	{
 		_unitOfWork = unitOfWork;
+		_mapper = mapper;
 		_logger = logger;
 	}
 
@@ -28,11 +31,8 @@ public class CreateProductGroupCommandHandler : IRequestHandler<CreateProductGro
 
 		if (!product.ProductGroups.Any(x => x.Group.Id == request.GroupId))
 		{
-			product.ProductGroups.Add(new ProductGroups
-			{
-				ProductId = request.ProductId,
-				GroupId = request.GroupId,
-			});
+			var productGroup = _mapper.Map<ProductGroups>(request);
+			product.ProductGroups.Add(productGroup);
 			await _unitOfWork.SaveChangesAsync();
 		}
 
