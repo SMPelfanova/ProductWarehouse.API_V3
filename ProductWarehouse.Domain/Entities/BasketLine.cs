@@ -1,4 +1,5 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
+
 public class BasketLine : Entity
 {
 	public Basket Basket { get; set; }

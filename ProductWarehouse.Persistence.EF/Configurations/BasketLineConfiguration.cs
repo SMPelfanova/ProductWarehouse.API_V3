@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class BasketLineConfiguration : EntityConfiguration<BasketLine>
 {
 	public override void Configure(EntityTypeBuilder<BasketLine> builder)

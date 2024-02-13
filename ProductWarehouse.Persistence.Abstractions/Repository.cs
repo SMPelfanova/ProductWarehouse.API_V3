@@ -2,6 +2,7 @@
 using ProductWarehouse.Persistence.Abstractions.Interfaces;
 
 namespace ProductWarehouse.Persistence.Abstractions;
+
 public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
 	protected readonly DbContext _dbContext;

@@ -1,4 +1,5 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
+
 public class Payment : Entity
 {
 	public string Method { get; set; }

@@ -4,6 +4,7 @@ using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class OrderStatusConfiguration : EntityConfiguration<OrderStatus>
 {
 	public override void Configure(EntityTypeBuilder<OrderStatus> builder)

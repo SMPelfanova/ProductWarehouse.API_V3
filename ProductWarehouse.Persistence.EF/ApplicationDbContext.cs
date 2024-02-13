@@ -2,14 +2,17 @@
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF;
+
 public class ApplicationDbContext : DbContext
 {
 	public ApplicationDbContext()
 	{
 	}
+
 	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 	{
 	}
+
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		if (!optionsBuilder.IsConfigured)

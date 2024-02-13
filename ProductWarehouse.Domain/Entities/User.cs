@@ -1,4 +1,5 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
+
 public class User : Entity
 {
 	public string FirstName { get; set; }

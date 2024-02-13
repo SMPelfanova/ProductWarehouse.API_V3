@@ -2,6 +2,7 @@
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class BasketConfiguration : EntityConfiguration<Basket>
 {
 	public override void Configure(EntityTypeBuilder<Basket> builder)

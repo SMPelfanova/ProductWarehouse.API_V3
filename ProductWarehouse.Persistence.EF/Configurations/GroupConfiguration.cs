@@ -2,6 +2,7 @@
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class GroupConfiguration : EntityConfiguration<Group>
 {
 	public override void Configure(EntityTypeBuilder<Group> builder)

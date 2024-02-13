@@ -6,7 +6,7 @@ namespace ProductWarehouse.Persistence.EF.Repositories;
 
 public sealed class SizeRepository : Repository<Size>, ISizeRepository
 {
-    public SizeRepository(ApplicationDbContext dbContext):base(dbContext)
-    {
-    }
+	public SizeRepository(ApplicationDbContext dbContext) : base(dbContext)
+	{
+	}
 }

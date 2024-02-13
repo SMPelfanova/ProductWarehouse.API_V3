@@ -6,7 +6,7 @@ namespace ProductWarehouse.Persistence.EF.Repositories;
 
 public sealed class BrandRepository : Repository<Brand>, IBrandRepository
 {
-    public BrandRepository(ApplicationDbContext dbContext):base(dbContext)
-    {
-    }
+	public BrandRepository(ApplicationDbContext dbContext) : base(dbContext)
+	{
+	}
 }

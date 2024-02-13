@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class UserConfiguration : EntityConfiguration<User>
 {
 	public override void Configure(EntityTypeBuilder<User> builder)

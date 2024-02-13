@@ -6,7 +6,7 @@ namespace ProductWarehouse.Persistence.EF.Repositories;
 
 public sealed class OrderStatusRepository : Repository<OrderStatus>, IOrderStatusRepository
 {
-    public OrderStatusRepository(ApplicationDbContext dbContext) : base(dbContext)
-    {
-    }
+	public OrderStatusRepository(ApplicationDbContext dbContext) : base(dbContext)
+	{
+	}
 }

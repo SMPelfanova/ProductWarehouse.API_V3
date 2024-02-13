@@ -5,6 +5,7 @@ using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.EF.Repositories;
 
 namespace ProductWarehouse.Persistence.EF.Extensions;
+
 public static class DependencyInjectionExtensions
 {
 	public static IServiceCollection AddPersistenceEF(

@@ -2,6 +2,7 @@
 using ProductWarehouse.Persistence.EF;
 
 namespace ProductWarehouse.Persistence;
+
 internal class UnitOfWork : IUnitOfWork
 {
 	private readonly ApplicationDbContext _dbContext;

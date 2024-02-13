@@ -4,6 +4,7 @@ using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
 {
 	public void Configure(EntityTypeBuilder<OrderLine> builder)
@@ -27,6 +28,5 @@ public class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
 		builder.HasOne(b => b.Size)
 			.WithMany(p => p.OrderLines)
 			.HasForeignKey(b => b.SizeId);
-
 	}
 }

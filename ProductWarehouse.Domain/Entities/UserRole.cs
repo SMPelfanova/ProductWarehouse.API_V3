@@ -1,4 +1,5 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
+
 public class UserRole
 {
 	public User User { get; set; }

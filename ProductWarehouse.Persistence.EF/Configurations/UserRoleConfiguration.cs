@@ -4,6 +4,7 @@ using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
 {
 	public void Configure(EntityTypeBuilder<UserRole> builder)

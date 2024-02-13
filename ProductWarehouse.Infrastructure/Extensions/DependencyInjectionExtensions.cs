@@ -7,13 +7,13 @@ namespace ProductWarehouse.Infrastructure.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
-    {
-        services.Configure<MockyClientOptions>(
-            config.GetSection(nameof(MockyClientOptions.MockyClient)));
+	public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
+	{
+		services.Configure<MockyClientOptions>(
+			config.GetSection(nameof(MockyClientOptions.MockyClient)));
 
-        services.AddHttpClient<MockyClientService>();
+		services.AddHttpClient<MockyClientService>();
 
-        return services;
-    }
+		return services;
+	}
 }

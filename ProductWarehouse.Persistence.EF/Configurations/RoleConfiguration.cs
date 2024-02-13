@@ -2,6 +2,7 @@
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class RoleConfiguration : EntityConfiguration<Role>
 {
 	public override void Configure(EntityTypeBuilder<Role> builder)

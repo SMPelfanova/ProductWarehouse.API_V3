@@ -4,6 +4,7 @@ using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class ProductSizesConfiguration : IEntityTypeConfiguration<ProductSize>
 {
 	public void Configure(EntityTypeBuilder<ProductSize> builder)

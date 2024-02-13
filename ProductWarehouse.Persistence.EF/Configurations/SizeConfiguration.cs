@@ -2,6 +2,7 @@
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
+
 public class SizeConfiguration : EntityConfiguration<Size>
 {
 	public override void Configure(EntityTypeBuilder<Size> builder)

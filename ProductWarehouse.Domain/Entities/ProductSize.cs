@@ -1,4 +1,5 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
+
 public class ProductSize
 {
 	public Product Product { get; set; }
