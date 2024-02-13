@@ -25,11 +25,6 @@ public sealed class OrderRepository : Repository<Order>, IOrderRepository
         return order;
     }
 
-    public Task<Order> GetOrderStatusAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
     {
         var orders = await _dbContext.Orders

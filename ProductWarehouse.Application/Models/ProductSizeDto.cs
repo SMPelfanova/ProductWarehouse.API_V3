@@ -1,6 +1,4 @@
-﻿using ProductWarehouse.Domain.Entities;
-
-namespace ProductWarehouse.Application.Models;
+﻿namespace ProductWarehouse.Application.Models;
 public class ProductSizeDto
 {
     public Guid Id { get; set; }

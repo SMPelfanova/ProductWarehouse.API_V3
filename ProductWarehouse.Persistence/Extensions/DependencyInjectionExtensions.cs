@@ -5,10 +5,10 @@ namespace ProductWarehouse.Persistence.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddPersistence(this IServiceCollection services)
-    {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+	public static IServiceCollection AddPersistence(this IServiceCollection services)
+	{
+		services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        return services;
-    }
+		return services;
+	}
 }

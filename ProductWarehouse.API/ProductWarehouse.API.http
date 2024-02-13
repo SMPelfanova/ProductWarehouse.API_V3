@@ -1,8 +1,9 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@ProductId = d81284fb-4492-4521-1671-08dc2b0eadce
-@UserId = 96174bfc-383a-464b-ac51-ed81fd55842c
-@SizeId = 2a5b8d45-bfcd-4ae7-b351-ac6658d2bbb4
-@GroupId = cc458d23-fae6-4b7b-bfc5-399e272442c6
+@BrandId = d6f201af-cf75-40d9-814a-1e0d17e9796c
+@ProductId = 11ead65f-14e8-4362-1b2f-08dc2c6aea3f
+@UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
+@SizeId = da35ec2b-24e1-4652-ab48-7671b93b5edc
+@GroupId = cd95a5b4-efb0-4755-9379-73a81a3a2f9f
 
 ### Get Basket
 GET {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
@@ -15,10 +16,10 @@ POST {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
 Content-Type: application/json
 
 {
-  "productId": "d81284fb-4492-4521-1671-08dc2b0eadce",
+  "productId": "{{ProductId}}",
   "quantity": 1,
   "price": 1110,
-  "sizeId": "0234522f-d731-4660-af41-27529d538755"
+  "sizeId": "7wee3527-c299-4c13-b907-ecaa57f9a655"
 }
 
 ### Delete Basket Line
@@ -48,16 +49,22 @@ Content-Type: application/json
 {
   "userId": "{{UserId}}",
   "totalAmount": 10,
-  "orderLines": [
+    "orderLines": [
     {
-      "productId": "{{ProductId}}",
+      "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
       "quantity": 1,
-      "price": 10,
-      "sizeId": "{{SizeId}}"
+      "price": 1110.00,
+      "sizeId": "da35ec2b-24e1-4652-ab48-7671b93b5edc"
+    },
+    {
+      "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
+      "quantity": 1,
+      "price": 1110.00,
+      "sizeId": "7aee3527-c299-4c13-b907-ecaa57f9a655"
     }
   ]
 }
-}
+
 
 ### Partially Update Order
 PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/92f8de45-6224-44d0-f190-08dc2b9ff824
@@ -81,7 +88,7 @@ GET {{ProductWarehouse.API_HostAddress}}/api/products
 GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
 
 ### Get Product
-GET {{ProductWarehouse.API_HostAddress}}/api/products/d81284fb-4492-4521-1671-08dc2b0eadce
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}
 
 ### Create Product
 POST {{ProductWarehouse.API_HostAddress}}/api/products
@@ -92,16 +99,16 @@ Content-Type: application/json
     "description": "Description of Product 3",
     "photo": "product3.jpg",
     "price": 39.99,
-    "brandId": "eb2abbfc-7076-463f-a861-8bd84c4ddfcf",
+    "brandId": "{{BrandId}}",
     "sizes": [
       {
-        "id": "0234522f-d731-4660-af41-27529d538755",
+        "id": "{{SizeId}}",
         "quantityInStock": 16
       }
     ],
     "groups": [
       {
-        "id": "cc458d23-fae6-4b7b-bfc5-399e272442c6"
+        "id": "{{GroupId}}"
       }
     ]
 }
@@ -112,7 +119,7 @@ Content-Type: application/json
 
 {
     "id": "062e76d9-8ab1-466d-d538-08dc2ba23d4a",
-     "title": "ddd",
+    "title": "ddd",
     "description": "wee",
     "price": 125.00
 }
@@ -151,7 +158,8 @@ POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes
 Content-Type: application/json
 
 {
-    "sizeId": "{{SizeId}}",
+    "id": "{{ProductId}}",
+    "sizeId": "7aee3527-c299-4c13-b907-ecaa57f9a655",
     "quantityInStock": 10
 }
 
@@ -159,4 +167,4 @@ Content-Type: application/json
 DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/{{SizeId}}
 
 ### Update Product Size
-PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/0234522f-d731-4660-af41-27529d538755?QuantityInStock=18
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/{{SizeId}}QuantityInStock=18

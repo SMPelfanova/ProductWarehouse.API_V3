@@ -51,7 +51,7 @@ public class OrdersController : BaseController
 			return NotFound();
 		}
 
-		var result = mapper.Map<BasketResponse>(order);
+		var result = mapper.Map<OrderResponse>(order);
 
 		return Ok(result);
 	}
@@ -66,7 +66,7 @@ public class OrdersController : BaseController
 
 		var orderId = await mediator.Send(command);
 
-		return CreatedAtAction(nameof(GetOrder), new { id = orderId }, createOrderRequest);
+		return CreatedAtAction(nameof(GetOrder), new { id = orderId, userId = createOrderRequest.UserId }, createOrderRequest);
 	}
 
 	[HttpPatch("{id:guid}")]

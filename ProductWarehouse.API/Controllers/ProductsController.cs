@@ -34,7 +34,7 @@ public class ProductsController : BaseController
 			return NotFound();
 		}
 
-		var products = mapper.Map<IEnumerable<ProductResponse>>(result.Products);
+		var products = mapper.Map<List<ProductResponse>>(result.Products);
 
         return Ok(products);
     }

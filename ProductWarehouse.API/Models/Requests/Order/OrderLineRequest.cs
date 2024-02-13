@@ -1,6 +1,4 @@
-﻿using ProductWarehouse.API.Controllers.Enums;
-
-namespace ProductWarehouse.API.Models.Requests.Order;
+﻿namespace ProductWarehouse.API.Models.Requests.Order;
 
 public class OrderLineRequest
 {

@@ -26,24 +26,15 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
     public async Task<Product> GetProductDetailsAsync(Guid id)
     {
-      
-        try
-        {
-            var product = await _dbContext.Products
-                .Where(p => p.Id == id)
-                .Include(p => p.Brand)
-                .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
-                .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-                .FirstOrDefaultAsync();
+		var product = await _dbContext.Products
+				 .Where(p => p.Id == id)
+				 .Include(p => p.Brand)
+				 .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
+				 .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
+				 .FirstOrDefaultAsync();
 
-            return product;
-        }
-        catch (Exception ex)
-        {
-        
-            throw;
-        }
-    }
+		return product;
+	}
 
     public void DeleteProductGroup(Guid productId, Guid groupId)
     {

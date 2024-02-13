@@ -24,6 +24,7 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
         var basket = _dbContext.Basket
                           .Include(b => b.BasketLines)
                           .FirstOrDefault(x => x.UserId == userId);
+
         if (basket != null)
         {
             _dbContext.BasketLine.RemoveRange(basket.BasketLines);

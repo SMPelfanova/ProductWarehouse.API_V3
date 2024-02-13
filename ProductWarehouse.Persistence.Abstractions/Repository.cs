@@ -4,46 +4,48 @@ using ProductWarehouse.Persistence.Abstractions.Interfaces;
 namespace ProductWarehouse.Persistence.Abstractions;
 public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
-    protected readonly DbContext _dbContext;
+	protected readonly DbContext _dbContext;
 
-    protected Repository(DbContext context)
-    {
-        _dbContext = context;
-    }
-    public async Task<TEntity> GetByIdAsync(Guid id)
-    {
-        return await _dbContext.Set<TEntity>().FindAsync(id);
-    }
+	protected Repository(DbContext context)
+	{
+		_dbContext = context;
+	}
 
-    public async Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties)
-    {
-        IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+	public async Task<TEntity> GetByIdAsync(Guid id)
+	{
+		return await _dbContext.Set<TEntity>().FindAsync(id);
+	}
 
-        foreach (var includeProperty in includeProperties)
-        {
-            query = query.Include(includeProperty);
-        }
+	public async Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties)
+	{
+		IQueryable<TEntity> query = _dbContext.Set<TEntity>();
 
-        return await query.ToListAsync();
-    }
+		foreach (var includeProperty in includeProperties)
+		{
+			query = query.Include(includeProperty);
+		}
 
-    public async Task<Guid> Add(TEntity entity)
-    {
-        var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
+		return await query.ToListAsync();
+	}
 
-        var generatedId = _dbContext.Entry(entity).Property("Id").CurrentValue;
+	public async Task<Guid> Add(TEntity entity)
+	{
+		var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
+		await _dbContext.SaveChangesAsync();
 
-        return (Guid)generatedId;
-    }
-    public void Delete(TEntity entity)
-    {
-        _dbContext.Set<TEntity>().Remove(entity);
-    }
+		var generatedId = _dbContext.Entry(entity).Property("Id").CurrentValue;
 
-    public void Update(TEntity entity)
-    {
-        _dbContext.Set<TEntity>().Update(entity);
-        _dbContext.Entry(entity).State = EntityState.Modified;
-    }
+		return (Guid)generatedId;
+	}
+
+	public void Delete(TEntity entity)
+	{
+		_dbContext.Set<TEntity>().Remove(entity);
+	}
+
+	public void Update(TEntity entity)
+	{
+		_dbContext.Set<TEntity>().Update(entity);
+		_dbContext.Entry(entity).State = EntityState.Modified;
+	}
 }
