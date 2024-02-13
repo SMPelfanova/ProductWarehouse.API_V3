@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ProductWarehouse.Application.Constants;
 
 namespace ProductWarehouse.Application.Features.Queries.Products.GetProductSizes;
 
@@ -6,6 +7,8 @@ public class GetProductSizesQueryValidator : AbstractValidator<GetProductSizesQu
 {
 	public GetProductSizesQueryValidator()
 	{
-		RuleFor(x => x.Id).NotEmpty().WithMessage("Id cannot be empty.");
+		RuleFor(x => x.Id)
+			.NotEmpty()
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetProductSizesQuery.Id)));
 	}
 }

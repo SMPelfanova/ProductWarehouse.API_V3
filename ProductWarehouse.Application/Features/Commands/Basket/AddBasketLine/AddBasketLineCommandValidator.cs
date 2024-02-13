@@ -12,21 +12,22 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.UserId)));
 
 		RuleFor(command => command.BasketLine)
-			.NotNull().WithMessage("Basket line cannot be null.");
+			.NotNull().WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine)));
 
 		RuleFor(command => command.BasketLine.ProductId)
 			.NotEmpty()
-			.WithMessage("BasketLine ProductId is required.");
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.ProductId)));
 
 		RuleFor(command => command.BasketLine.Quantity)
-			.NotEmpty().WithMessage("BasketLine Quantity is required.")
-			.GreaterThan(0).WithMessage("BasketLine Quantity must be greater than 0.");
+			.NotEmpty().WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Quantity)))
+			.GreaterThan(0).WithMessage(string.Format(MessageConstants.GraterThanZeroValidationMessage, nameof(AddBasketLineCommand.BasketLine.Quantity)));
 
 		RuleFor(command => command.BasketLine.Price)
-			.NotEmpty().WithMessage("BasketLine Price is required.")
-			.GreaterThan(0).WithMessage("BasketLine Price must be greater than 0.");
-
+			.NotEmpty().WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Price)))
+			.GreaterThan(0).WithMessage(string.Format(MessageConstants.GraterThanZeroValidationMessage, nameof(AddBasketLineCommand.BasketLine.Price)));
+		
 		RuleFor(command => command.BasketLine.SizeId)
-			.NotEmpty().WithMessage("BasketLine SizeId is required.");
+			.NotEmpty()
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.SizeId)));
 	}
 }

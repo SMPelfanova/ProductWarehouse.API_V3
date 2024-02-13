@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using ProductWarehouse.Application.Constants;
+using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 
@@ -15,20 +16,24 @@ public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLi
 			.NotNull()
 			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(UpdateBasketLineCommand.BasketLine)));
 
-		//todo: BasketLineDto.
 		RuleFor(command => command.BasketLine.Id)
 			.NotEmpty()
-			.WithMessage("BasketLine Id is required.");
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Id)));
 
-		RuleFor(command => command.BasketLine.BasketId)
+		RuleFor(command => command.BasketLine.ProductId)
 			.NotEmpty()
-			.WithMessage("BasketLine BasketId is required.");
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.ProductId)));
 
-		RuleFor(command => command.BasketLine.ProductId).NotEmpty().WithMessage("BasketLine ProductId is required.");
-		RuleFor(command => command.BasketLine.Quantity).NotEmpty().WithMessage("BasketLine Quantity is required.")
-														.GreaterThan(0).WithMessage("BasketLine Quantity must be greater than 0.");
-		RuleFor(command => command.BasketLine.Price).NotEmpty().WithMessage("BasketLine Price is required.")
-													 .GreaterThan(0).WithMessage("BasketLine Price must be greater than 0.");
-		RuleFor(command => command.BasketLine.SizeId).NotEmpty().WithMessage("BasketLine SizeId is required.");
+		RuleFor(command => command.BasketLine.Quantity)
+			.NotEmpty().WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Quantity)))
+			.GreaterThan(0).WithMessage(string.Format(MessageConstants.GraterThanZeroValidationMessage, nameof(AddBasketLineCommand.BasketLine.Quantity)));
+
+		RuleFor(command => command.BasketLine.Price)
+			.NotEmpty().WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Price)))
+			.GreaterThan(0).WithMessage(string.Format(MessageConstants.GraterThanZeroValidationMessage, nameof(AddBasketLineCommand.BasketLine.Price)));
+		
+		RuleFor(command => command.BasketLine.SizeId)
+			.NotEmpty()
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.SizeId)));
 	}
 }

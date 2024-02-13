@@ -4,6 +4,7 @@
 @UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
 @SizeId = da35ec2b-24e1-4652-ab48-7671b93b5edc
 @GroupId = cd95a5b4-efb0-4755-9379-73a81a3a2f9f
+@OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
 
 ### Get Basket
 GET {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
@@ -19,11 +20,11 @@ Content-Type: application/json
   "productId": "{{ProductId}}",
   "quantity": 1,
   "price": 1110,
-  "sizeId": "7wee3527-c299-4c13-b907-ecaa57f9a655"
+  "sizeId": "{{SizeId}}"
 }
 
 ### Delete Basket Line
-DELETE {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}/58be69e2-f4c4-4f40-f7d3-08dc2b9e1dce
+DELETE {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}/d0a8f206-f901-418f-3f71-08dc2c82d4d9
 
 ### Update Basket Line
 PUT {{ProductWarehouse.API_HostAddress}}/api/basket/{{UserId}}
@@ -31,8 +32,11 @@ Content-Type: application/json
 
 {
   "basketLine": {
-  "productId": "{{ProductId}}",
-  "quantity": 10
+    "id": "215132c7-dca0-4028-2bc4-08dc2c83de1f",
+    "productId": "{{ProductId}}",
+    "quantity": 10,
+    "price" : "20",
+    "sizeId": "{{SizeId}}"
   }
 }
 
@@ -40,7 +44,7 @@ Content-Type: application/json
 GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
 
 ### Get Order
-GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/92f8de45-6224-44d0-f190-08dc2b9ff824
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/{{OrderId}}
 
 ### Create Order
 POST {{ProductWarehouse.API_HostAddress}}/api/orders
@@ -67,19 +71,19 @@ Content-Type: application/json
 
 
 ### Partially Update Order
-PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/92f8de45-6224-44d0-f190-08dc2b9ff824
+PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/f93a44ec-26a7-4857-8ec6-08dc2c84457f
 Content-Type: application/json-patch+json
 
 [
    {
-    "value": "123.45",
-    "path": "/TotalAmount",
+    "value": "6ee5e273-82f0-40a0-aa0e-2f221a2588b0",
+    "path": "/statusId",
     "op": "replace"
   }
 ]
 
 ### Delete Order
-DELETE {{ProductWarehouse.API_HostAddress}}/api/orders/7a5ea64b-da98-4219-b8a3-08dc2b9fa204
+DELETE {{ProductWarehouse.API_HostAddress}}/api/orders/43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
 
 ### Get Products
 GET {{ProductWarehouse.API_HostAddress}}/api/products
@@ -95,7 +99,7 @@ POST {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
  
 {
-    "title": "Product 221",
+    "title": "Product X",
     "description": "Description of Product 3",
     "photo": "product3.jpg",
     "price": 39.99,
@@ -118,15 +122,14 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-    "id": "062e76d9-8ab1-466d-d538-08dc2ba23d4a",
-    "title": "ddd",
-    "description": "wee",
-    "price": 125.00
+    "id": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
+    "title": "NEW",
+    "description": "NEW",
+    "price": 10000
 }
 
 ### Delete Product
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/7a154536-56b4-4863-d537-08dc2ba23d4a
-
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/11ead65f-14e8-4362-1b2f-08dc2c6aea3f
 
 
 GET {{ProductWarehouse.API_HostAddress}}/api/Products
@@ -144,7 +147,7 @@ POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
 Content-Type: application/json
 
 {
-    "groupId": "{{GroupId}}"
+    "groupId": "0e596ec6-bc97-4e5d-9593-69387ac3cb03"
 }
 
 ### Delete Product Group
@@ -159,12 +162,12 @@ Content-Type: application/json
 
 {
     "id": "{{ProductId}}",
-    "sizeId": "7aee3527-c299-4c13-b907-ecaa57f9a655",
+    "sizeId": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
     "quantityInStock": 10
 }
+### Update Product Size
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/ea88c493-9e58-47c7-80cd-766ac89a7a01?QuantityInStock=18
+
 
 ### Delete Product Size
 DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/{{SizeId}}
-
-### Update Product Size
-PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/{{SizeId}}QuantityInStock=18

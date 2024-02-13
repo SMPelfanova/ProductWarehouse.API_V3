@@ -36,8 +36,10 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
 
 		if (availableSizes >= request.BasketLine.Quantity)
 		{
+			basketLine.Id = request.BasketLine.Id;
 			basketLine.SizeId = request.BasketLine.SizeId;
 			basketLine.Quantity = request.BasketLine.Quantity;
+			basketLine.Price = request.BasketLine.Price;
 			_unitOfWork.BasketLines.Update(basketLine);
 			await _unitOfWork.SaveChangesAsync();
 

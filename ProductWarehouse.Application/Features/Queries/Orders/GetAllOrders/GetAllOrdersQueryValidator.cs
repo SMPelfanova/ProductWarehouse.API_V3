@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ProductWarehouse.Application.Constants;
 
 namespace ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
 
@@ -6,6 +7,8 @@ public class GetAllOrdersQueryValidator : AbstractValidator<GetAllOrdersQuery>
 {
 	public GetAllOrdersQueryValidator()
 	{
-		RuleFor(query => query.UserId).NotEmpty().WithMessage("User Id cannot be empty.");
+		RuleFor(query => query.UserId)
+			.NotEmpty()
+			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetAllOrdersQuery.UserId)));
 	}
 }
