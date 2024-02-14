@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 
@@ -8,12 +7,10 @@ namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
 {
 	private readonly IUnitOfWork _unitOfWork;
-	private readonly IMapper _mapper;
 
-	public CreateOrderCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+	public CreateOrderCommandHandler(IUnitOfWork unitOfWork)
 	{
 		_unitOfWork = unitOfWork;
-		_mapper = mapper;
 	}
 
 	public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -31,9 +28,15 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
 
 		foreach (var item in request.OrderLines)
 		{
-			var orderLine = _mapper.Map<OrderLine>(item);
-			order.OrderLines.Add(orderLine);
 
+			order.OrderLines.Add(new OrderLine
+			{
+				OrderId = id,
+				SizeId = item.SizeId,
+				ProductId = item.ProductId,
+				Quantity = item.Quantity,
+				Price = item.Price
+			});
 			var productSize = await _unitOfWork.Products.GetProductSizeAsync(item.ProductId, item.SizeId);
 			if (productSize != null)
 			{

@@ -1,0 +1,49 @@
+@ProductWarehouse.API_HostAddress = http://localhost:5068
+@ProductId = 11ead65f-14e8-4362-1b2f-08dc2c6aea3f
+@UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
+@OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
+
+### Get Orders
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
+
+### Get Order
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/{{OrderId}}
+
+### Create Order
+POST {{ProductWarehouse.API_HostAddress}}/api/orders
+Content-Type: application/json
+
+{
+  "userId": "{{UserId}}",
+  "totalAmount": 10,
+    "orderLines": [
+    {
+      "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
+      "quantity": 1,
+      "price": 1110.00,
+      "sizeId": "da35ec2b-24e1-4652-ab48-7671b93b5edc"
+    },
+    {
+      "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
+      "quantity": 1,
+      "price": 1110.00,
+      "sizeId": "7aee3527-c299-4c13-b907-ecaa57f9a655"
+    }
+  ]
+}
+
+
+### Partially Update Order
+PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/a21114b2-c828-4970-4ad9-08dc2c6d4d8d
+Content-Type: application/json-patch+json
+
+[
+   {
+    "value": "6ee5e273-82f0-40a0-aa0e-2f221a2588b0",
+    "path": "/statusId",
+    "op": "replace"
+  }
+]
+
+### Delete Order
+DELETE {{ProductWarehouse.API_HostAddress}}/api/orders/a21114b2-c828-4970-4ad9-08dc2c6d4d8d

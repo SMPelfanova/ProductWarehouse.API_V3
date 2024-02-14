@@ -6,12 +6,15 @@ using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
 namespace ProductWarehouse.API.Controllers;
 
 /// <summary>
-/// Controller for managing product-brands-related operations.
+/// Controller for managing brands related operations.
 /// </summary>
 public class BrandsController : BaseController
 {
+	/// <summary>
+	/// Get all brands.
+	/// </summary>
+	/// <returns>A list of all brands.</returns>
 	[HttpGet]
-	[Produces("application/json")]
 	public async Task<IActionResult> GetBrands([FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetAllBrandsQuery());
@@ -24,6 +27,11 @@ public class BrandsController : BaseController
 		return Ok(result);
 	}
 
+	/// <summary>
+	/// Get a brand by ID.
+	/// </summary>
+	/// <param name="id">The ID of the brand to retrieve.</param>
+	/// <returns>The brand with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
 	public async Task<IActionResult> GetBrand(Guid id, [FromServices] IMediator mediator)
 	{

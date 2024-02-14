@@ -9,9 +9,17 @@ using ProductWarehouse.Application.Features.Queries.Products.GetProductSizes;
 
 namespace ProductWarehouse.API.Controllers;
 
+/// <summary>
+/// Controller for managing product sizes related operations.
+/// </summary>
 [Route("api/products/{id:guid}/sizes")]
 public class ProductSizesController : BaseController
 {
+	/// <summary>
+	/// Retrieves product sizes by product ID.
+	/// </summary>
+	/// <param name="id">The ID of the product.</param>
+	/// <returns>The product sizes.</returns>
 	[HttpGet]
 	public async Task<IActionResult> GetProductSizes(
 		Guid id,
@@ -26,6 +34,12 @@ public class ProductSizesController : BaseController
 		return Ok(result);
 	}
 
+	/// <summary>
+	/// Creates a new product size.
+	/// </summary>
+	/// <param name="id">The ID of the product.</param>
+	/// <param name="request">The request containing the product size details.</param>
+	/// <returns>The newly created product size.</returns>
 	[HttpPost]
 	public async Task<IActionResult> CreateProductSize(
 		Guid id,
@@ -38,6 +52,12 @@ public class ProductSizesController : BaseController
 		return CreatedAtAction(nameof(GetProductSizes), new { id = id }, request);
 	}
 
+	/// <summary>
+	/// Deletes a product size by product and size IDs.
+	/// </summary>
+	/// <param name="id">The ID of the product.</param>
+	/// <param name="sizeId">The ID of the size.</param>
+	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{sizeId:guid}")]
 	public async Task<IActionResult> DeleteProductSize(
 		Guid id,
@@ -49,6 +69,13 @@ public class ProductSizesController : BaseController
 		return NoContent();
 	}
 
+	/// <summary>
+	/// Updates the quantity in stock of a product size.
+	/// </summary>
+	/// <param name="id">The ID of the product.</param>
+	/// <param name="sizeId">The ID of the size.</param>
+	/// <param name="QuantityInStock">The updated quantity in stock.</param>
+	/// <returns>No content if the update is successful.</returns>
 	[HttpPut("{sizeId:guid}")]
 	public async Task<IActionResult> UpdateProductSize(
 		Guid id,

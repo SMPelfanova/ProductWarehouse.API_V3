@@ -32,8 +32,9 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
 		if (availableSizes >= request.BasketLine.Quantity)
 		{
-			request.BasketLine.Id = basket.Id;
+
 			var basketLine = _mapper.Map<BasketLine>(request.BasketLine);
+			basketLine.BasketId = basket.Id;
 			await _unitOfWork.BasketLines.Add(basketLine);
 
 			await _unitOfWork.SaveChangesAsync();

@@ -15,12 +15,17 @@ using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
 namespace ProductWarehouse.API.Controllers;
 
 /// <summary>
-/// Controller for managing orders-related operations.
+/// Controller for managing orders related operations.
 /// </summary>
 public class OrdersController : BaseController
 {
+
+	/// <summary>
+	/// Get orders for a specific user.
+	/// </summary>
+	/// <param name="userId">The ID of the user whose orders are to be retrieved.</param>
+	/// <returns>The orders for the specified user.</returns>
 	[HttpGet("{userId:guid}")]
-	[Produces("application/json")]
 	public async Task<IActionResult> GetOrders(
 		Guid userId,
 		[FromServices] IMediator mediator,
@@ -37,6 +42,11 @@ public class OrdersController : BaseController
 		return Ok(result);
 	}
 
+	/// <summary>
+	/// Get orders for a specific user.
+	/// </summary>
+	/// <param name="userId">The ID of the user whose orders are to be retrieved.</param>
+	/// <returns>The orders for the specified user.</returns>
 	[HttpGet("{userId:guid}/{id:guid}")]
 	public async Task<IActionResult> GetOrder(
 		Guid id,
@@ -55,6 +65,11 @@ public class OrdersController : BaseController
 		return Ok(result);
 	}
 
+	/// <summary>
+	/// Create a new order.
+	/// </summary>
+	/// <param name="createOrderRequest">The request object containing order details.</param>
+	/// <returns>The created order.</returns>
 	[HttpPost]
 	public async Task<IActionResult> CreateOrder(
 	[FromBody] CreateOrderRequest createOrderRequest,
@@ -68,6 +83,12 @@ public class OrdersController : BaseController
 		return CreatedAtAction(nameof(GetOrder), new { id = orderId, userId = createOrderRequest.UserId }, createOrderRequest);
 	}
 
+	/// <summary>
+	/// Partially update an existing order.
+	/// </summary>
+	/// <param name="id">The ID of the order to update.</param>
+	/// <param name="patchDocument">The JSON patch document containing updates.</param>
+	/// <returns>No content if successful.</returns>
 	[HttpPatch("{id:guid}")]
 	public async Task<IActionResult> PartiallyUpdateOrder(
 		Guid id,
@@ -81,6 +102,11 @@ public class OrdersController : BaseController
 		return NoContent();
 	}
 
+	/// <summary>
+	/// Delete an order by ID.
+	/// </summary>
+	/// <param name="id">The ID of the order to delete.</param>
+	/// <returns>No content if successful.</returns>
 	[HttpDelete("{id:guid}")]
 	public async Task<IActionResult> DeleteOrder(
 		Guid id,

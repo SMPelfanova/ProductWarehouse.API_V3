@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
+		optionsBuilder.EnableSensitiveDataLogging();
 		if (!optionsBuilder.IsConfigured)
 		{
 			optionsBuilder.UseSqlServer("Server=localhost;Database=Werehouse;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");

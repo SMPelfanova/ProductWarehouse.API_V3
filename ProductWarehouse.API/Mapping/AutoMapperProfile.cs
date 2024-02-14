@@ -30,17 +30,15 @@ public class AutoMapperProfile : Profile
 	{
 		CreateMap<SizeRequest, SizeDto>();
 		CreateMap<ProductGroupRequest, GroupDto>();
+		CreateMap<BasketLineRequest, BasketLineDto>();
+		CreateMap<UpdateBasketLineRequest, BasketLineDto>();
+		CreateMap<OrderLineRequest, OrderLineDto>();
 
 		CreateMap<CreateProductSizeRequest, CreateProductSizeCommand>();
-
 		CreateMap<CreateProductRequest, CreateProductCommand>()
 			.ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes))
 			.ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.Groups));
-
-		CreateMap<BasketLineRequest, BasketLineDto>();
-		CreateMap<UpdateBasketLineRequest, BasketLineDto>();
 		CreateMap<UpdateProductRequest, UpdateProductCommand>();
-		CreateMap<OrderLineRequest, OrderLineDto>();
 		CreateMap<CreateOrderRequest, CreateOrderCommand>();
 		CreateMap<FilterProductsRequest, GetAllProductsQuery>();
 		CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderRequest>>();

@@ -12,7 +12,7 @@ using ProductWarehouse.Application.Features.Queries.GetProducts;
 namespace ProductWarehouse.API.Controllers;
 
 /// <summary>
-/// Controller for managing product-related operations.
+/// Controller for managing product related operations.
 /// </summary>
 public class ProductsController : BaseController
 {
@@ -22,7 +22,6 @@ public class ProductsController : BaseController
 	/// <returns>List of products.</returns>
 	/// <response code="200">Returns list of products</response>
 	[HttpGet]
-	[Produces("application/json")]
 	public async Task<IActionResult> GetProducts(
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
@@ -46,7 +45,6 @@ public class ProductsController : BaseController
 	/// <returns>Filtered products.</returns>
 	/// <response code="200">Returns filtered products</response>
 	[HttpGet("filter")]
-	[Produces("application/json")]
 	public async Task<IActionResult> GetProducts(
 		[FromQuery] FilterProductsRequest productsFilter,
 		[FromServices] IMediator mediator,
@@ -64,6 +62,11 @@ public class ProductsController : BaseController
 		return Ok(response);
 	}
 
+	/// <summary>
+	/// Retrieves a product by its ID.
+	/// </summary>
+	/// <param name="id">The ID of the product.</param>
+	/// <returns>The product with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
 	public async Task<IActionResult> GetProduct(
 		Guid id,
@@ -79,6 +82,11 @@ public class ProductsController : BaseController
 		return Ok(product);
 	}
 
+	/// <summary>
+	/// Creates a new product.
+	/// </summary>
+	/// <param name="request">The request containing the product details.</param>
+	/// <returns>The newly created product.</returns>
 	[HttpPost]
 	public async Task<IActionResult> CreateProduct(
 		[FromBody] CreateProductRequest request,
@@ -97,6 +105,11 @@ public class ProductsController : BaseController
 		return CreatedAtAction(nameof(GetProduct), new { id = productId }, request);
 	}
 
+	/// <summary>
+	/// Updates an existing product.
+	/// </summary>
+	/// <param name="request">The request containing the updated product details.</param>
+	/// <returns>No content if the update is successful.</returns>
 	[HttpPut]
 	public async Task<IActionResult> UpdateProduct(
 		[FromBody] UpdateProductRequest request,
@@ -109,6 +122,11 @@ public class ProductsController : BaseController
 		return Ok();
 	}
 
+	/// <summary>
+	/// Deletes a product by its ID.
+	/// </summary>
+	/// <param name="id">The ID of the product to delete.</param>
+	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{id:guid}")]
 	public async Task<IActionResult> DeleteProduct(
 		Guid id,

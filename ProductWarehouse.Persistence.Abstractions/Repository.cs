@@ -47,6 +47,6 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 	public void Update(TEntity entity)
 	{
 		_dbContext.Set<TEntity>().Update(entity);
-		_dbContext.Entry(entity).State = EntityState.Modified;
+		//_dbContext.Entry(entity).State = EntityState.Modified;
 	}
 }
