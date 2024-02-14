@@ -11,28 +11,24 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.UserId)));
 
-		RuleFor(command => command.BasketLine)
-			.NotNull()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine)));
-
-		RuleFor(command => command.BasketLine.ProductId)
+		RuleFor(command => command.ProductId)
 			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.ProductId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.ProductId)));
 
-		RuleFor(command => command.BasketLine.Quantity)
+		RuleFor(command => command.Quantity)
 			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.Quantity)))
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.Quantity)))
 			.GreaterThan(0)
-			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.BasketLine.Quantity)));
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Quantity)));
 
-		RuleFor(command => command.BasketLine.Price)
+		RuleFor(command => command.Price)
 			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.Price)))
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.Price)))
 			.GreaterThan(0)
-			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.BasketLine.Price)));
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Price)));
 		
-		RuleFor(command => command.BasketLine.SizeId)
+		RuleFor(command => command.SizeId)
 			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.SizeId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.SizeId)));
 	}
 }

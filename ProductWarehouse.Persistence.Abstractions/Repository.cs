@@ -34,6 +34,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
 		await _dbContext.SaveChangesAsync();
 
+		var idProperty = entity.GetType().GetProperty("Id");
+		if (idProperty == null || idProperty.PropertyType != typeof(Guid))
+		{
+			return Guid.Empty;
+		}
+
 		var generatedId = _dbContext.Entry(entity).Property("Id").CurrentValue;
 
 		return (Guid)generatedId;

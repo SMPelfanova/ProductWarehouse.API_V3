@@ -47,8 +47,8 @@ public class ProductSizesController : BaseController
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
 	{
-		//var command = mapper.Map<>(request);
-		var resultId = await mediator.Send(new CreateProductSizeCommand(request.Id, request.SizeId, request.QuantityInStock));
+		var command = mapper.Map<CreateProductSizeCommand>(request);
+		var resultId = await mediator.Send(command);
 
 		return CreatedAtAction(nameof(GetProductSizes), new { id = id }, request);
 	}

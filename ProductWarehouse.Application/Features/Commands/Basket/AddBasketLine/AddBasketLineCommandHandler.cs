@@ -29,11 +29,11 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 			throw new BasketNotFoundException($"No basket found for user: {request.UserId}");
 		}
 
-		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
-		if (availableSizes >= request.BasketLine.Quantity)
+		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.ProductId, request.SizeId);
+		if (availableSizes >= request.Quantity)
 		{
 
-			var basketLine = _mapper.Map<BasketLine>(request.BasketLine);
+			var basketLine = _mapper.Map<BasketLine>(request);
 			basketLine.BasketId = basket.Id;
 			await _unitOfWork.BasketLines.Add(basketLine);
 
@@ -43,7 +43,7 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 		}
 		else
 		{
-			_logger.Warning($"No available sizes for ProductId: {request.BasketLine.ProductId}. Sizes requested: {request.BasketLine.Quantity}, but available count is: {availableSizes}");
+			_logger.Warning($"No available sizes for ProductId: {request.ProductId}. Sizes requested: {request.Quantity}, but available count is: {availableSizes}");
 			return Guid.Empty;
 		}
 	}

@@ -2,7 +2,6 @@
 using MediatR;
 using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Domain.Entities;
 using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
@@ -22,21 +21,21 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
 
 	public async Task<Guid> Handle(UpdateBasketLineCommand request, CancellationToken cancellationToken)
 	{
-		var basketLine = await _unitOfWork.BasketLines.GetByIdAsync(request.BasketLine.Id);
+		var basketLine = await _unitOfWork.BasketLines.GetByIdAsync(request.Id);
 		if (basketLine == null)
 		{
-			_logger.Error($"No basket found with id: {request.BasketLine.Id}");
-			throw new BasketNotFoundException($"No basket found with id: {request.BasketLine.Id}");
+			_logger.Error($"No basket found with id: {request.Id}");
+			throw new BasketNotFoundException($"No basket found with id: {request.Id}");
 		}
 
-		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.BasketLine.ProductId, request.BasketLine.SizeId);
+		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(request.ProductId, request.SizeId);
 
-		if (availableSizes >= request.BasketLine.Quantity)
+		if (availableSizes >= request.Quantity)
 		{
-			basketLine.Id = request.BasketLine.Id;
-			basketLine.SizeId = request.BasketLine.SizeId;
-			basketLine.Quantity = request.BasketLine.Quantity;
-			basketLine.Price = request.BasketLine.Price;
+			basketLine.Id = request.Id;
+			basketLine.SizeId = request.SizeId;
+			basketLine.Quantity = request.Quantity;
+			basketLine.Price = request.Price;
 
 			_unitOfWork.BasketLines.Update(basketLine);
 
@@ -46,7 +45,7 @@ public class UpdateBasketLineCommandHandler : IRequestHandler<UpdateBasketLineCo
 		}
 		else
 		{
-			_logger.Warning($"No available sizes for ProductId: {request.BasketLine.ProductId}. Sizes requested: {request.BasketLine.Quantity}, but available count is: {availableSizes}");
+			_logger.Warning($"No available sizes for ProductId: {request.ProductId}. Sizes requested: {request.Quantity}, but available count is: {availableSizes}");
 			return Guid.Empty;
 		}
 	}

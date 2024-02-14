@@ -9,6 +9,7 @@ using ProductWarehouse.API.Models.Requests.Product.Size;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.API.Models.Responses.Basket;
 using ProductWarehouse.API.Models.Responses.Order;
+using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
@@ -29,22 +30,26 @@ public class AutoMapperProfile : Profile
 
 	private void MapFromRequestToQueriesOrCommands()
 	{
+		CreateMap<AddBasketLineRequest, AddBasketLineCommand>();
 		CreateMap<UpdateBasketLineRequest, UpdateBasketLineCommand>();
 
-		CreateMap<SizeRequest, SizeDto>();
-		CreateMap<ProductGroupRequest, GroupDto>();
-		CreateMap<BasketLineRequest, BasketLineDto>();
-		CreateMap<UpdateBasketLineRequest, BasketLineDto>();
-		CreateMap<OrderLineRequest, OrderLineDto>();
-
-		CreateMap<CreateProductSizeRequest, CreateProductSizeCommand>();
 		CreateMap<CreateProductRequest, CreateProductCommand>()
 			.ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes))
 			.ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.Groups));
 
 		CreateMap<UpdateProductRequest, UpdateProductCommand>();
-		CreateMap<CreateOrderRequest, CreateOrderCommand>();
 		CreateMap<FilterProductsRequest, GetAllProductsQuery>();
+
+		CreateMap<CreateProductSizeRequest, CreateProductSizeCommand>()
+			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id));
+
+		CreateMap<CreateProductGroupRequest, CreateProductGroupCommand>()
+			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id));
+
+		CreateMap<OrderLineRequest, OrderLineDto>();
+		CreateMap<CreateOrderRequest, CreateOrderCommand>()
+			.ForMember(dest => dest.OrderLines, opt => opt.MapFrom(src => src.OrderLines));
+
 		CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderRequest>>();
 		CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderRequest>>();
 	}

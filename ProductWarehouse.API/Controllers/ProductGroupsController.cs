@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Product.Group;
 using ProductWarehouse.Application.Features.Commands.Products;
@@ -42,9 +43,11 @@ public class ProductGroupsController : BaseController
 	public async Task<IActionResult> CreateProductGroup(
 		Guid id,
 		[FromBody] CreateProductGroupRequest request,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		[FromServices] IMapper mapper)
 	{
-		var resultId = await mediator.Send(new CreateProductGroupCommand(id, request.GroupId));
+		var command = mapper.Map<CreateProductGroupCommand>(request);
+		var resultId = await mediator.Send(command);
 
 		return CreatedAtAction(nameof(GetProductGroups), new { id = id }, request);
 	}

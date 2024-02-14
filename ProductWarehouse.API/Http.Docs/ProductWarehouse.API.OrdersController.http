@@ -19,13 +19,13 @@ Content-Type: application/json
     "orderLines": [
     {
       "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
-      "quantity": 1,
+      "quantity": 2,
       "price": 1110.00,
-      "sizeId": "da35ec2b-24e1-4652-ab48-7671b93b5edc"
+      "sizeId": "10c96071-d5d0-4915-aba0-f52585132de4"
     },
     {
       "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
-      "quantity": 1,
+      "quantity": 2,
       "price": 1110.00,
       "sizeId": "7aee3527-c299-4c13-b907-ecaa57f9a655"
     }

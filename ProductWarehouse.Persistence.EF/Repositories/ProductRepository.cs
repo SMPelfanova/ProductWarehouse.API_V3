@@ -26,21 +26,18 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		return products;
 	}
 
-	public async Task<Product> GetProductDetailsAsync(Guid id)
+	public Task<Product> GetProductDetailsAsync(Guid id)
 	{
-		var product = await _dbContext.Products
-				 .Where(p => p.Id == id)
-				 .Include(p => p.Brand)
-				 .Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
-				 .Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-				 .FirstOrDefaultAsync();
-
-		return product;
+		return _dbContext.Products
+			.Include(p => p.Brand)
+			.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
+			.Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
+			.SingleAsync(p => p.Id == id);
 	}
 
 	public void DeleteProductGroup(Guid productId, Guid groupId)
 	{
-		var entityToDelete = _dbContext.ProductGroups.FirstOrDefault(x => x.ProductId == productId && x.GroupId == groupId);
+		var entityToDelete = _dbContext.ProductGroups.Single(x => x.ProductId == productId && x.GroupId == groupId);
 
 		if (entityToDelete != null)
 		{
@@ -50,7 +47,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
 	public void UpdateProductSize(ProductSize productSize)
 	{
-		var entityToUpdate = _dbContext.ProductSizes.FirstOrDefault(x => x.ProductId == productSize.ProductId && x.SizeId == productSize.SizeId);
+		var entityToUpdate = _dbContext.ProductSizes.Single(x => x.ProductId == productSize.ProductId && x.SizeId == productSize.SizeId);
 		if (entityToUpdate != null)
 		{
 			entityToUpdate.QuantityInStock = productSize.QuantityInStock;
@@ -58,16 +55,16 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId)
+	public Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId)
 	{
-		var productSize = await _dbContext.ProductSizes.FirstOrDefaultAsync(x => x.ProductId == productId && x.SizeId == sizeId);
-
-		return productSize;
+		return _dbContext.ProductSizes
+			.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId);
 	}
 
 	public async Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId)
 	{
-		var productSize = await _dbContext.ProductSizes.FirstOrDefaultAsync(x => x.ProductId == productId && x.SizeId == sizeId);
+		var productSize = await _dbContext.ProductSizes
+							.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId);
 
 		return productSize.QuantityInStock;
 	}

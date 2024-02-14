@@ -8,7 +8,6 @@ using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasket;
 using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 using ProductWarehouse.Application.Features.Queries.Basket.GetBasket;
-using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -58,17 +57,18 @@ public class BasketsController : BaseController
 	/// Add a new basket line to the user's basket.
 	/// </summary>
 	/// <param name="userId">User ID.</param>
-	/// <param name="basketLineRequest">Basket line request.</param>
+	/// <param name="addBasketLineRequest">Basket line request.</param>
 	/// <returns>Returns the ID of the added basket line.</returns>
 	[HttpPost("{userId:guid}")]
 	public async Task<IActionResult> AddBasketLine(
 		Guid userId,
-		[FromBody] BasketLineRequest basketLineRequest,
+		[FromBody] AddBasketLineRequest addBasketLineRequest,
 		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		var mappedLine = mapper.Map<BasketLineDto>(basketLineRequest);
-		var result = await mediator.Send(new AddBasketLineCommand(userId, mappedLine));
+		var command = mapper.Map<AddBasketLineCommand>(addBasketLineRequest);
+		command.UserId = userId;
+		var result = await mediator.Send(command);
 		if (result == Guid.Empty)
 		{
 			return NotFound("No products found with requested size.");
@@ -103,12 +103,12 @@ public class BasketsController : BaseController
 	[HttpPut("{userId:guid}")]
 	public async Task<IActionResult> UpdateBasketLine(
 		Guid userId,
-		[FromBody] UpdateBasketRequest updatedBasketRequest,
+		[FromBody] UpdateBasketLineRequest updatedBasketRequest,
 		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		//var mappedLine = mapper.Map<BasketLineDto>(updatedBasketRequest.BasketLine);
 		var command = mapper.Map<UpdateBasketLineCommand>(updatedBasketRequest);
+		command.UserId = userId;
 		await mediator.Send(command);
 
 		return Ok();

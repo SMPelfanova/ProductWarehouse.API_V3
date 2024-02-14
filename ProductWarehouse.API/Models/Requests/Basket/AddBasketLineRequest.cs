@@ -1,6 +1,6 @@
 ﻿namespace ProductWarehouse.API.Models.Requests.Basket;
 
-public class BasketLineRequest
+public class AddBasketLineRequest
 {
 	public Guid ProductId { get; set; }
 	public int Quantity { get; set; }
