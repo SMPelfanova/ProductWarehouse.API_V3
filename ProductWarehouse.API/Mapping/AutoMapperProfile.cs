@@ -9,6 +9,7 @@ using ProductWarehouse.API.Models.Requests.Product.Size;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.API.Models.Responses.Basket;
 using ProductWarehouse.API.Models.Responses.Order;
+using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.Application.Features.Commands.Products;
@@ -28,6 +29,8 @@ public class AutoMapperProfile : Profile
 
 	private void MapFromRequestToQueriesOrCommands()
 	{
+		CreateMap<UpdateBasketLineRequest, UpdateBasketLineCommand>();
+
 		CreateMap<SizeRequest, SizeDto>();
 		CreateMap<ProductGroupRequest, GroupDto>();
 		CreateMap<BasketLineRequest, BasketLineDto>();
@@ -38,6 +41,7 @@ public class AutoMapperProfile : Profile
 		CreateMap<CreateProductRequest, CreateProductCommand>()
 			.ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes))
 			.ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.Groups));
+
 		CreateMap<UpdateProductRequest, UpdateProductCommand>();
 		CreateMap<CreateOrderRequest, CreateOrderCommand>();
 		CreateMap<FilterProductsRequest, GetAllProductsQuery>();

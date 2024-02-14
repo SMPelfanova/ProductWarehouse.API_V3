@@ -9,18 +9,18 @@ public class GetAllProductsQueryValidator : AbstractValidator<GetAllProductsQuer
 	{
 		RuleFor(r => r.MinPrice)
 			.GreaterThanOrEqualTo(0)
-			.WithMessage(string.Format(MessageConstants.NonNegativeValidationMessage, nameof(GetAllProductsQuery.MinPrice)));
+			.WithMessage(MessageConstants.NonNegativeValidationMessage(nameof(GetAllProductsQuery.MinPrice)));
 
 		RuleFor(r => r.MaxPrice)
 			.GreaterThanOrEqualTo(0)
-			.WithMessage(string.Format(MessageConstants.NonNegativeValidationMessage, nameof(GetAllProductsQuery.MaxPrice)));
+			.WithMessage(MessageConstants.NonNegativeValidationMessage(nameof(GetAllProductsQuery.MaxPrice)));
 
 		RuleFor(r => r.Size)
 			.MaximumLength(255)
-			.WithMessage(string.Format(MessageConstants.MaxLengthValidationMessage, nameof(GetAllProductsQuery.Size), 255));
+			.WithMessage(MessageConstants.MaxLengthValidationMessage(nameof(GetAllProductsQuery.Size), 255));
 
 		RuleFor(r => r.Highlight)
 			.MaximumLength(255)
-			.WithMessage(string.Format(MessageConstants.MaxLengthValidationMessage, nameof(GetAllProductsQuery.Highlight), 255));
+			.WithMessage(MessageConstants.MaxLengthValidationMessage(nameof(GetAllProductsQuery.Highlight), 255));
 	}
 }

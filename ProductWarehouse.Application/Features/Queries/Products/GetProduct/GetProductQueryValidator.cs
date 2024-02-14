@@ -10,6 +10,6 @@ public class GetProductQueryValidator : AbstractValidator<GetProductQuery>
 	{
 		RuleFor(x => x.Id)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetProductQuery.Id)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(GetProductQuery.Id)));
 	}
 }

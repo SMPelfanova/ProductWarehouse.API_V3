@@ -10,30 +10,34 @@ public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLi
 	{
 		RuleFor(command => command.UserId)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(UpdateBasketLineCommand.UserId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateBasketLineCommand.UserId)));
 
 		RuleFor(command => command.BasketLine)
 			.NotNull()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(UpdateBasketLineCommand.BasketLine)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateBasketLineCommand.BasketLine)));
 
 		RuleFor(command => command.BasketLine.Id)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Id)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.Id)));
 
 		RuleFor(command => command.BasketLine.ProductId)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.ProductId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.ProductId)));
 
 		RuleFor(command => command.BasketLine.Quantity)
-			.NotEmpty().WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Quantity)))
-			.GreaterThan(0).WithMessage(string.Format(MessageConstants.GraterThanZeroValidationMessage, nameof(AddBasketLineCommand.BasketLine.Quantity)));
+			.NotEmpty()
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.Quantity)))
+			.GreaterThan(0)
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.BasketLine.Quantity)));
 
 		RuleFor(command => command.BasketLine.Price)
-			.NotEmpty().WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.Price)))
-			.GreaterThan(0).WithMessage(string.Format(MessageConstants.GraterThanZeroValidationMessage, nameof(AddBasketLineCommand.BasketLine.Price)));
+			.NotEmpty()
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.Price)))
+			.GreaterThan(0)
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.BasketLine.Price)));
 		
 		RuleFor(command => command.BasketLine.SizeId)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(AddBasketLineCommand.BasketLine.SizeId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.BasketLine.SizeId)));
 	}
 }

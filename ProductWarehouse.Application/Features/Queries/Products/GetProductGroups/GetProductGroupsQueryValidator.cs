@@ -9,6 +9,6 @@ public class GetProductGroupsQueryValidator : AbstractValidator<GetProductGroups
 	{
 		RuleFor(x => x.Id)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetProductGroupsQuery.Id)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(GetProductGroupsQuery.Id)));
 	}
 }

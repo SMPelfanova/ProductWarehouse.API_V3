@@ -9,10 +9,10 @@ public class GetOrderQueryValidator : AbstractValidator<GetOrderQuery>
 	{
 		RuleFor(query => query.Id)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetOrderQuery.Id)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(GetOrderQuery.Id)));
 
 		RuleFor(query => query.UserId)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetOrderQuery.UserId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(GetOrderQuery.UserId)));
 	}
 }

@@ -9,14 +9,14 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 	{
 		RuleFor(query => query.UserId)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(CreateOrderCommand.UserId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateOrderCommand.UserId)));
 
 		RuleFor(c => c.TotalAmount)
 			.GreaterThan(0)
-			.WithMessage(string.Format(MessageConstants.GraterThanZeroValidationMessage, nameof(CreateOrderCommand.TotalAmount)));
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(CreateOrderCommand.TotalAmount)));
 
 		RuleFor(c => c.OrderLines)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(CreateOrderCommand.OrderLines)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateOrderCommand.OrderLines)));
 	}
 }

@@ -9,6 +9,6 @@ public class GetBasketQueryValidator : AbstractValidator<GetBasketQuery>
 	{
 		RuleFor(query => query.UserId)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetBasketQuery.UserId)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(GetBasketQuery.UserId)));
 	}
 }

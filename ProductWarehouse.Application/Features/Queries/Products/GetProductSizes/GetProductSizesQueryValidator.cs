@@ -9,6 +9,6 @@ public class GetProductSizesQueryValidator : AbstractValidator<GetProductSizesQu
 	{
 		RuleFor(x => x.Id)
 			.NotEmpty()
-			.WithMessage(string.Format(MessageConstants.RequiredValidationMessage, nameof(GetProductSizesQuery.Id)));
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(GetProductSizesQuery.Id)));
 	}
 }
