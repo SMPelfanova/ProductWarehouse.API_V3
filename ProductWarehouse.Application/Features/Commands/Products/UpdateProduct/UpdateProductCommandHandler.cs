@@ -21,7 +21,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 
 	public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
 	{
-		var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
+		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id);
 
 		_mapper.Map(request, product);
 		_unitOfWork.Products.Update(product);

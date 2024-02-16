@@ -6,7 +6,7 @@ using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
-public sealed class OrderRepository : Repository<Order>, IOrderRepository
+public class OrderRepository : Repository<Order>, IOrderRepository
 {
 	private readonly ApplicationDbContext _dbContext;
 
@@ -32,7 +32,6 @@ public sealed class OrderRepository : Repository<Order>, IOrderRepository
 		{
 			throw new DatabaseException("An error occurred while fetching the basket.", ex);
 		}
-
 	}
 
 	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)

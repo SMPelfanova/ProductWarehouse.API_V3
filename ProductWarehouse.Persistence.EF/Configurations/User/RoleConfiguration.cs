@@ -9,6 +9,8 @@ public class RoleConfiguration : EntityConfiguration<Role>
 	{
 		base.Configure(builder);
 
-		builder.Property(p => p.Name).IsRequired().HasMaxLength(50);
+		builder.Property(p => p.Name)
+			.IsRequired()
+			.HasMaxLength(50);
 	}
 }

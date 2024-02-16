@@ -9,8 +9,6 @@ public class ProductSizesConfiguration : IEntityTypeConfiguration<ProductSize>
 {
 	public void Configure(EntityTypeBuilder<ProductSize> builder)
 	{
-		builder.ToTable(nameof(TableNames.ProductSizes));
-
 		builder.HasKey(pg => new { pg.ProductId, pg.SizeId });
 
 		builder.Property(p => p.QuantityInStock)

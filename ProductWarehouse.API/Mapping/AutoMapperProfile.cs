@@ -8,7 +8,9 @@ using ProductWarehouse.API.Models.Requests.Product.Group;
 using ProductWarehouse.API.Models.Requests.Product.Size;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.API.Models.Responses.Basket;
+using ProductWarehouse.API.Models.Responses.Group;
 using ProductWarehouse.API.Models.Responses.Order;
+using ProductWarehouse.API.Models.Responses.Size;
 using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
@@ -60,6 +62,8 @@ public class AutoMapperProfile : Profile
 
 	private void MapFromDtoToResponse()
 	{
+		CreateMap<SizeDto, SizeResponse>();
+		CreateMap<GroupDto, GroupResponse>();
 		CreateMap<BasketDto, BasketResponse>()
 			.ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.BasketLines));
 
@@ -69,7 +73,7 @@ public class AutoMapperProfile : Profile
 
 		CreateMap<OrderLineDto, OrderLineResponse>();
 
-		CreateMap<OrderDto, OrderResponse>()
+		CreateMap<OrderDto, OrderStatusResponse>()
 			.ForMember(dest => dest.OrderLines, opt => opt.MapFrom(src => src.OrderLines));
 
 		CreateMap<ProductDto, ProductResponse>();

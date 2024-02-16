@@ -37,7 +37,7 @@ public class OrdersController : BaseController
 		//{
 		//	return NotFound();
 		//}
-		var result = mapper.Map<List<OrderResponse>>(orders);
+		var result = mapper.Map<List<OrderStatusResponse>>(orders);
 
 		return Ok(result);
 	}
@@ -55,7 +55,7 @@ public class OrdersController : BaseController
 		[FromServices] IMapper mapper)
 	{
 		var order = await mediator.Send(new GetOrderQuery(id, userId));
-		var result = mapper.Map<OrderResponse>(order);
+		var result = mapper.Map<OrderStatusResponse>(order);
 
 		return Ok(result);
 	}

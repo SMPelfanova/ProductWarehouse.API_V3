@@ -41,10 +41,7 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
 						.Include(b => b.BasketLines)
 						.SingleAsync(x => x.UserId == userId);
 
-			if (basket != null)
-			{
-				_dbContext.BasketLine.RemoveRange(basket.BasketLines);
-			}
+			_dbContext.BasketLine.RemoveRange(basket.BasketLines);
 		}
 		catch (InvalidOperationException ex)
 		{

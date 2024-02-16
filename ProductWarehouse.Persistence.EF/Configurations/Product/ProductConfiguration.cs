@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
@@ -12,10 +13,14 @@ public class ProductConfiguration : EntityConfiguration<Product>
 
 		builder.Property(p => p.Photo).IsRequired(false);
 		builder.Property(p => p.IsDeleted).HasDefaultValue(false);
-		builder.Property(p => p.Title).IsRequired().HasMaxLength(100);
 		builder.Property(p => p.Description).IsRequired();
+
+		builder.Property(p => p.Title)
+			.IsRequired()
+			.HasMaxLength(100);
+
 		builder.Property(p => p.Price)
-			.HasColumnType("decimal(18, 2)")
+			.HasColumnType(DatabaseConstants.DecimalColumnType)
 			.IsRequired();
 
 		builder.HasOne(b => b.Brand)

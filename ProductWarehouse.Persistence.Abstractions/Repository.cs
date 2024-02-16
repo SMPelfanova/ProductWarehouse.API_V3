@@ -17,11 +17,13 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 	{
 		try
 		{
-			return await _dbContext.Set<TEntity>().FindAsync(id);
-		}
-		catch (InvalidOperationException ex)
-		{
-			throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.", ex);
+			TEntity entity = await _dbContext.Set<TEntity>().FindAsync(id);
+			if (entity == null)
+			{
+				throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.");
+			}
+
+			return entity;
 		}
 		catch (Exception ex)
 		{

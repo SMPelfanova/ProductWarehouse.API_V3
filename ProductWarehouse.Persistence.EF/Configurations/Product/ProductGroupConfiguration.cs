@@ -9,8 +9,6 @@ public class ProductGroupConfiguration : IEntityTypeConfiguration<ProductGroups>
 {
 	public void Configure(EntityTypeBuilder<ProductGroups> builder)
 	{
-		builder.ToTable(nameof(TableNames.ProductGroups));
-
 		builder.HasKey(pg => new { pg.ProductId, pg.GroupId });
 
 		builder.HasOne(pg => pg.Product)

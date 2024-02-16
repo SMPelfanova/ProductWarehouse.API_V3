@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
@@ -15,8 +16,8 @@ public class BasketLineConfiguration : EntityConfiguration<BasketLine>
 			.HasDefaultValue(1);
 
 		builder.Property(p => p.Price)
-	   .HasColumnType("decimal(18, 2)")
-	   .IsRequired();
+		   .HasColumnType(DatabaseConstants.DecimalColumnType)
+		   .IsRequired();
 
 		builder.HasOne(bl => bl.Basket)
 			.WithMany(bl => bl.BasketLines)

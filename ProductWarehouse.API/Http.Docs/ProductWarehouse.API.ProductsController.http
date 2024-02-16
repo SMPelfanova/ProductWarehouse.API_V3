@@ -43,7 +43,7 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-    "id": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
+    "id": "288d5d4f-a2fd-4e01-4a21-08dc2c862878",
     "title": "NEW",
     "description": "NEW",
     "price": 10000
@@ -88,7 +88,7 @@ Content-Type: application/json
 }
 
 ### Update Product Size
-PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/ea88c493-9e58-47c7-80cd-766ac89a7a01?QuantityInStock=18
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/3aee3527-c299-4c13-b907-ecaa57f9a655?QuantityInStock=18
 
 
 ### Delete Product Size

@@ -15,11 +15,11 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		_dbContext = dbContext;
 	}
 
-	public Task<List<Product>> GetProductsAsync()
+	public async Task<List<Product>> GetProductsAsync()
 	{
 		try
 		{
-			var products = _dbContext.Products
+			var products = await _dbContext.Products
 				.Where(x => !x.IsDeleted)
 				.Include(p => p.Brand)
 				.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
@@ -38,11 +38,11 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public Task<Product> GetProductDetailsAsync(Guid id)
+	public async Task<Product> GetProductDetailsAsync(Guid id)
 	{
 		try
 		{
-			return _dbContext.Products
+			return await _dbContext.Products
 				.Include(p => p.Brand)
 				.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
 				.Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
@@ -63,11 +63,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var entityToDelete = _dbContext.ProductGroups.Single(x => x.ProductId == productId && x.GroupId == groupId);
-
-			if (entityToDelete != null)
-			{
-				_dbContext.ProductGroups.Remove(entityToDelete);
-			}
+			_dbContext.ProductGroups.Remove(entityToDelete);
 		}
 		catch (InvalidOperationException ex)
 		{
@@ -84,11 +80,8 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var entityToUpdate = _dbContext.ProductSizes.Single(x => x.ProductId == productSize.ProductId && x.SizeId == productSize.SizeId);
-			if (entityToUpdate != null)
-			{
-				entityToUpdate.QuantityInStock = productSize.QuantityInStock;
-				_dbContext.ProductSizes.Update(entityToUpdate);
-			}
+			entityToUpdate.QuantityInStock = productSize.QuantityInStock;
+			_dbContext.ProductSizes.Update(entityToUpdate);
 		}
 		catch (InvalidOperationException ex)
 		{
@@ -100,12 +93,12 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId)
+	public async Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId)
 	{
 		try
 		{
-			return _dbContext.ProductSizes
-			.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId);
+			return await _dbContext.ProductSizes
+						.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId);
 		}
 		catch (InvalidOperationException ex)
 		{
@@ -115,7 +108,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		{
 			throw new DatabaseException("An error occurred while fetching the product sizes.", ex);
 		}
-
 	}
 
 	public async Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId)

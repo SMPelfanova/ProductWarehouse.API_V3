@@ -15,14 +15,10 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 		RuleFor(command => command.UserId)
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.UserId)));
-		//.Must(HaveBasket)
-		//.WithMessage(command => $"No basket found for user: {command.UserId}");
 
 		RuleFor(command => command.ProductId)
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.ProductId)));
-			//.MustAsync(ExistInProducts)
-			//.WithMessage(command => $"Product with Id: {command.ProductId} does not exist.");
 
 		RuleFor(command => command.Quantity)
 			.NotEmpty()
@@ -44,18 +40,6 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 			.MustAsync((command, sizeId, cancellationToken) => NotAlreadyAdded(command.UserId, command.ProductId, command.SizeId, cancellationToken))
 			.WithMessage("Product with the same size is already added to the basket.");
 	}
-
-	//private bool HaveBasket(Guid userId)
-	//{
-	//	var basket = _unitOfWork.Basket.GetBasketByUserId(userId);
-	//	return basket != null;
-	//}
-
-	//private async Task<bool> ExistInProducts(Guid productId, CancellationToken cancellationToken)
-	//{
-	//	var product = await _unitOfWork.Products.GetByIdAsync(productId);
-	//	return product != null;
-	//}
 
 	private async Task<bool> HaveSufficientQuantity(AddBasketLineCommand command, int quantity, CancellationToken cancellationToken)
 	{

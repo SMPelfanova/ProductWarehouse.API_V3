@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
@@ -10,14 +11,18 @@ public class PaymentConfiguration : EntityConfiguration<Payment>
 	{
 		base.Configure(builder);
 
-		builder.Property(p => p.Method).IsRequired().HasMaxLength(50);
-		builder.Property(p => p.Status).IsRequired().HasMaxLength(50);
+		builder.Property(p => p.Method)
+			.IsRequired()
+			.HasMaxLength(50);
 
-		builder.Property(p => p.PaymentDate).IsRequired();
+		builder.Property(p => p.Status)
+			.IsRequired()
+			.HasMaxLength(50);
+
 		builder.Property(t => t.PaymentDate)
 			.IsRequired()
-			.HasColumnType("Date")
-			.HasDefaultValueSql("GetDate()");
+			.HasColumnType(DatabaseConstants.DateColumnType)
+			.HasDefaultValueSql(DatabaseConstants.DecimalColumnType);
 
 		builder.HasOne(b => b.Order)
 			.WithOne(p => p.Payment)

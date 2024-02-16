@@ -2,7 +2,7 @@
 
 namespace ProductWarehouse.API.Models.Responses.Order;
 
-public class OrderResponse
+public class OrderStatusResponse
 {
 	public Guid Id { get; set; }
 	public OrderStatusDto Status { get; set; }

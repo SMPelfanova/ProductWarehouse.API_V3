@@ -4,7 +4,7 @@ using ProductWarehouse.Persistence.Abstractions;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
-public sealed class GroupRepository : Repository<Group>, IGroupRepository
+public class GroupRepository : Repository<Group>, IGroupRepository
 {
 	public GroupRepository(ApplicationDbContext dbContext) : base(dbContext)
 	{

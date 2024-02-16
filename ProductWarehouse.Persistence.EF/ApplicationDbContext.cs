@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.EF.SeedModels;
+using System;
 
 namespace ProductWarehouse.Persistence.EF;
 
@@ -21,12 +23,16 @@ public class ApplicationDbContext : DbContext
 			optionsBuilder.UseSqlServer("Server=localhost;Database=Werehouse;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
 		}
 	}
-
+	public static void EnsureDatabaseCreated(DbContextOptions<ApplicationDbContext> options)
+	{
+		using var context = new ApplicationDbContext(options);
+		context.Database.EnsureCreated();
+	}
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-		SeedData(modelBuilder);
+		DataSeeder.SeedData(modelBuilder);
 	}
 
 	public DbSet<Brand> Brands { get; set; }
@@ -43,51 +49,4 @@ public class ApplicationDbContext : DbContext
 	public DbSet<OrderLine> OrderLine { get; set; }
 	public DbSet<Basket> Basket { get; set; }
 	public DbSet<BasketLine> BasketLine { get; set; }
-
-	private void SeedData(ModelBuilder modelBuilder)
-	{
-		Guid userid = Guid.NewGuid();
-		modelBuilder.Entity<User>().HasData(
-			new User
-			{
-				Id = userid,
-				FirstName = "First",
-				LastName = "Last",
-				Password = "asd",
-				Phone = "0888888877",
-				Email = "test@email.com",
-				Address = "Street default"
-			});
-
-		modelBuilder.Entity<Basket>().HasData(
-			new Basket
-			{
-				Id = Guid.NewGuid(),
-				UserId = userid
-			});
-
-		modelBuilder.Entity<Brand>().HasData(
-			new Brand { Id = Guid.NewGuid(), Name = "Zara" },
-			new Brand { Id = Guid.NewGuid(), Name = "Bershka" },
-			new Brand { Id = Guid.NewGuid(), Name = "Stella Nova" }
-		);
-
-		modelBuilder.Entity<Group>().HasData(
-			new Group { Id = Guid.NewGuid(), Name = "Casual" },
-			new Group { Id = Guid.NewGuid(), Name = "Comfortable" }
-		);
-
-		modelBuilder.Entity<OrderStatus>().HasData(
-			new OrderStatus { Id = Guid.NewGuid(), Name = "Pending" },
-			new OrderStatus { Id = Guid.NewGuid(), Name = "Delivered" }
-		);
-
-		modelBuilder.Entity<Size>().HasData(
-			new Size { Id = Guid.NewGuid(), Name = "XS" },
-			new Size { Id = Guid.NewGuid(), Name = "S" },
-			new Size { Id = Guid.NewGuid(), Name = "M" },
-			new Size { Id = Guid.NewGuid(), Name = "L" },
-			new Size { Id = Guid.NewGuid(), Name = "XL" }
-		);
-	}
 }

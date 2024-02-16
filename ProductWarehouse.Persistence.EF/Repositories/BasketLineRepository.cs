@@ -21,7 +21,6 @@ public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepositor
 		{
 			var basket = await _dbContext.Basket.SingleAsync(x => x.UserId == userId);
 			return !basket.BasketLines.Any(x => x.ProductId == productId && x.SizeId == sizeId);
-
 		}
 		catch (InvalidOperationException ex)
 		{
