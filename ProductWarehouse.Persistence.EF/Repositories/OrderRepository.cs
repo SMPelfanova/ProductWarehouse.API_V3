@@ -3,16 +3,19 @@ using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
+using Serilog;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
 public class OrderRepository : Repository<Order>, IOrderRepository
 {
 	private readonly ApplicationDbContext _dbContext;
+	private readonly ILogger _logger;
 
-	public OrderRepository(ApplicationDbContext dbContext) : base(dbContext)
+	public OrderRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext)
 	{
 		_dbContext = dbContext;
+		_logger = logger;
 	}
 
 	public async Task<Order> GetOrderDetailsAsync(Guid id)
@@ -26,10 +29,12 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		}
 		catch (InvalidOperationException ex)
 		{
+			_logger.Warning($"Order with specified id: {id} not found.", ex);
 			throw new NotFoundException($"Order with specified id: {id} not found.", ex);
 		}
 		catch (Exception ex)
 		{
+			_logger.Error("An error occurred while fetching the basket.", ex);
 			throw new DatabaseException("An error occurred while fetching the basket.", ex);
 		}
 	}
@@ -46,10 +51,12 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		}
 		catch (InvalidOperationException ex)
 		{
+			_logger.Warning("Orders not found for the specified user.", ex);
 			throw new NotFoundException("Orders not found for the specified user.", ex);
 		}
 		catch (Exception ex)
 		{
+			_logger.Error("An error occurred while fetching the basket.", ex);
 			throw new DatabaseException("An error occurred while fetching the basket.", ex);
 		}
 	}

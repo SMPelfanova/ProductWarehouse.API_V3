@@ -19,4 +19,6 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateOrderCommand.OrderLines)));
 	}
+
+	//check product size
 }

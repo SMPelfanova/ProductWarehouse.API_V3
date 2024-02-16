@@ -7,5 +7,5 @@ public interface IBasketRepository : IRepository<Basket>
 {
 	Task<Basket> GetBasketByUserIdAsync(Guid userId);
 
-	Task DeleteBasketLinesAsync(Guid userId);
+	void DeleteBasketLines(Guid userId);
 }

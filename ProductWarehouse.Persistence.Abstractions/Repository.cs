@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.Abstractions.Interfaces;
+using Serilog;
 
 namespace ProductWarehouse.Persistence.Abstractions;
 
 public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
 	protected readonly DbContext _dbContext;
+	private readonly ILogger _logger;
 
 	protected Repository(DbContext context)
 	{
@@ -20,6 +22,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 			TEntity entity = await _dbContext.Set<TEntity>().FindAsync(id);
 			if (entity == null)
 			{
+				_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
 				throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.");
 			}
 
@@ -27,6 +30,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 		catch (Exception ex)
 		{
+			_logger.Error("An error occurred while fetching the entity by id.", ex);
 			throw new DatabaseException("An error occurred while fetching the entity by id.", ex);
 		}
 	}
@@ -46,6 +50,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 		catch (Exception ex)
 		{
+			_logger.Error("An error occurred while fetching all entities.", ex);
 			throw new DatabaseException("An error occurred while fetching all entities.", ex);
 		}
 	}
@@ -70,6 +75,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 		catch (Exception ex)
 		{
+			_logger.Error("An error occurred while adding the entity.", ex);
 			throw new DatabaseException("An error occurred while adding the entity.", ex);
 		}
 	}
@@ -82,10 +88,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 		catch (InvalidOperationException ex)
 		{
+			_logger.Warning("Entity to be deleted not found.", ex);
 			throw new NotFoundException("Entity to be deleted not found.", ex);
 		}
 		catch (Exception ex)
 		{
+			_logger.Error("An error occurred while deleting the entity.", ex);
 			throw new DatabaseException("An error occurred while deleting the entity.", ex);
 		}
 	}
@@ -99,10 +107,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 		catch (InvalidOperationException ex)
 		{
+			_logger.Warning("Entity to be updated not found.", ex);
 			throw new NotFoundException("Entity to be updated not found.", ex);
 		}
 		catch (Exception ex)
 		{
+			_logger.Error("An error occurred while updating the entity.", ex);
 			throw new DatabaseException("An error occurred while updating the entity.", ex);
 		}
 	}

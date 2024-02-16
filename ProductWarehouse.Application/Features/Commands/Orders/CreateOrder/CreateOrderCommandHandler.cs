@@ -45,7 +45,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
 			}
 		}
 
-		await _unitOfWork.Basket.DeleteBasketLinesAsync(request.UserId);
+		_unitOfWork.Basket.DeleteBasketLines(request.UserId);
 		await _unitOfWork.SaveChangesAsync();
 
 		return id;

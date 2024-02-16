@@ -27,4 +27,8 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 			.NotEmpty().WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateProductCommand.Price)))
 			.GreaterThan(0).WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(CreateProductCommand.Price)));
 	}
+
+	// check if size exists
+	// check if group exists
+	// check if brand exists
 }
