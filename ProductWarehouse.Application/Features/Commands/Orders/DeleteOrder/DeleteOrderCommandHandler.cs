@@ -19,11 +19,7 @@ public class DeleteOrderCommandHandler : IRequestHandler<DeleteOrderCommand>
 	public async Task Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
 	{
 		var order = await _unitOfWork.Orders.GetByIdAsync(request.Id);
-		if (order == null)
-		{
-			_logger.Error($"No order found with id: {request.Id}");
-			throw new OrderNotFoundException($"No order found with id: {request.Id}");
-		}
+
 		order.IsDeleted = true;
 		_unitOfWork.Orders.Update(order);
 

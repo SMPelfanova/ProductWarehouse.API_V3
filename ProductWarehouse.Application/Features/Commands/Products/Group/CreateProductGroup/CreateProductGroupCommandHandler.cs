@@ -23,11 +23,6 @@ public class CreateProductGroupCommandHandler : IRequestHandler<CreateProductGro
 	public async Task<Guid> Handle(CreateProductGroupCommand request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
-		if (product == null)
-		{
-			_logger.Error($"No product found with id: {request.ProductId}");
-			throw new ProductNotFoundException($"No product found with id: {request.ProductId}");
-		}
 
 		if (!product.ProductGroups.Any(x => x.Group.Id == request.GroupId))
 		{

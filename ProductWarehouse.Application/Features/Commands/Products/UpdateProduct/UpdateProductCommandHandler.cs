@@ -22,11 +22,6 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 	public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetByIdAsync(request.Id);
-		if (product == null)
-		{
-			_logger.Error($"No product found with id: {request.Id}");
-			throw new ProductNotFoundException($"No product found with id: {request.Id}");
-		}
 
 		_mapper.Map(request, product);
 		_unitOfWork.Products.Update(product);

@@ -19,11 +19,6 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductSize
 	public async Task Handle(DeleteProductSizeCommand request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
-		if (product == null)
-		{
-			_logger.Error($"No product found with id: {request.ProductId}");
-			throw new ProductNotFoundException($"No product found with id: {request.ProductId}");
-		}
 
 		var productSizeToDelete = product.ProductSizes.FirstOrDefault(x => x.SizeId == request.SizeId);
 		if (productSizeToDelete != null)

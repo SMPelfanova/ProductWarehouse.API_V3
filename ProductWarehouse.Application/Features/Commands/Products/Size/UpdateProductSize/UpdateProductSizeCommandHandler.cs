@@ -24,12 +24,6 @@ public class UpdateProductSizeCommandHandler : IRequestHandler<UpdateProductSize
 	public async Task Handle(UpdateProductSizeCommand request, CancellationToken cancellationToken)
 	{
 		var size = await _unitOfWork.Sizes.GetByIdAsync(request.sizeId);
-
-		if (size == null)
-		{
-			_logger.Error($"No size found with id: {request.sizeId}");
-			throw new SizeNotFoundException($"No size found with id: {request.sizeId}");
-		}
 		var map = _mapper.Map<ProductSize>(request);
 
 		_unitOfWork.ProductSizes.Update(map);

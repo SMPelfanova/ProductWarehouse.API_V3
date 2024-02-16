@@ -2,6 +2,7 @@
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
@@ -14,22 +15,44 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
 		_dbContext = dbContext;
 	}
 
-	public Basket GetBasketByUserId(Guid userId)
+	public async Task<Basket> GetBasketByUserIdAsync(Guid userId)
 	{
-		var basket = _dbContext.Basket.Include(b => b.BasketLines).FirstOrDefault(b => b.UserId == userId);
-
-		return basket;
+		try
+		{
+			return await _dbContext.Basket
+						.Include(b => b.BasketLines)
+						.SingleAsync(b => b.UserId == userId);
+		}
+		catch (InvalidOperationException ex)
+		{
+			throw new NotFoundException("Basket not found for the specified user.", ex);
+		}
+		catch (Exception ex)
+		{
+			throw new DatabaseException("An error occurred while fetching the basket.", ex);
+		}
 	}
 
-	public void DeleteBasketLines(Guid userId)
+	public async Task DeleteBasketLinesAsync(Guid userId)
 	{
-		var basket = _dbContext.Basket
-						  .Include(b => b.BasketLines)
-						  .FirstOrDefault(x => x.UserId == userId);
-
-		if (basket != null)
+		try
 		{
-			_dbContext.BasketLine.RemoveRange(basket.BasketLines);
+			var basket = await _dbContext.Basket
+						.Include(b => b.BasketLines)
+						.SingleAsync(x => x.UserId == userId);
+
+			if (basket != null)
+			{
+				_dbContext.BasketLine.RemoveRange(basket.BasketLines);
+			}
+		}
+		catch (InvalidOperationException ex)
+		{
+			throw new NotFoundException("Basket not found for the specified user.", ex);
+		}
+		catch (Exception ex)
+		{
+			throw new DatabaseException("An error occurred while fetching the basket.", ex);
 		}
 	}
 }

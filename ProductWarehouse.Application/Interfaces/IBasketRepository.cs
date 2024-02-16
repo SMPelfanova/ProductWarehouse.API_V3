@@ -5,7 +5,7 @@ namespace ProductWarehouse.Application.Interfaces;
 
 public interface IBasketRepository : IRepository<Basket>
 {
-	Basket GetBasketByUserId(Guid userId);
+	Task<Basket> GetBasketByUserIdAsync(Guid userId);
 
-	void DeleteBasketLines(Guid userId);
+	Task DeleteBasketLinesAsync(Guid userId);
 }

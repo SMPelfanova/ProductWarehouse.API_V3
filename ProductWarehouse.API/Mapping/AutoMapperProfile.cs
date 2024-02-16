@@ -24,11 +24,12 @@ public class AutoMapperProfile : Profile
 {
 	public AutoMapperProfile()
 	{
-		MapFromRequestToQueriesOrCommands();
+		MapFromRequestToQueries();
+		MapFromRequestToCommands();
 		MapFromDtoToResponse();
 	}
 
-	private void MapFromRequestToQueriesOrCommands()
+	private void MapFromRequestToQueries()
 	{
 		CreateMap<AddBasketLineRequest, AddBasketLineCommand>();
 		CreateMap<UpdateBasketLineRequest, UpdateBasketLineCommand>();
@@ -38,8 +39,6 @@ public class AutoMapperProfile : Profile
 			.ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.Groups));
 
 		CreateMap<UpdateProductRequest, UpdateProductCommand>();
-		CreateMap<FilterProductsRequest, GetAllProductsQuery>();
-
 		CreateMap<CreateProductSizeRequest, CreateProductSizeCommand>()
 			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id));
 
@@ -50,8 +49,13 @@ public class AutoMapperProfile : Profile
 		CreateMap<CreateOrderRequest, CreateOrderCommand>()
 			.ForMember(dest => dest.OrderLines, opt => opt.MapFrom(src => src.OrderLines));
 
-		CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderRequest>>();
-		CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderRequest>>();
+		CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderCommandRequest>>();
+		CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderCommandRequest>>();
+	}
+
+	private void MapFromRequestToCommands()
+	{
+		CreateMap<FilterProductsRequest, GetAllProductsQuery>();
 	}
 
 	private void MapFromDtoToResponse()

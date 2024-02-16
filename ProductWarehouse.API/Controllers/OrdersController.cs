@@ -33,10 +33,10 @@ public class OrdersController : BaseController
 	{
 		var orders = await mediator.Send(new GetAllOrdersQuery(userId));
 
-		if (!orders.Any())
-		{
-			return NotFound();
-		}
+		//if (!orders.Any())
+		//{
+		//	return NotFound();
+		//}
 		var result = mapper.Map<List<OrderResponse>>(orders);
 
 		return Ok(result);
@@ -55,11 +55,6 @@ public class OrdersController : BaseController
 		[FromServices] IMapper mapper)
 	{
 		var order = await mediator.Send(new GetOrderQuery(id, userId));
-		if (order == null)
-		{
-			return NotFound();
-		}
-
 		var result = mapper.Map<OrderResponse>(order);
 
 		return Ok(result);
@@ -96,7 +91,7 @@ public class OrdersController : BaseController
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
 	{
-		var command = mapper.Map<JsonPatchDocument<PartialUpdateOrderRequest>>(patchDocument);
+		var command = mapper.Map<JsonPatchDocument<PartialUpdateOrderCommandRequest>>(patchDocument);
 		await mediator.Send(new PartialUpdateOrderCommand() { Id = id, PatchDocument = command });
 
 		return NoContent();

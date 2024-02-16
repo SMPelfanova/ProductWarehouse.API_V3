@@ -19,11 +19,6 @@ public class BrandsController : BaseController
 	{
 		var result = await mediator.Send(new GetAllBrandsQuery());
 
-		if (result == null || !result.Any())
-		{
-			return NotFound();
-		}
-
 		return Ok(result);
 	}
 
@@ -36,11 +31,6 @@ public class BrandsController : BaseController
 	public async Task<IActionResult> GetBrand(Guid id, [FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetBrandQuery(id));
-
-		if (result == null)
-		{
-			return NotFound();
-		}
 
 		return Ok(result);
 	}

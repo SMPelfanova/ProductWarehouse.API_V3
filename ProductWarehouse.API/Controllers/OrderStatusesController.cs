@@ -17,10 +17,6 @@ public class OrderStatusesController : BaseController
 	public async Task<IActionResult> GetOrderStatuses([FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetAllOrderStatusesQuery());
-		if (result == null || !result.Any())
-		{
-			return NotFound();
-		}
 
 		return Ok(result);
 	}
@@ -34,11 +30,6 @@ public class OrderStatusesController : BaseController
 	public async Task<IActionResult> GetOrderStatus(Guid id, [FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetOrderStatusQuery(id));
-
-		if (result == null)
-		{
-			return NotFound();
-		}
 
 		return Ok(result);
 	}

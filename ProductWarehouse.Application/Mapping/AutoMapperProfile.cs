@@ -22,6 +22,7 @@ public class AutoMapperProfile : Profile
 
 		MapProductFilter();
 	}
+
 	private void FromEntityToDto()
 	{
 		CreateMap<Brand, BrandDto>().ReverseMap();

@@ -1,6 +1,6 @@
 ﻿namespace ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 
-public class PartialUpdateOrderRequest
+public class PartialUpdateOrderCommandRequest
 {
 	public Guid Id { get; set; }
 	public Guid? StatusId { get; set; }

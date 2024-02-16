@@ -22,12 +22,6 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDt
 	public async Task<ProductDto> Handle(GetProductQuery request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id);
-		if (product == null)
-		{
-			_logger.Warning($"No product found with id:{request.Id}");
-			return null;
-		}
-
 		var result = _mapper.Map<ProductDto>(product);
 
 		return result;

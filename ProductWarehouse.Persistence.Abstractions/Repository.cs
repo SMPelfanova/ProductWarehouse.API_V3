@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.Abstractions.Interfaces;
 
 namespace ProductWarehouse.Persistence.Abstractions;
@@ -14,45 +15,93 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
 	public async Task<TEntity> GetByIdAsync(Guid id)
 	{
-		return await _dbContext.Set<TEntity>().FindAsync(id);
+		try
+		{
+			return await _dbContext.Set<TEntity>().FindAsync(id);
+		}
+		catch (InvalidOperationException ex)
+		{
+			throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.", ex);
+		}
+		catch (Exception ex)
+		{
+			throw new DatabaseException("An error occurred while fetching the entity by id.", ex);
+		}
 	}
 
 	public async Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties)
 	{
-		IQueryable<TEntity> query = _dbContext.Set<TEntity>();
-
-		foreach (var includeProperty in includeProperties)
+		try
 		{
-			query = query.Include(includeProperty);
-		}
+			IQueryable<TEntity> query = _dbContext.Set<TEntity>();
 
-		return await query.ToListAsync();
+			foreach (var includeProperty in includeProperties)
+			{
+				query = query.Include(includeProperty);
+			}
+
+			return await query.ToListAsync();
+		}
+		catch (Exception ex)
+		{
+			throw new DatabaseException("An error occurred while fetching all entities.", ex);
+		}
 	}
 
+	//todo: fix 
 	public async Task<Guid> Add(TEntity entity)
 	{
-		var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
-		await _dbContext.SaveChangesAsync();
-
-		var idProperty = entity.GetType().GetProperty("Id");
-		if (idProperty == null || idProperty.PropertyType != typeof(Guid))
+		try
 		{
-			return Guid.Empty;
+			var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
+			await _dbContext.SaveChangesAsync();
+
+			var idProperty = entity.GetType().GetProperty("Id");
+			if (idProperty == null || idProperty.PropertyType != typeof(Guid))
+			{
+				return Guid.Empty;
+			}
+
+			var generatedId = _dbContext.Entry(entity).Property("Id").CurrentValue;
+
+			return (Guid)generatedId;
 		}
-
-		var generatedId = _dbContext.Entry(entity).Property("Id").CurrentValue;
-
-		return (Guid)generatedId;
+		catch (Exception ex)
+		{
+			throw new DatabaseException("An error occurred while adding the entity.", ex);
+		}
 	}
 
 	public void Delete(TEntity entity)
 	{
-		_dbContext.Set<TEntity>().Remove(entity);
+		try
+		{
+			_dbContext.Set<TEntity>().Remove(entity);
+		}
+		catch (InvalidOperationException ex)
+		{
+			throw new NotFoundException("Entity to be deleted not found.", ex);
+		}
+		catch (Exception ex)
+		{
+			throw new DatabaseException("An error occurred while deleting the entity.", ex);
+		}
 	}
 
+	//todo: make async Delete and Update
 	public void Update(TEntity entity)
 	{
-		_dbContext.Set<TEntity>().Update(entity);
-		//_dbContext.Entry(entity).State = EntityState.Modified;
+		try
+		{
+			_dbContext.Set<TEntity>().Update(entity);
+		}
+		catch (InvalidOperationException ex)
+		{
+			throw new NotFoundException("Entity to be updated not found.", ex);
+		}
+		catch (Exception ex)
+		{
+			throw new DatabaseException("An error occurred while updating the entity.", ex);
+		}
 	}
 }

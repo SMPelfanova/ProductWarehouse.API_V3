@@ -26,10 +26,6 @@ public class ProductSizesController : BaseController
 		[FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetProductSizesQuery(id));
-		if (!result.Any())
-		{
-			return NotFound();
-		}
 
 		return Ok(result);
 	}

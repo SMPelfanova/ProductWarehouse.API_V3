@@ -25,10 +25,6 @@ public class ProductGroupsController : BaseController
 		[FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetProductGroupsQuery(id));
-		if (!result.Any())
-		{
-			return NotFound();
-		}
 
 		return Ok(result);
 	}

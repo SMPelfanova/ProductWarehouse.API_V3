@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.Application.Exceptions;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.API.Infrastructure;
 
@@ -20,39 +21,33 @@ public class GlobalExceptionHandler : IExceptionHandler
 	{
 		_logger.LogError(exception, "Exception occured {Message}.", exception.Message);
 
-		if (exception is ValidatorException validationException)
+		var problemDetails = exception switch
 		{
-			var validationErrors = validationException.Errors.Select(error => new
+			ValidatorException validationException => new ProblemDetails
 			{
-				Property = error.PropertyName,
-				Message = error.ErrorMessage
-			});
-
-			httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-			await httpContext.Response.WriteAsJsonAsync(validationErrors, cancellationToken);
-
-			return true;
-		}
-
-		var problemDetails = new ProblemDetails();
-
-		switch (exception)
-		{
-			case BadHttpRequestException:
-				problemDetails.Status = StatusCodes.Status400BadRequest;
-				problemDetails.Title = exception.GetType().Name;
-				break;
-
-			default:
-				problemDetails.Status = StatusCodes.Status500InternalServerError;
-				problemDetails.Title = "Internal Server Error";
-				break;
-		}
+				Status = StatusCodes.Status400BadRequest,
+				Title = "Validation Error",
+				Detail = string.Join("; ", validationException.Errors.Select(error => $"{error.PropertyName}: {error.ErrorMessage}"))
+			},
+			InvalidOperationException or NotFoundException => new ProblemDetails
+			{
+				Status = StatusCodes.Status404NotFound,
+				Title = exception.Message
+			},
+			BadHttpRequestException => new ProblemDetails
+			{
+				Status = StatusCodes.Status400BadRequest,
+				Title = exception.Message
+			},
+			_ => new ProblemDetails
+			{
+				Status = StatusCodes.Status500InternalServerError,
+				Title = "Internal Server Error"
+			}
+		};
 
 		httpContext.Response.StatusCode = (int)problemDetails.Status;
-		await httpContext
-			.Response
-			.WriteAsJsonAsync(problemDetails, cancellationToken);
+		await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
 		return true;
 	}

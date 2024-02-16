@@ -21,13 +21,7 @@ public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrd
 	{
 		var order = await _unitOfWork.Orders.GetByIdAsync(request.Id);
 
-		if (order == null)
-		{
-			_logger.Error($"No order found with id: {request.Id}");
-			throw new OrderNotFoundException($"No order found with id: {request.Id}");
-		}
-
-		var partialUpdate = new PartialUpdateOrderRequest();
+		var partialUpdate = new PartialUpdateOrderCommandRequest();
 		request.PatchDocument.ApplyTo(partialUpdate);
 
 		if (partialUpdate.TotalAmount.HasValue)

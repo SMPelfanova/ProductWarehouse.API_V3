@@ -17,10 +17,6 @@ public class SizesController : BaseController
 	public async Task<IActionResult> GetSizes([FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetAllSizesQuery());
-		if (result == null || !result.Any())
-		{
-			return NotFound();
-		}
 
 		return Ok(result);
 	}
@@ -34,11 +30,6 @@ public class SizesController : BaseController
 	public async Task<IActionResult> GetSize([FromServices] IMediator mediator, Guid id)
 	{
 		var size = await mediator.Send(new GetSizeQuery(id));
-
-		if (size == null)
-		{
-			return NotFound();
-		}
 
 		return Ok(size);
 	}

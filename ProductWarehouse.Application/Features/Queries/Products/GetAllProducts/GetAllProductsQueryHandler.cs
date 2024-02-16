@@ -28,7 +28,6 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
 		if (products.Count() <= 0)
 		{
 			_logger.Information($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
-			return new ProductsFilterDto();
 		}
 
 		var productFilter = _mapper.Map<ProductsFilterDto>(products);

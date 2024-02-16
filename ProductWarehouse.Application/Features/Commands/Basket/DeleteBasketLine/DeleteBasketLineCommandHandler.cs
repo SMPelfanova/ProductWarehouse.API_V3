@@ -19,11 +19,6 @@ public class DeleteBasketLineCommandHandler : IRequestHandler<DeleteBasketLineCo
 	public async Task Handle(DeleteBasketLineCommand request, CancellationToken cancellationToken)
 	{
 		var basketLine = await _unitOfWork.BasketLines.GetByIdAsync(request.basketLineId);
-		if (basketLine == null)
-		{
-			_logger.Error($"No basket found with id: {request.basketLineId}");
-			throw new BasketNotFoundException($"No basket found with id: {request.basketLineId}");
-		}
 		_unitOfWork.BasketLines.Delete(basketLine);
 		await _unitOfWork.SaveChangesAsync();
 	}

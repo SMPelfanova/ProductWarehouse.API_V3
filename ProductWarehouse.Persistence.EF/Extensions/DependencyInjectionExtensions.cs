@@ -13,7 +13,7 @@ public static class DependencyInjectionExtensions
 		IConfiguration configuration)
 	{
 		services.AddDbContext<ApplicationDbContext>(options =>
-			options.UseSqlServer(configuration.GetConnectionString("WerehouseSQLDBConnectionString")),
+			options.UseSqlServer(configuration.GetConnectionString("WerehouseSqlDbConnectionString")),
 			ServiceLifetime.Scoped);
 		services.AddScoped<IProductRepository, ProductRepository>();
 		services.AddScoped<IGroupRepository, GroupRepository>();

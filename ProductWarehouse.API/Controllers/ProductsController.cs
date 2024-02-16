@@ -28,11 +28,6 @@ public class ProductsController : BaseController
 	{
 		var result = await mediator.Send(new GetAllProductsQuery());
 
-		if (!result.Products.Any())
-		{
-			return NotFound();
-		}
-
 		var products = mapper.Map<List<ProductResponse>>(result.Products);
 
 		return Ok(products);
@@ -52,11 +47,6 @@ public class ProductsController : BaseController
 	{
 		var productsQueryMap = mapper.Map<GetAllProductsQuery>(productsFilter);
 		var result = await mediator.Send(productsQueryMap);
-		if (!result.Products.Any())
-		{
-			return NotFound();
-		}
-
 		var response = mapper.Map<ProductFilterResponse>(result);
 
 		return Ok(response);
@@ -74,11 +64,6 @@ public class ProductsController : BaseController
 	{
 		var product = await mediator.Send(new GetProductQuery(id));
 
-		if (product == null)
-		{
-			return NotFound();
-		}
-
 		return Ok(product);
 	}
 
@@ -93,11 +78,6 @@ public class ProductsController : BaseController
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
 	{
-		if (request == null)
-		{
-			return BadRequest("Request body is null");
-		}
-
 		var command = mapper.Map<CreateProductCommand>(request);
 
 		var productId = await mediator.Send(command);

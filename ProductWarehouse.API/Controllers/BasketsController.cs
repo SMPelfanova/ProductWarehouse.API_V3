@@ -28,11 +28,6 @@ public class BasketsController : BaseController
 		[FromServices] IMediator mediator)
 	{
 		var result = await mediator.Send(new GetBasketQuery(userId));
-		//todo: check when validation failes and userId not found
-		if (result == null)
-		{
-			return NotFound();
-		}
 		var basket = mapper.Map<BasketResponse>(result);
 
 		return Ok(basket);
@@ -69,10 +64,6 @@ public class BasketsController : BaseController
 		var command = mapper.Map<AddBasketLineCommand>(addBasketLineRequest);
 		command.UserId = userId;
 		var result = await mediator.Send(command);
-		if (result == Guid.Empty)
-		{
-			return NotFound("No products found with requested size.");
-		}
 
 		return Ok(result);
 	}
