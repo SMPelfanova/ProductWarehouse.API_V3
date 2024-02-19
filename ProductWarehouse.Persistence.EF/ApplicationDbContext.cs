@@ -1,38 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.EF.SeedModels;
-using System;
+using System.Reflection;
 
 namespace ProductWarehouse.Persistence.EF;
 
 public class ApplicationDbContext : DbContext
 {
-	public ApplicationDbContext()
+ 
+	public ApplicationDbContext(DbContextOptions options) : base(options)
 	{
 	}
 
-	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-	{
-	}
-
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
-		optionsBuilder.EnableSensitiveDataLogging();
-		if (!optionsBuilder.IsConfigured)
-		{
-			optionsBuilder.UseSqlServer("Server=localhost;Database=Werehouse;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true");
-		}
-	}
-	public static void EnsureDatabaseCreated(DbContextOptions<ApplicationDbContext> options)
+	public static void EnsureDatabaseCreated(DbContextOptions options)
 	{
 		using var context = new ApplicationDbContext(options);
-		context.Database.EnsureCreated();
+		context.Database.Migrate();
 	}
+
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
-		modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+		modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
 		DataSeeder.SeedData(modelBuilder);
+		base.OnModelCreating(modelBuilder);
 	}
 
 	public DbSet<Brand> Brands { get; set; }
@@ -46,7 +37,12 @@ public class ApplicationDbContext : DbContext
 	public DbSet<Payment> Payments { get; set; }
 	public DbSet<OrderStatus> OrderStatus { get; set; }
 	public DbSet<Order> Orders { get; set; }
-	public DbSet<OrderLine> OrderLine { get; set; }
-	public DbSet<Basket> Basket { get; set; }
-	public DbSet<BasketLine> BasketLine { get; set; }
+	public DbSet<OrderLine> OrderLines { get; set; }
+	public DbSet<Baskets> Baskets { get; set; }
+	public DbSet<BasketLine> BasketLines { get; set; }
+
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		base.OnConfiguring(optionsBuilder);
+	}
 }

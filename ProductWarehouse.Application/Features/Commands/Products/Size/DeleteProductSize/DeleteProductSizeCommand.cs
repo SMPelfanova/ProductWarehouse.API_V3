@@ -1,4 +1,8 @@
 ﻿using MediatR;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.DeleteProductSize;
-public record DeleteProductSizeCommand(Guid ProductId, Guid SizeId) : IRequest;
+public record DeleteProductSizeCommand : IRequest
+{
+	public Guid ProductId { get; set; }
+	public Guid SizeId { get; set; }
+}

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Product.Size;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProductSize;
@@ -18,14 +19,17 @@ public class ProductSizesController : BaseController
 	/// <summary>
 	/// Retrieves product sizes by product ID.
 	/// </summary>
-	/// <param name="id">The ID of the product.</param>
+	/// <param name="request">The ID of the product.</param>
 	/// <returns>The product sizes.</returns>
 	[HttpGet]
 	public async Task<IActionResult> GetProductSizes(
-		Guid id,
+		[FromRoute] BaseRequestId request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		var result = await mediator.Send(new GetProductSizesQuery(id));
+
+		var query = mapper.Map<GetProductSizesQuery>(request);
+		var result = await mediator.Send(query);
 
 		return Ok(result);
 	}
@@ -52,16 +56,17 @@ public class ProductSizesController : BaseController
 	/// <summary>
 	/// Deletes a product size by product and size IDs.
 	/// </summary>
-	/// <param name="id">The ID of the product.</param>
-	/// <param name="sizeId">The ID of the size.</param>
+	/// <param name="request.id">The ID of the product.</param>
+	/// <param name="request.sizeId">The ID of the size.</param>
 	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{sizeId:guid}")]
 	public async Task<IActionResult> DeleteProductSize(
-		Guid id,
-		Guid sizeId,
+		[FromRoute] DeleteProductSizeRequest request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		await mediator.Send(new DeleteProductSizeCommand(id, sizeId));
+		var command = mapper.Map<DeleteProductSizeCommand>(request);
+		await mediator.Send(command);
 
 		return NoContent();
 	}
@@ -69,18 +74,18 @@ public class ProductSizesController : BaseController
 	/// <summary>
 	/// Updates the quantity in stock of a product size.
 	/// </summary>
-	/// <param name="id">The ID of the product.</param>
-	/// <param name="sizeId">The ID of the size.</param>
+	/// <param name="request.id">The ID of the product.</param>
+	/// <param name="request.sizeId">The ID of the size.</param>
 	/// <param name="QuantityInStock">The updated quantity in stock.</param>
 	/// <returns>No content if the update is successful.</returns>
 	[HttpPut("{sizeId:guid}")]
 	public async Task<IActionResult> UpdateProductSize(
-		Guid id,
-		Guid sizeId,
-		int QuantityInStock,
+		[FromRoute] UpdateProductSizeRequest request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		await mediator.Send(new UpdateProductSizeCommand(id, sizeId, QuantityInStock));
+		var command = mapper.Map<UpdateProductSizeCommand>(request);
+		await mediator.Send(command);
 
 		return NoContent();
 	}

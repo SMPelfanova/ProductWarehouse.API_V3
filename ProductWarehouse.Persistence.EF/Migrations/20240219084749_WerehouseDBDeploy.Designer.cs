@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductWarehouse.Persistence.EF;
 
@@ -11,13 +12,15 @@ using ProductWarehouse.Persistence.EF;
 namespace ProductWarehouse.Persistence.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240219084749_WerehouseDBDeploy")]
+    partial class WerehouseDBDeploy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -46,9 +49,9 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f6bc2b1e-c221-42c7-9d7b-da1520994ef3"),
+                            Id = new Guid("9ded1da9-4ad3-44af-8192-40fdecf9ff29"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("9576d43e-a65a-4ecb-b576-988f70aa8d46")
+                            UserId = new Guid("fb76807b-3ef2-4800-952d-ff8d5396eaea")
                         });
                 });
 
@@ -114,19 +117,19 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3197fece-ecc4-4db3-9cb2-dea1a16a4b6f"),
+                            Id = new Guid("465776d8-f3cb-4af5-b40e-a8f8ae2df4dc"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Zara"
                         },
                         new
                         {
-                            Id = new Guid("b0d567a9-8648-4cc2-98ce-8938bac49ee4"),
+                            Id = new Guid("64e35c94-facf-4b65-af8e-6e1a8f86f515"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Bershka"
                         },
                         new
                         {
-                            Id = new Guid("f6e4baab-2ad4-474e-9c78-84140fe0b88d"),
+                            Id = new Guid("014d1da2-5dac-4620-936f-6fddaaa53bdd"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Stella Nova"
                         });
@@ -155,13 +158,13 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("254a7e0b-88fa-4d17-8c33-9e31a152521d"),
+                            Id = new Guid("35316bda-6956-41b8-9b89-b9df1506e9cd"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Casual"
                         },
                         new
                         {
-                            Id = new Guid("e44f63fa-ee64-4de0-80af-b2a3754894ab"),
+                            Id = new Guid("23b1f647-6051-417e-9878-0c3261e8e27b"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Comfortable"
                         });
@@ -268,13 +271,13 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("22fb68fa-0224-454d-9442-a51a12e289af"),
+                            Id = new Guid("12616c46-2f71-4b14-b8db-48ce8a2b67cb"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Pending"
                         },
                         new
                         {
-                            Id = new Guid("3810d28a-bf6e-4732-b655-3fb43e4565f5"),
+                            Id = new Guid("03097b8d-2d8c-454f-b716-d5558cffa4b4"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Delivered"
                         });
@@ -431,31 +434,31 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1b9b5079-9319-49c1-a04e-54397d1b3d6f"),
+                            Id = new Guid("7aec896d-d614-4e17-83cd-db0f48031f0c"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XS"
                         },
                         new
                         {
-                            Id = new Guid("339638a2-ae03-4efe-8207-150f38f124d1"),
+                            Id = new Guid("4c0a66b6-bd04-4b6d-8ea3-df94ad3f8168"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "S"
                         },
                         new
                         {
-                            Id = new Guid("9ea49eef-4987-4578-ae8d-801bb1ed33f0"),
+                            Id = new Guid("70608050-b26f-4cea-af7b-e62ae041132d"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "M"
                         },
                         new
                         {
-                            Id = new Guid("8d2d879d-6464-4919-9ebe-27e4a2955b52"),
+                            Id = new Guid("7e480876-7569-4cbd-a747-ffffdf004d38"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "L"
                         },
                         new
                         {
-                            Id = new Guid("2b692993-2542-4329-b5a8-98e0926687b3"),
+                            Id = new Guid("4b80794b-39bd-4bf5-9792-5c21c151a062"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XL"
                         });
@@ -511,7 +514,7 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9576d43e-a65a-4ecb-b576-988f70aa8d46"),
+                            Id = new Guid("fb76807b-3ef2-4800-952d-ff8d5396eaea"),
                             Address = "Street default",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "test@email.com",

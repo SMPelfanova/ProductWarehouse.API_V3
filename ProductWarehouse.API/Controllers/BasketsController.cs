@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Basket;
 using ProductWarehouse.API.Models.Responses.Basket;
 using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
@@ -19,15 +20,16 @@ public class BasketsController : BaseController
 	/// <summary>
 	/// Retrieve a user's basket by user ID.
 	/// </summary>
-	/// <param name="userId">User ID.</param>
+	/// <param name="request">User ID.</param>
 	/// <returns>Returns the user's basket.</returns>
 	[HttpGet("{userId:guid}")]
 	public async Task<IActionResult> GetBasket(
-		Guid userId,
+		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		var result = await mediator.Send(new GetBasketQuery(userId));
+		var comamnd = mapper.Map<GetBasketQuery>(request);
+		var result = await mediator.Send(comamnd);
 		var basket = mapper.Map<BasketResponse>(result);
 
 		return Ok(basket);
@@ -36,14 +38,17 @@ public class BasketsController : BaseController
 	/// <summary>
 	/// Delete a user's basket by user ID.
 	/// </summary>
-	/// <param name="userId">User ID.</param>
+	/// <param name="request">User ID.</param>
 	/// <returns>Returns no content.</returns>
 	[HttpDelete("{userId:guid}")]
 	public async Task<IActionResult> DeleteBasket(
-		Guid userId,
+		[FromRoute] BaseRequestUserId request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		await mediator.Send(new DeleteBasketCommand(userId));
+		var comamnd = mapper.Map<DeleteBasketCommand>(request);
+
+		await mediator.Send(comamnd);
 
 		return NoContent();
 	}
@@ -76,11 +81,12 @@ public class BasketsController : BaseController
 	/// <returns>Returns no content.</returns>
 	[HttpDelete("{userId:guid}/{basketLineId:guid}")]
 	public async Task<IActionResult> DeleteBaskeLine(
-		 Guid userId,
-		 Guid basketLineId,
+		 [FromRoute] DeleteBasketLineRequest request,
+		 [FromServices] IMapper mapper,
 		 [FromServices] IMediator mediator)
 	{
-		await mediator.Send(new DeleteBasketLineCommand(userId, basketLineId));
+		var comand = mapper.Map<DeleteBasketLineCommand>(request);
+		await mediator.Send(comand);
 
 		return NoContent();
 	}

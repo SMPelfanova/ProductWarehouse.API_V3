@@ -1,6 +1,6 @@
 ﻿namespace ProductWarehouse.Domain.Entities;
 
-public class Basket : Entity
+public class Baskets : Entity
 {
 	public User User { get; set; }
 	public Guid UserId { get; set; }

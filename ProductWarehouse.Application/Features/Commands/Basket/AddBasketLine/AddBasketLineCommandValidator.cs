@@ -49,7 +49,9 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 
 	private async Task<bool> NotAlreadyAdded(Guid userId, Guid productId, Guid sizeId, CancellationToken cancellationToken)
 	{
-		return await _unitOfWork.BasketLines.GetByProductAndSizeAsync(userId, productId, sizeId);
+		bool alreadyAded = await _unitOfWork.BasketLines.CheckProductAndSizeAddedAsync(userId, productId, sizeId);
+		
+		return !alreadyAded;
 	}
 
 }

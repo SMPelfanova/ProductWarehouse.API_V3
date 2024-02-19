@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.Application.Features.Queries.Brands.GetAllBrands;
 using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
 
@@ -15,9 +17,13 @@ public class BrandsController : BaseController
 	/// </summary>
 	/// <returns>A list of all brands.</returns>
 	[HttpGet]
-	public async Task<IActionResult> GetBrands([FromServices] IMediator mediator)
+	public async Task<IActionResult> GetBrands(
+		[FromRoute] BaseEmptyRequest request,
+		[FromServices] IMapper mapper,
+		[FromServices] IMediator mediator)
 	{
-		var result = await mediator.Send(new GetAllBrandsQuery());
+		var query = mapper.Map<GetAllBrandsQuery>(request);
+		var result = await mediator.Send(query);
 
 		return Ok(result);
 	}
@@ -25,12 +31,16 @@ public class BrandsController : BaseController
 	/// <summary>
 	/// Get a brand by ID.
 	/// </summary>
-	/// <param name="id">The ID of the brand to retrieve.</param>
+	/// <param name="request">The ID of the brand to retrieve.</param>
 	/// <returns>The brand with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
-	public async Task<IActionResult> GetBrand(Guid id, [FromServices] IMediator mediator)
+	public async Task<IActionResult> GetBrand(
+		[FromRoute] BaseRequestId request,
+		[FromServices] IMapper mapper,
+		[FromServices] IMediator mediator)
 	{
-		var result = await mediator.Send(new GetBrandQuery(id));
+		var query = mapper.Map<GetBrandQuery>(request);
+		var result = await mediator.Send(query);
 
 		return Ok(result);
 	}

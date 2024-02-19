@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.EF.Repositories;
 
@@ -13,8 +14,11 @@ public static class DependencyInjectionExtensions
 		IConfiguration configuration)
 	{
 		services.AddDbContext<ApplicationDbContext>(options =>
-			options.UseSqlServer(configuration.GetConnectionString("WerehouseSqlDbConnectionString")),
-			ServiceLifetime.Scoped);
+		{
+			options.EnableSensitiveDataLogging();
+			options.UseSqlServer(configuration.GetConnectionString("WerehouseSqlDbConnectionString"));
+		});
+
 		services.AddScoped<IProductRepository, ProductRepository>();
 		services.AddScoped<IGroupRepository, GroupRepository>();
 		services.AddScoped<IUserRepository, UserRepository>();

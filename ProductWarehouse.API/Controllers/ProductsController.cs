@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
@@ -23,10 +24,12 @@ public class ProductsController : BaseController
 	/// <response code="200">Returns list of products</response>
 	[HttpGet]
 	public async Task<IActionResult> GetProducts(
+		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
 	{
-		var result = await mediator.Send(new GetAllProductsQuery());
+		var query = mapper.Map<GetAllProductsQuery>(request);
+		var result = await mediator.Send(query);
 
 		var products = mapper.Map<List<ProductResponse>>(result.Products);
 
@@ -59,10 +62,12 @@ public class ProductsController : BaseController
 	/// <returns>The product with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
 	public async Task<IActionResult> GetProduct(
-		Guid id,
+		[FromRoute] BaseRequestId request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		var product = await mediator.Send(new GetProductQuery(id));
+		var query = mapper.Map<GetProductQuery>(request);
+		var product = await mediator.Send(query);
 
 		return Ok(product);
 	}
@@ -109,10 +114,13 @@ public class ProductsController : BaseController
 	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{id:guid}")]
 	public async Task<IActionResult> DeleteProduct(
-		Guid id,
+		[FromRoute] BaseRequestId request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		await mediator.Send(new DeleteProductCommand(id));
+		var command = mapper.Map<DeleteProductCommand>(request);
+		await mediator.Send(command);
+
 		return NoContent();
 	}
 }

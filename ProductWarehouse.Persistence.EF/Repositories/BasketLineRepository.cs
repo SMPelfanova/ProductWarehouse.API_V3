@@ -18,12 +18,16 @@ public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepositor
 		_logger = logger;
 	}
 
-	public async Task<bool> GetByProductAndSizeAsync(Guid userId, Guid productId, Guid sizeId)
+	public async Task<bool> CheckProductAndSizeAddedAsync(Guid userId, Guid productId, Guid sizeId)
 	{
 		try
 		{
-			var basket = await _dbContext.Basket.SingleAsync(x => x.UserId == userId);
-			return !basket.BasketLines.Any(x => x.ProductId == productId && x.SizeId == sizeId);
+			var basket = await _dbContext.Baskets.Include(x=>x.BasketLines).SingleAsync(x => x.UserId == userId);
+			if (basket?.BasketLines == null)
+			{
+				return false;
+			}
+			return basket.BasketLines.Any(x => x.ProductId == productId && x.SizeId == sizeId);
 		}
 		catch (InvalidOperationException ex)
 		{

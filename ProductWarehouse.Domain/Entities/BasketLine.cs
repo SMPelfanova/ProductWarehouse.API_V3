@@ -2,7 +2,7 @@
 
 public class BasketLine : Entity
 {
-	public Basket Basket { get; set; }
+	public Baskets Basket { get; set; }
 	public Guid BasketId { get; set; }
 	public Product Product { get; set; }
 	public Guid ProductId { get; set; }

@@ -3,14 +3,14 @@ using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
-public class BasketConfiguration : EntityConfiguration<Basket>
+public class BasketConfiguration : EntityConfiguration<Baskets>
 {
-	public override void Configure(EntityTypeBuilder<Basket> builder)
+	public override void Configure(EntityTypeBuilder<Baskets> builder)
 	{
 		base.Configure(builder);
 
 		builder.HasOne(b => b.User)
 			.WithOne(b => b.Basket)
-			.HasForeignKey<Basket>(b => b.UserId);
+			.HasForeignKey<Baskets>(b => b.UserId);
 	}
 }

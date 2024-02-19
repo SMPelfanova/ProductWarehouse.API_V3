@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Order;
 using ProductWarehouse.API.Models.Responses.Order;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
@@ -23,20 +24,16 @@ public class OrdersController : BaseController
 	/// <summary>
 	/// Get orders for a specific user.
 	/// </summary>
-	/// <param name="userId">The ID of the user whose orders are to be retrieved.</param>
+	/// <param name="request">The ID of the user whose orders are to be retrieved.</param>
 	/// <returns>The orders for the specified user.</returns>
 	[HttpGet("{userId:guid}")]
 	public async Task<IActionResult> GetOrders(
-		Guid userId,
+		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
 	{
-		var orders = await mediator.Send(new GetAllOrdersQuery(userId));
-
-		//if (!orders.Any())
-		//{
-		//	return NotFound();
-		//}
+		var query = mapper.Map<GetAllOrdersQuery>(request);
+		var orders = await mediator.Send(query);
 		var result = mapper.Map<List<OrderStatusResponse>>(orders);
 
 		return Ok(result);
@@ -45,16 +42,16 @@ public class OrdersController : BaseController
 	/// <summary>
 	/// Get orders for a specific user.
 	/// </summary>
-	/// <param name="userId">The ID of the user whose orders are to be retrieved.</param>
+	/// <param name="request">The ID of the user whose orders are to be retrieved.</param>
 	/// <returns>The orders for the specified user.</returns>
 	[HttpGet("{userId:guid}/{id:guid}")]
 	public async Task<IActionResult> GetOrder(
-		Guid id,
-		Guid userId,
+		[FromRoute] GetOrderRequest request,
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
 	{
-		var order = await mediator.Send(new GetOrderQuery(id, userId));
+		var query = mapper.Map<GetOrderQuery>(request);
+		var order = await mediator.Send(query);
 		var result = mapper.Map<OrderStatusResponse>(order);
 
 		return Ok(result);
@@ -100,14 +97,16 @@ public class OrdersController : BaseController
 	/// <summary>
 	/// Delete an order by ID.
 	/// </summary>
-	/// <param name="id">The ID of the order to delete.</param>
+	/// <param name="request">The ID of the order to delete.</param>
 	/// <returns>No content if successful.</returns>
 	[HttpDelete("{id:guid}")]
 	public async Task<IActionResult> DeleteOrder(
-		Guid id,
+		[FromRoute] BaseRequestId request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		await mediator.Send(new DeleteOrderCommand(id));
+		var command = mapper.Map<DeleteOrderCommand>(request);
+		await mediator.Send(command);
 
 		return NoContent();
 	}

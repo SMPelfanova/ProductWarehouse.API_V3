@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using ProductWarehouse.API.Models.Requests;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Basket;
 using ProductWarehouse.API.Models.Requests.Order;
 using ProductWarehouse.API.Models.Requests.Product.Group;
@@ -12,12 +13,30 @@ using ProductWarehouse.API.Models.Responses.Group;
 using ProductWarehouse.API.Models.Responses.Order;
 using ProductWarehouse.API.Models.Responses.Size;
 using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
+using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasket;
+using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
+using ProductWarehouse.Application.Features.Commands.Orders.DeleteOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.Application.Features.Commands.Products;
+using ProductWarehouse.Application.Features.Commands.Products.DeleteProductGroup;
+using ProductWarehouse.Application.Features.Commands.Products.DeleteProductSize;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
+using ProductWarehouse.Application.Features.Commands.Products.UpdateProductSize;
+using ProductWarehouse.Application.Features.Queries.Basket.GetBasket;
+using ProductWarehouse.Application.Features.Queries.Brands.GetAllBrands;
+using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
+using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
+using ProductWarehouse.Application.Features.Queries.Groups.GetAllGroups;
+using ProductWarehouse.Application.Features.Queries.Groups.GetGroup;
+using ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
+using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
+using ProductWarehouse.Application.Features.Queries.OrderStatuses;
+using ProductWarehouse.Application.Features.Queries.Products.GetProductGroups;
+using ProductWarehouse.Application.Features.Queries.Products.GetProductSizes;
+using ProductWarehouse.Application.Features.Queries.Sizes;
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.API.Mapping;
@@ -31,7 +50,7 @@ public class AutoMapperProfile : Profile
 		MapFromDtoToResponse();
 	}
 
-	private void MapFromRequestToQueries()
+	private void MapFromRequestToCommands()
 	{
 		CreateMap<AddBasketLineRequest, AddBasketLineCommand>();
 		CreateMap<UpdateBasketLineRequest, UpdateBasketLineCommand>();
@@ -53,11 +72,36 @@ public class AutoMapperProfile : Profile
 
 		CreateMap<JsonPatchDocument<UpdateOrderRequest>, JsonPatchDocument<PartialUpdateOrderCommandRequest>>();
 		CreateMap<Operation<UpdateOrderRequest>, Operation<PartialUpdateOrderCommandRequest>>();
+		CreateMap<BaseRequestUserId, DeleteBasketCommand>();
+		CreateMap<BaseRequestId, DeleteOrderCommand>();
+		CreateMap<DeleteBasketLineRequest, DeleteBasketLineCommand>();
+		CreateMap<DeleteProductGroupRequest, DeleteProductGroupCommand>();
+		CreateMap<DeleteProductSizeRequest, DeleteProductSizeCommand>();
+		CreateMap<UpdateProductSizeRequest, UpdateProductSizeCommand>();
 	}
 
-	private void MapFromRequestToCommands()
+	private void MapFromRequestToQueries()
 	{
 		CreateMap<FilterProductsRequest, GetAllProductsQuery>();
+
+		CreateMap<BaseRequestUserId, GetBasketQuery>();
+		CreateMap<BaseRequestUserId, GetAllOrdersQuery>();
+		CreateMap<GetOrderRequest, GetOrderQuery>();
+		
+		CreateMap<BaseRequestId, GetSizeQuery>();
+		CreateMap<BaseRequestId, GetOrderStatusQuery>();
+		CreateMap<BaseRequestId, GetGroupQuery>();
+		CreateMap<BaseRequestId, GetBrandQuery>();
+		CreateMap<BaseRequestId, GetProductGroupsQuery>();
+		CreateMap<BaseRequestId, GetProductSizesQuery>();
+		CreateMap<BaseRequestId, GetProductQuery>();
+		
+		CreateMap<BaseEmptyRequest, GetAllSizesQuery>();
+		CreateMap<BaseEmptyRequest, GetAllBrandsQuery>();
+		CreateMap<BaseEmptyRequest, GetAllOrderStatusesQuery>();
+		CreateMap<BaseEmptyRequest, GetAllGroupsQuery>();
+		CreateMap<BaseEmptyRequest, GetAllProductsQuery>();
+		
 	}
 
 	private void MapFromDtoToResponse()

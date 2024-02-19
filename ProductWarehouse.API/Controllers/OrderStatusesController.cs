@@ -1,5 +1,8 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductWarehouse.API.Models.Requests.Base;
+using ProductWarehouse.Application.Features.Queries.Groups.GetAllGroups;
 using ProductWarehouse.Application.Features.Queries.OrderStatuses;
 
 namespace ProductWarehouse.API.Controllers;
@@ -14,9 +17,13 @@ public class OrderStatusesController : BaseController
 	/// </summary>
 	/// <returns>A list of all order statuses.</returns>
 	[HttpGet]
-	public async Task<IActionResult> GetOrderStatuses([FromServices] IMediator mediator)
+	public async Task<IActionResult> GetOrderStatuses(
+		[FromRoute] BaseEmptyRequest request,
+		[FromServices] IMapper mapper,
+		[FromServices] IMediator mediator)
 	{
-		var result = await mediator.Send(new GetAllOrderStatusesQuery());
+		var query = mapper.Map<GetAllOrderStatusesQuery>(request);
+		var result = await mediator.Send(query);
 
 		return Ok(result);
 	}
@@ -24,12 +31,16 @@ public class OrderStatusesController : BaseController
 	/// <summary>
 	/// Get an order status by ID.
 	/// </summary>
-	/// <param name="id">The ID of the order status to retrieve.</param>
+	/// <param name="request">The ID of the order status to retrieve.</param>
 	/// <returns>The order status with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
-	public async Task<IActionResult> GetOrderStatus(Guid id, [FromServices] IMediator mediator)
+	public async Task<IActionResult> GetOrderStatus(
+		[FromRoute] BaseRequestId request,
+		[FromServices] IMapper mapper, 
+		[FromServices] IMediator mediator)
 	{
-		var result = await mediator.Send(new GetOrderStatusQuery(id));
+		var query = mapper.Map<GetOrderStatusQuery>(request);
+		var result = await mediator.Send(query);
 
 		return Ok(result);
 	}

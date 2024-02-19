@@ -11,5 +11,5 @@ public class User : Entity
 	public bool IsDeleted { get; set; }
 	public ICollection<Order> Orders { get; set; }
 	public ICollection<UserRole> UserRoles { get; set; }
-	public Basket Basket { get; set; }
+	public Baskets Basket { get; set; }
 }

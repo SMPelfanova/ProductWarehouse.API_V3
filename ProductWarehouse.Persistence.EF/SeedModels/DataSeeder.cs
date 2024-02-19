@@ -19,8 +19,8 @@ public static class DataSeeder
 				Address = "Street default"
 			});
 
-		modelBuilder.Entity<Basket>().HasData(
-			new Basket
+		modelBuilder.Entity<Baskets>().HasData(
+			new Baskets
 			{
 				Id = Guid.NewGuid(),
 				UserId = userid

@@ -7,7 +7,7 @@ using Serilog;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
 
-public class BasketRepository : Repository<Basket>, IBasketRepository
+public class BasketRepository : Repository<Baskets>, IBasketRepository
 {
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger _logger;
@@ -18,11 +18,11 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
 		_logger = logger;
 	}
 
-	public async Task<Basket> GetBasketByUserIdAsync(Guid userId)
+	public async Task<Baskets> GetBasketByUserIdAsync(Guid userId)
 	{
 		try
 		{
-			return await _dbContext.Basket
+			return await _dbContext.Baskets
 						.Include(b => b.BasketLines)
 						.SingleAsync(b => b.UserId == userId);
 		}
@@ -42,11 +42,11 @@ public class BasketRepository : Repository<Basket>, IBasketRepository
 	{
 		try
 		{
-			var basket = _dbContext.Basket
+			var basket = _dbContext.Baskets
 						.Include(b => b.BasketLines)
 						.Single(x => x.UserId == userId);
 
-			_dbContext.BasketLine.RemoveRange(basket.BasketLines);
+			_dbContext.BasketLines.RemoveRange(basket.BasketLines);
 		}
 		catch (InvalidOperationException ex)
 		{

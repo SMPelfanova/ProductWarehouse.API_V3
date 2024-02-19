@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Product.Group;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProductGroup;
@@ -17,14 +18,16 @@ public class ProductGroupsController : BaseController
 	/// <summary>
 	/// Retrieves all product groups for a specified product.
 	/// </summary>
-	/// <param name="id">The ID of the product.</param>
+	/// <param name="request">The ID of the product.</param>
 	/// <returns>A list of product groups associated with the specified product.</returns>
 	[HttpGet]
 	public async Task<IActionResult> GetProductGroups(
-		Guid id,
+		[FromRoute] BaseRequestId request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		var result = await mediator.Send(new GetProductGroupsQuery(id));
+		var query = mapper.Map<GetProductGroupsQuery>(request);
+		var result = await mediator.Send(query);
 
 		return Ok(result);
 	}
@@ -51,16 +54,17 @@ public class ProductGroupsController : BaseController
 	/// <summary>
 	/// Deletes a product group for a specified product.
 	/// </summary>
-	/// <param name="id">The ID of the product.</param>
-	/// <param name="groupId">The ID of the group to be deleted.</param>
+	/// <param name="request.id">The ID of the product.</param>
+	/// <param name="request.groupId">The ID of the group to be deleted.</param>
 	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{groupId:guid}")]
 	public async Task<IActionResult> DeleteProductGroup(
-		Guid id,
-		Guid groupId,
+		[FromRoute] DeleteProductGroupRequest request,
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-		await mediator.Send(new DeleteProductGroupCommand(id, groupId));
+		var command = mapper.Map<DeleteProductGroupCommand>(request);
+		await mediator.Send(command);
 
 		return NoContent();
 	}

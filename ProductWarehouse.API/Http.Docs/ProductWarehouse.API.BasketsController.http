@@ -1,7 +1,7 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
 @ProductId = 11ead65f-14e8-4362-1b2f-08dc2c6aea3f
 @UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
-@SizeId = ea88c493-9e58-47c7-80cd-766ac89a7a01
+@SizeId = 2aef86e1-2190-455a-890f-c19b276c97e1
 
 ### Get Basket
 GET {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}
@@ -21,16 +21,16 @@ Content-Type: application/json
 }
 
 ### Delete Basket Line
-DELETE {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}/394ecad9-5215-4975-98dd-08dc2ca2023c
+DELETE {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}/4f06c7ae-b1f6-4e34-e5d0-08dc31472970
 
 ### Update Basket Line
 PUT {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}
 Content-Type: application/json
 
 {
-  "id": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
-  "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
+  "id": "9d0cc97a-23eb-4262-e5ce-08dc31472970",
+  "productId": "{{ProductId}}",
   "quantity": 10,
   "price" : 220,
-  "sizeId": "ea88c493-9e58-47c7-80cd-766ac89a7a01"
+  "sizeId": "{{SizeId}}"
 }

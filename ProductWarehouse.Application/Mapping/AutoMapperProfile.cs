@@ -29,7 +29,7 @@ public class AutoMapperProfile : Profile
 		CreateMap<Group, GroupDto>().ReverseMap();
 		CreateMap<BasketLine, BasketLineDto>().ReverseMap();
 
-		CreateMap<Basket, BasketDto>()
+		CreateMap<Baskets, BasketDto>()
 		   .ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.BasketLines));
 
 		CreateMap<Order, OrderDto>().ReverseMap();
@@ -50,7 +50,7 @@ public class AutoMapperProfile : Profile
 
 	private void MapFromDtoToEntity()
 	{
-		CreateMap<BasketDto, Basket>()
+		CreateMap<BasketDto, Baskets>()
 			.ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.BasketLines));
 
 		CreateMap<Size, SizeDto>().ReverseMap();
@@ -71,7 +71,7 @@ public class AutoMapperProfile : Profile
 		CreateMap<AddBasketLineCommand, BasketLine>();
 		
 		CreateMap<UpdateProductSizeCommand, ProductSize>()
-			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id));
+			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId));
 
 		CreateMap<CreateProductCommand, Product>()
 			.ForMember(dest => dest.ProductGroups, opt => opt.MapFrom(src => src.Groups))

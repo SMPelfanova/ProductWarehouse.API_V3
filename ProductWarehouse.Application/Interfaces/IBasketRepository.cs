@@ -3,9 +3,9 @@ using ProductWarehouse.Persistence.Abstractions.Interfaces;
 
 namespace ProductWarehouse.Application.Interfaces;
 
-public interface IBasketRepository : IRepository<Basket>
+public interface IBasketRepository : IRepository<Baskets>
 {
-	Task<Basket> GetBasketByUserIdAsync(Guid userId);
+	Task<Baskets> GetBasketByUserIdAsync(Guid userId);
 
 	void DeleteBasketLines(Guid userId);
 }
