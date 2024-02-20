@@ -23,6 +23,7 @@ public class BasketsController : BaseController
 	/// <param name="request">User ID.</param>
 	/// <returns>Returns the user's basket.</returns>
 	[HttpGet("{userId:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetBasket(
 		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMapper mapper,
@@ -41,6 +42,7 @@ public class BasketsController : BaseController
 	/// <param name="request">User ID.</param>
 	/// <returns>Returns no content.</returns>
 	[HttpDelete("{userId:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> DeleteBasket(
 		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMapper mapper,
@@ -60,6 +62,7 @@ public class BasketsController : BaseController
 	/// <param name="addBasketLineRequest">Basket line request.</param>
 	/// <returns>Returns the ID of the added basket line.</returns>
 	[HttpPost("{userId:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> AddBasketLine(
 		Guid userId,
 		[FromBody] AddBasketLineRequest addBasketLineRequest,
@@ -69,8 +72,10 @@ public class BasketsController : BaseController
 		var command = mapper.Map<AddBasketLineCommand>(addBasketLineRequest);
 		command.UserId = userId;
 		var result = await mediator.Send(command);
+		
+		var basketLineRespose = mapper.Map<BasketLineResponse>(result);
 
-		return Ok(result);
+		return Ok(basketLineRespose);
 	}
 
 	/// <summary>
@@ -80,6 +85,7 @@ public class BasketsController : BaseController
 	/// <param name="basketLineId">Basket line ID.</param>
 	/// <returns>Returns no content.</returns>
 	[HttpDelete("{userId:guid}/{basketLineId:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> DeleteBaskeLine(
 		 [FromRoute] DeleteBasketLineRequest request,
 		 [FromServices] IMapper mapper,
@@ -98,6 +104,7 @@ public class BasketsController : BaseController
 	/// <param name="updatedBasketRequest">Updated basket request.</param>
 	/// <returns>Returns ok.</returns>
 	[HttpPut("{userId:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> UpdateBasketLine(
 		Guid userId,
 		[FromBody] UpdateBasketLineRequest updatedBasketRequest,

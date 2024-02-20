@@ -16,6 +16,7 @@ public class SizesController : BaseController
 	/// </summary>
 	/// <returns>A list of sizes.</returns>
 	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetSizes(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
@@ -33,6 +34,7 @@ public class SizesController : BaseController
 	/// <param name="request">The ID of the size.</param>
 	/// <returns>The size with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetSize(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,

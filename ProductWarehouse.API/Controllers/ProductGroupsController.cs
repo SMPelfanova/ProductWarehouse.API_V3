@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Product.Group;
+using ProductWarehouse.API.Models.Responses.Group;
+using ProductWarehouse.API.Models.Responses.Product;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProductGroup;
 using ProductWarehouse.Application.Features.Queries.Products.GetProductGroups;
@@ -21,6 +23,7 @@ public class ProductGroupsController : BaseController
 	/// <param name="request">The ID of the product.</param>
 	/// <returns>A list of product groups associated with the specified product.</returns>
 	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetProductGroups(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
@@ -28,8 +31,9 @@ public class ProductGroupsController : BaseController
 	{
 		var query = mapper.Map<GetProductGroupsQuery>(request);
 		var result = await mediator.Send(query);
+		var productGroupsResonse = mapper.Map<List<GroupResponse>>(result);
 
-		return Ok(result);
+		return Ok(productGroupsResonse);
 	}
 
 	/// <summary>
@@ -39,6 +43,7 @@ public class ProductGroupsController : BaseController
 	/// <param name="request">The request containing the group ID.</param>
 	/// <returns>The newly created product group.</returns>
 	[HttpPost]
+	[ProducesResponseType(StatusCodes.Status201Created)]
 	public async Task<IActionResult> CreateProductGroup(
 		Guid id,
 		[FromBody] CreateProductGroupRequest request,
@@ -46,9 +51,10 @@ public class ProductGroupsController : BaseController
 		[FromServices] IMapper mapper)
 	{
 		var command = mapper.Map<CreateProductGroupCommand>(request);
-		var resultId = await mediator.Send(command);
+		var result = await mediator.Send(command);
+		var productGroupsResonse = mapper.Map<ProductGroupResponse>(result);
 
-		return CreatedAtAction(nameof(GetProductGroups), new { id = id }, request);
+		return CreatedAtAction(nameof(GetProductGroups), new { id = request.Id }, productGroupsResonse);
 	}
 
 	/// <summary>
@@ -58,6 +64,7 @@ public class ProductGroupsController : BaseController
 	/// <param name="request.groupId">The ID of the group to be deleted.</param>
 	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{groupId:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> DeleteProductGroup(
 		[FromRoute] DeleteProductGroupRequest request,
 		[FromServices] IMapper mapper,

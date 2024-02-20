@@ -23,6 +23,7 @@ public class ProductsController : BaseController
 	/// <returns>List of products.</returns>
 	/// <response code="200">Returns list of products</response>
 	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetProducts(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMediator mediator,
@@ -43,6 +44,7 @@ public class ProductsController : BaseController
 	/// <returns>Filtered products.</returns>
 	/// <response code="200">Returns filtered products</response>
 	[HttpGet("filter")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetProducts(
 		[FromQuery] FilterProductsRequest productsFilter,
 		[FromServices] IMediator mediator,
@@ -61,6 +63,7 @@ public class ProductsController : BaseController
 	/// <param name="id">The ID of the product.</param>
 	/// <returns>The product with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetProduct(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
@@ -69,7 +72,9 @@ public class ProductsController : BaseController
 		var query = mapper.Map<GetProductQuery>(request);
 		var product = await mediator.Send(query);
 
-		return Ok(product);
+		var productResponse = mapper.Map<ProductResponse>(product);
+
+		return Ok(productResponse);
 	}
 
 	/// <summary>
@@ -78,16 +83,18 @@ public class ProductsController : BaseController
 	/// <param name="request">The request containing the product details.</param>
 	/// <returns>The newly created product.</returns>
 	[HttpPost]
+	[ProducesResponseType(StatusCodes.Status201Created)]
 	public async Task<IActionResult> CreateProduct(
 		[FromBody] CreateProductRequest request,
 		[FromServices] IMediator mediator,
 		[FromServices] IMapper mapper)
 	{
 		var command = mapper.Map<CreateProductCommand>(request);
+		var product = await mediator.Send(command);
 
-		var productId = await mediator.Send(command);
+		var productResponse = mapper.Map<ProductResponse>(product);
 
-		return CreatedAtAction(nameof(GetProduct), new { id = productId }, request);
+		return CreatedAtAction(nameof(GetProduct), new { id = productResponse.Id }, productResponse);
 	}
 
 	/// <summary>
@@ -96,6 +103,7 @@ public class ProductsController : BaseController
 	/// <param name="request">The request containing the updated product details.</param>
 	/// <returns>No content if the update is successful.</returns>
 	[HttpPut]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> UpdateProduct(
 		[FromBody] UpdateProductRequest request,
 		[FromServices] IMediator mediator,
@@ -113,6 +121,7 @@ public class ProductsController : BaseController
 	/// <param name="id">The ID of the product to delete.</param>
 	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> DeleteProduct(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,

@@ -13,7 +13,7 @@ GET {{ProductWarehouse.API_HostAddress}}/api/products
 GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
 
 ### Get Product
-GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}
+GET {{ProductWarehouse.API_HostAddress}}/api/products/03a9f741-9a9e-4159-2de9-08dc320c7549
 
 ### Create Product
 POST {{ProductWarehouse.API_HostAddress}}/api/products
@@ -23,7 +23,7 @@ Content-Type: application/json
     "title": "Product X",
     "description": "Description of Product 3",
     "photo": "product3.jpg",
-    "price": 0,
+    "price": 10,
     "brandId": "{{BrandId}}",
     "sizes": [
       {
@@ -43,10 +43,22 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-    "id": "dc7a6d7c-e40e-4814-45a6-08dc31ec11f8",
-    "title": "NEW",
-    "description": "NEW",
-    "price": 10000
+  "id": "03a9f741-9a9e-4159-2de9-08dc320c7549",
+  "title": "Product X",
+  "description": "Description of Product 3",
+  "brandId": "e8c25c64-44a8-4481-84fb-29718c37c6b4",
+  "price": 10,
+  "sizes": [
+    {
+      "id": "da35ec2b-24e1-4652-ab48-7671b93b5edc",
+      "quantityInStock": 16
+    }
+  ],
+  "groups": [
+    {
+      "id": "cd95a5b4-efb0-4755-9379-73a81a3a2f9f"
+    }
+  ]
 }
 
 ### Delete Product

@@ -2,7 +2,6 @@
 using MediatR;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProductSize;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.Size.UpdateProductSize;
 

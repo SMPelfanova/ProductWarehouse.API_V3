@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Commands.Products;
-public record CreateProductSizeCommand() : IRequest<Guid>
+public record CreateProductSizeCommand() : IRequest<ProductSizeDto>
 {
 	public Guid ProductId { get; set; }
 	public Guid SizeId { get; set; }

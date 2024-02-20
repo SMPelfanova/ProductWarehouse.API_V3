@@ -27,6 +27,7 @@ public class OrdersController : BaseController
 	/// <param name="request">The ID of the user whose orders are to be retrieved.</param>
 	/// <returns>The orders for the specified user.</returns>
 	[HttpGet("{userId:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetOrders(
 		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMediator mediator,
@@ -45,6 +46,7 @@ public class OrdersController : BaseController
 	/// <param name="request">The ID of the user whose orders are to be retrieved.</param>
 	/// <returns>The orders for the specified user.</returns>
 	[HttpGet("{userId:guid}/{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetOrder(
 		[FromRoute] GetOrderRequest request,
 		[FromServices] IMediator mediator,
@@ -63,6 +65,7 @@ public class OrdersController : BaseController
 	/// <param name="createOrderRequest">The request object containing order details.</param>
 	/// <returns>The created order.</returns>
 	[HttpPost]
+	[ProducesResponseType(StatusCodes.Status201Created)]
 	public async Task<IActionResult> CreateOrder(
 	[FromBody] CreateOrderRequest createOrderRequest,
 	[FromServices] IMapper mapper,
@@ -70,9 +73,9 @@ public class OrdersController : BaseController
 	{
 		var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
 
-		var orderDto = await mediator.Send(command);
+		var order = await mediator.Send(command);
 
-		var orderResponse = mapper.Map<OrderResponse>(orderDto);
+		var orderResponse = mapper.Map<OrderResponse>(order);
 
 		return CreatedAtAction(nameof(GetOrder), new { id = orderResponse.Id, userId = orderResponse.UserId }, orderResponse);
 	}
@@ -84,6 +87,7 @@ public class OrdersController : BaseController
 	/// <param name="patchDocument">The JSON patch document containing updates.</param>
 	/// <returns>No content if successful.</returns>
 	[HttpPatch("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> PartiallyUpdateOrder(
 		Guid id,
 		[FromBody] JsonPatchDocument<UpdateOrderRequest> patchDocument,
@@ -102,6 +106,7 @@ public class OrdersController : BaseController
 	/// <param name="request">The ID of the order to delete.</param>
 	/// <returns>No content if successful.</returns>
 	[HttpDelete("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> DeleteOrder(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,

@@ -17,6 +17,7 @@ public class OrderStatusesController : BaseController
 	/// </summary>
 	/// <returns>A list of all order statuses.</returns>
 	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetOrderStatuses(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
@@ -34,6 +35,7 @@ public class OrderStatusesController : BaseController
 	/// <param name="request">The ID of the order status to retrieve.</param>
 	/// <returns>The order status with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetOrderStatus(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper, 

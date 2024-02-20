@@ -17,6 +17,7 @@ public class BrandsController : BaseController
 	/// </summary>
 	/// <returns>A list of all brands.</returns>
 	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetBrands(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
@@ -34,6 +35,7 @@ public class BrandsController : BaseController
 	/// <param name="request">The ID of the brand to retrieve.</param>
 	/// <returns>The brand with the specified ID.</returns>
 	[HttpGet("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetBrand(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,

@@ -1,37 +1,31 @@
 ﻿using AutoMapper;
 using MediatR;
-using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Application.Models;
 using ProductWarehouse.Domain.Entities;
-using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Products;
 
-public class CreateProductSizeCommandHandler : IRequestHandler<CreateProductSizeCommand, Guid>
+public class CreateProductSizeCommandHandler : IRequestHandler<CreateProductSizeCommand, ProductSizeDto>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
-	private readonly ILogger _logger;
 
-	public CreateProductSizeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
+	public CreateProductSizeCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
-		_logger = logger;
 	}
 
-	public async Task<Guid> Handle(CreateProductSizeCommand request, CancellationToken cancellationToken)
+	public async Task<ProductSizeDto> Handle(CreateProductSizeCommand request, CancellationToken cancellationToken)
 	{
-		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
+		var productSize = _mapper.Map<ProductSize>(request);
+		var result  = await _unitOfWork.ProductSizes.Add(productSize);
+
+		await _unitOfWork.SaveChangesAsync();
 		
-		if (!product.ProductSizes.Any(x => x.SizeId == request.SizeId))
-		{
-			var productSize = _mapper.Map<ProductSize>(request);
-			await _unitOfWork.ProductSizes.Add(productSize);
+		var productSizeDto = _mapper.Map<ProductSizeDto>(result);
 
-			await _unitOfWork.SaveChangesAsync();
-		}
-
-		return request.ProductId;
+		return productSizeDto;
 	}
 }

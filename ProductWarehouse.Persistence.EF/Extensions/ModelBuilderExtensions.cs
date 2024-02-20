@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Domain.Entities;
 
-namespace ProductWarehouse.Persistence.EF.SeedModels;
-public static class DataSeeder
+namespace ProductWarehouse.Persistence.EF.Extensions;
+
+public static class ModelBuilderExtensions
 {
-	public static void SeedData(ModelBuilder modelBuilder)
+	public static void Seed(this ModelBuilder modelBuilder)
 	{
 		Guid userid = Guid.NewGuid();
 		modelBuilder.Entity<User>().HasData(

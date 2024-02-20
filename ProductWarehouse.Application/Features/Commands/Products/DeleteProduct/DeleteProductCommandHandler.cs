@@ -1,19 +1,15 @@
 ﻿using MediatR;
-using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Interfaces;
-using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
 
 public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductCommand>
 {
 	private readonly IUnitOfWork _unitOfWork;
-	private readonly ILogger _logger;
 
-	public DeleteProductSizeCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+	public DeleteProductSizeCommandHandler(IUnitOfWork unitOfWork)
 	{
 		_unitOfWork = unitOfWork;
-		_logger = logger;
 	}
 
 	public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)

@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Product.Size;
+using ProductWarehouse.API.Models.Responses.Product;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProductSize;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProductSize;
@@ -22,16 +23,17 @@ public class ProductSizesController : BaseController
 	/// <param name="request">The ID of the product.</param>
 	/// <returns>The product sizes.</returns>
 	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetProductSizes(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
-
 		var query = mapper.Map<GetProductSizesQuery>(request);
 		var result = await mediator.Send(query);
+		var productSizesResonse = mapper.Map<List<ProductSizeResponse>>(result);
 
-		return Ok(result);
+		return Ok(productSizesResonse);
 	}
 
 	/// <summary>
@@ -41,6 +43,7 @@ public class ProductSizesController : BaseController
 	/// <param name="request">The request containing the product size details.</param>
 	/// <returns>The newly created product size.</returns>
 	[HttpPost]
+	[ProducesResponseType(StatusCodes.Status201Created)]
 	public async Task<IActionResult> CreateProductSize(
 		Guid id,
 		[FromBody] CreateProductSizeRequest request,
@@ -48,9 +51,10 @@ public class ProductSizesController : BaseController
 		[FromServices] IMapper mapper)
 	{
 		var command = mapper.Map<CreateProductSizeCommand>(request);
-		var resultId = await mediator.Send(command);
+		var result = await mediator.Send(command);
+		var productSizeResonse = mapper.Map<ProductSizeResponse>(result);
 
-		return CreatedAtAction(nameof(GetProductSizes), new { id = id }, request);
+		return CreatedAtAction(nameof(GetProductSizes), new { id = id }, productSizeResonse);
 	}
 
 	/// <summary>
@@ -60,6 +64,7 @@ public class ProductSizesController : BaseController
 	/// <param name="request.sizeId">The ID of the size.</param>
 	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{sizeId:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> DeleteProductSize(
 		[FromRoute] DeleteProductSizeRequest request,
 		[FromServices] IMapper mapper,
@@ -79,6 +84,7 @@ public class ProductSizesController : BaseController
 	/// <param name="QuantityInStock">The updated quantity in stock.</param>
 	/// <returns>No content if the update is successful.</returns>
 	[HttpPut("{sizeId:guid}")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> UpdateProductSize(
 		[FromRoute] UpdateProductSizeRequest request,
 		[FromServices] IMapper mapper,

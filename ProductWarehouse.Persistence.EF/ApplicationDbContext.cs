@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Domain.Entities;
-using ProductWarehouse.Persistence.EF.SeedModels;
+using ProductWarehouse.Persistence.EF.Extensions;
 using System.Reflection;
 
 namespace ProductWarehouse.Persistence.EF;
@@ -22,7 +22,8 @@ public class ApplicationDbContext : DbContext
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-		DataSeeder.SeedData(modelBuilder);
+		modelBuilder.Seed();
+
 		base.OnModelCreating(modelBuilder);
 	}
 
@@ -43,6 +44,7 @@ public class ApplicationDbContext : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
+		EnsureDatabaseCreated(optionsBuilder.Options);
 		base.OnConfiguring(optionsBuilder);
 	}
 }

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Application.Models;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 
-public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand, Guid>
+public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand, BasketLineDto>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
@@ -16,15 +17,16 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 		_mapper = mapper;
 	}
 
-	public async Task<Guid> Handle(AddBasketLineCommand request, CancellationToken cancellationToken)
+	public async Task<BasketLineDto> Handle(AddBasketLineCommand request, CancellationToken cancellationToken)
 	{
-		var basketLine = _mapper.Map<BasketLine>(request);
+		var basketLineRequest = _mapper.Map<BasketLine>(request);
 		var basket = await _unitOfWork.Basket.GetBasketByUserIdAsync(request.UserId);
 
-		basketLine.BasketId = basket.Id;
-		var addedBasket = await _unitOfWork.BasketLines.Add(basketLine);
+		basketLineRequest.BasketId = basket.Id;
+		var basketLine = await _unitOfWork.BasketLines.Add(basketLineRequest);
 		await _unitOfWork.SaveChangesAsync();
 
-		return addedBasket.Id;
+		var basketDto = _mapper.Map<BasketLineDto>(basketLine);
+		return basketDto;
 	}
 }

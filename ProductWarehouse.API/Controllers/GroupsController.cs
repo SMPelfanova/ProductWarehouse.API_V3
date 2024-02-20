@@ -17,6 +17,7 @@ public class GroupsController : BaseController
 	/// </summary>
 	/// <returns>A list of all groups.</returns>
 	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetGroups(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
@@ -34,6 +35,7 @@ public class GroupsController : BaseController
 	/// <param name="request">The ID of the group to retrieve.</param>
 	/// <returns>The group with the specified ID.</returns>[HttpGet("{id:guid}")]
 	[HttpGet("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetGroup(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
