@@ -22,9 +22,9 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 		var basket = await _unitOfWork.Basket.GetBasketByUserIdAsync(request.UserId);
 
 		basketLine.BasketId = basket.Id;
-		await _unitOfWork.BasketLines.Add(basketLine);
+		var addedBasket = await _unitOfWork.BasketLines.Add(basketLine);
 		await _unitOfWork.SaveChangesAsync();
 
-		return basket.Id;
+		return addedBasket.Id;
 	}
 }

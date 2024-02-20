@@ -55,11 +55,16 @@ public class AutoMapperProfile : Profile
 		CreateMap<AddBasketLineRequest, AddBasketLineCommand>();
 		CreateMap<UpdateBasketLineRequest, UpdateBasketLineCommand>();
 
+		CreateMap<SizeRequest, SizeDto>()
+			.ForMember(x => x.Name, opt => opt.Ignore());
+		CreateMap<ProductGroupRequest, GroupDto>()
+			.ForMember(x=>x.Name, opt=>opt.Ignore());
+
 		CreateMap<CreateProductRequest, CreateProductCommand>()
-			.ForMember(dest => dest.Sizes, opt => opt.MapFrom(src => src.Sizes))
 			.ForMember(dest => dest.Groups, opt => opt.MapFrom(src => src.Groups));
 
 		CreateMap<UpdateProductRequest, UpdateProductCommand>();
+
 		CreateMap<CreateProductSizeRequest, CreateProductSizeCommand>()
 			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id));
 
@@ -117,7 +122,7 @@ public class AutoMapperProfile : Profile
 
 		CreateMap<OrderLineDto, OrderLineResponse>();
 
-		CreateMap<OrderDto, OrderStatusResponse>()
+		CreateMap<OrderDto, OrderResponse>()
 			.ForMember(dest => dest.OrderLines, opt => opt.MapFrom(src => src.OrderLines));
 
 		CreateMap<ProductDto, ProductResponse>();

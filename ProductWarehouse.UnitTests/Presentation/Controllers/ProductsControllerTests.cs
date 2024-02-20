@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductWarehouse.API.Controllers;
+using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Models;
@@ -31,7 +32,7 @@ public class ProductsControllerTests
 					.Returns(new ProductsFilterDto());
 
 		// Act
-		var result = await controller.GetProducts(mediatorMock, mapperMock);
+		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock);
 
 		// Assert
 		result.Should().BeOfType<NotFoundResult>();
@@ -57,7 +58,7 @@ public class ProductsControllerTests
 					});
 
 		// Act
-		var result = await controller.GetProducts(mediatorMock, mapperMock);
+		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock);
 
 		// Assert
 		result.Should().BeOfType<OkObjectResult>();
@@ -88,7 +89,7 @@ public class ProductsControllerTests
 		var controller = new ProductsController();
 
 		// Act
-		var result = await controller.GetProducts(mediatorMock, mapperMock);
+		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock);
 
 		// Assert
 		result.Should().BeOfType<OkObjectResult>();

@@ -12,6 +12,7 @@ public interface IProductRepository : IRepository<Product>
 	void DeleteProductGroup(Guid productId, Guid groupId);
 
 	Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId);
+	void DeleteProductSize(Guid productId, Guid sizeId);
 
 	void UpdateProductSize(ProductSize productSize);
 

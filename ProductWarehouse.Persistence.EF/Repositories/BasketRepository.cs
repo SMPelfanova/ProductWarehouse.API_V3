@@ -12,7 +12,7 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger _logger;
 
-	public BasketRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext)
+	public BasketRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext, logger)
 	{
 		_dbContext = dbContext;
 		_logger = logger;

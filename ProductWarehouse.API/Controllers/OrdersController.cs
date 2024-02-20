@@ -34,7 +34,7 @@ public class OrdersController : BaseController
 	{
 		var query = mapper.Map<GetAllOrdersQuery>(request);
 		var orders = await mediator.Send(query);
-		var result = mapper.Map<List<OrderStatusResponse>>(orders);
+		var result = mapper.Map<List<OrderResponse>>(orders);
 
 		return Ok(result);
 	}
@@ -52,7 +52,7 @@ public class OrdersController : BaseController
 	{
 		var query = mapper.Map<GetOrderQuery>(request);
 		var order = await mediator.Send(query);
-		var result = mapper.Map<OrderStatusResponse>(order);
+		var result = mapper.Map<OrderResponse>(order);
 
 		return Ok(result);
 	}
@@ -70,9 +70,11 @@ public class OrdersController : BaseController
 	{
 		var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
 
-		var orderId = await mediator.Send(command);
+		var orderDto = await mediator.Send(command);
 
-		return CreatedAtAction(nameof(GetOrder), new { id = orderId, userId = createOrderRequest.UserId }, createOrderRequest);
+		var orderResponse = mapper.Map<OrderResponse>(orderDto);
+
+		return CreatedAtAction(nameof(GetOrder), new { id = orderResponse.Id, userId = orderResponse.UserId }, orderResponse);
 	}
 
 	/// <summary>

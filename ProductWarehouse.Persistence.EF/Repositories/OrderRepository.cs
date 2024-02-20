@@ -12,7 +12,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger _logger;
 
-	public OrderRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext)
+	public OrderRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext, logger)
 	{
 		_dbContext = dbContext;
 		_logger = logger;

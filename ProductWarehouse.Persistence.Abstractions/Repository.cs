@@ -10,9 +10,10 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 	protected readonly DbContext _dbContext;
 	private readonly ILogger _logger;
 
-	protected Repository(DbContext context)
+	protected Repository(DbContext context, ILogger logger)
 	{
 		_dbContext = context;
+		_logger = logger;
 	}
 
 	public async Task<TEntity> GetByIdAsync(Guid id)
@@ -55,23 +56,13 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	//todo: fix 
-	public async Task<Guid> Add(TEntity entity)
+	public async Task<TEntity> Add(TEntity entity)
 	{
 		try
 		{
 			var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
-			await _dbContext.SaveChangesAsync();
 
-			var idProperty = entity.GetType().GetProperty("Id");
-			if (idProperty == null || idProperty.PropertyType != typeof(Guid))
-			{
-				return Guid.Empty;
-			}
-
-			var generatedId = _dbContext.Entry(entity).Property("Id").CurrentValue;
-
-			return (Guid)generatedId;
+			return entry.Entity;
 		}
 		catch (Exception ex)
 		{
@@ -98,7 +89,6 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	//todo: make async Delete and Update
 	public void Update(TEntity entity)
 	{
 		try
@@ -114,6 +104,20 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		{
 			_logger.Error("An error occurred while updating the entity.", ex);
 			throw new DatabaseException("An error occurred while updating the entity.", ex);
+		}
+	}
+
+	public async Task<bool> ExistsAsync(Guid id)
+	{
+		try
+		{
+			TEntity entity = await _dbContext.Set<TEntity>().FindAsync(id);
+			return entity != null;
+		}
+		catch (Exception ex)
+		{
+			_logger.Error("An error occurred while checking if the entity exists by id.", ex);
+			throw new DatabaseException("An error occurred while checking if the entity exists by id.", ex);
 		}
 	}
 }

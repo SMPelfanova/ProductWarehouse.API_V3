@@ -12,7 +12,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger _logger;
 
-	public ProductRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext)
+	public ProductRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext, logger)
 	{
 		_dbContext = dbContext;
 		_logger = logger;
@@ -115,6 +115,25 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		{
 			_logger.Warning($"ProductSize not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
 			throw new NotFoundException($"ProductSize not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
+		}
+		catch (Exception ex)
+		{
+			_logger.Error("An error occurred while fetching the product sizes.", ex);
+			throw new DatabaseException("An error occurred while fetching the product sizes.", ex);
+		}
+	}
+
+	public void DeleteProductSize(Guid productId, Guid sizeId)
+	{
+		try
+		{
+			var entityToDelete = _dbContext.ProductSizes.Single(x => x.ProductId == productId && x.SizeId == sizeId);
+			_dbContext.ProductSizes.Remove(entityToDelete);
+		}
+		catch (InvalidOperationException ex)
+		{
+			_logger.Warning($"ProductGroup not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
+			throw new NotFoundException($"ProductGroup not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
 		}
 		catch (Exception ex)
 		{

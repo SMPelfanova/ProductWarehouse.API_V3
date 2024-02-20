@@ -20,10 +20,10 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 	{
 
 		var product = _mapper.Map<Product>(request);
-		var productId = await _unitOfWork.Products.Add(product);
+		var addedProduct = await _unitOfWork.Products.Add(product);
 
 		await _unitOfWork.SaveChangesAsync();
 
-		return productId;
+		return addedProduct.Id;
 	}
 }

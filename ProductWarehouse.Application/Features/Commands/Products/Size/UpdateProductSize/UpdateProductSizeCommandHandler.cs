@@ -19,12 +19,11 @@ public class UpdateProductSizeCommandHandler : IRequestHandler<UpdateProductSize
 
 	public async Task Handle(UpdateProductSizeCommand request, CancellationToken cancellationToken)
 	{
-		var size = await _unitOfWork.Sizes.GetByIdAsync(request.SizeId);
-		// size = await _unitOfWork.Products.CheckQuantityInStockAsync(request.ProductId, request.SizeId);
+		var productSize = await _unitOfWork.Products.GetProductSizeAsync(request.ProductId, request.SizeId);
 
-		var map = _mapper.Map<ProductSize>(request);
+		_mapper.Map(request, productSize);
 
-		_unitOfWork.ProductSizes.Update(map);
+		_unitOfWork.ProductSizes.Update(productSize);
 		await _unitOfWork.SaveChangesAsync();
 	}
 }

@@ -21,7 +21,7 @@ Content-Type: application/json
 }
 
 ### Delete Basket Line
-DELETE {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}/4f06c7ae-b1f6-4e34-e5d0-08dc31472970
+DELETE {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}/d3940cf3-a9e6-4764-8c88-08dc31e74d8d
 
 ### Update Basket Line
 PUT {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}

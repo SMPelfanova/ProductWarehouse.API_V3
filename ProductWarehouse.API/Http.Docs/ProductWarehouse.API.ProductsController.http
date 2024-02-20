@@ -23,7 +23,7 @@ Content-Type: application/json
     "title": "Product X",
     "description": "Description of Product 3",
     "photo": "product3.jpg",
-    "price": 39.99,
+    "price": 0,
     "brandId": "{{BrandId}}",
     "sizes": [
       {
@@ -43,7 +43,7 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-    "id": "288d5d4f-a2fd-4e01-4a21-08dc2c862878",
+    "id": "dc7a6d7c-e40e-4814-45a6-08dc31ec11f8",
     "title": "NEW",
     "description": "NEW",
     "price": 10000
@@ -83,13 +83,13 @@ Content-Type: application/json
 
 {
     "id": "{{ProductId}}",
-    "sizeId": "2aef86e1-2190-455a-890f-c19b276c97e1",
+    "sizeId": "10c96071-d5d0-4915-aba0-f52585132de4",
     "quantityInStock": 10
 }
 
 ### Update Product Size
-PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/3aee3527-c299-4c13-b907-ecaa57f9a655?QuantityInStock=18
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/10c96071-d5d0-4915-aba0-f52585132de4?QuantityInStock=1
 
 
 ### Delete Product Size
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/{{SizeId}}
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/10c96071-d5d0-4915-aba0-f52585132de4

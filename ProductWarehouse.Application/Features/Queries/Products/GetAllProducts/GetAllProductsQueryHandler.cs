@@ -25,7 +25,7 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
 	{
 		var products = await _unitOfWork.Products.GetProductsAsync();
 
-		if (products.Count() <= 0)
+		if (!products.Any())
 		{
 			_logger.Information($"No products found for filter: minPrice={request.MinPrice} maxPrice={request.MaxPrice} size={request.Size}");
 		}
@@ -39,10 +39,8 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
 
 		if (!string.IsNullOrEmpty(request.Highlight))
 		{
-			foreach (var product in productFilter.Products)
-			{
-				product.Description = product.Description.HighlightKeywords(request.Highlight);
-			}
+			productFilter.Products.ForEach(
+				product => product.Description = product.Description.HighlightKeywords(request.Highlight));
 		}
 
 		return productFilter;

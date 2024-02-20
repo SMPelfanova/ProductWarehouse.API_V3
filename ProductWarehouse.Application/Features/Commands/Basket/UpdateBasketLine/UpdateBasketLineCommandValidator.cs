@@ -41,7 +41,6 @@ public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLi
 		RuleFor(command => command.SizeId)
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateBasketLineCommand.SizeId)));
-		
 	}
 	
 	private async Task<bool> HaveSufficientQuantity(UpdateBasketLineCommand command, int quantity, CancellationToken cancellationToken)

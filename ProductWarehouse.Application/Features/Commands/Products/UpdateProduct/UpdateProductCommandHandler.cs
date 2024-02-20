@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Interfaces;
-using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 
@@ -10,13 +8,11 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
-	private readonly ILogger _logger;
 
-	public UpdateProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
+	public UpdateProductCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
-		_logger = logger;
 	}
 
 	public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
@@ -26,6 +22,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 		_mapper.Map(request, product);
 		_unitOfWork.Products.Update(product);
 
+		//todo: update also groups and sizes
+		//_unitOfWork.ProductSizes.Update(product.ProductSizes);
+		
 		await _unitOfWork.SaveChangesAsync();
 	}
 }

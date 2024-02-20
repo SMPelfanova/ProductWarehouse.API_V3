@@ -12,9 +12,6 @@ public static class DependencyInjectionExtensions
 	public static IServiceCollection AddApplication(this IServiceCollection services)
 	{
 		var assembly = typeof(DependencyInjectionExtensions).Assembly;
-
-		services.AddTransient<IValidator<GetAllProductsQuery>, GetAllProductsQueryValidator>();
-
 		services.AddValidatorsFromAssembly(assembly);
 
 		services.AddMediatR(configuration =>

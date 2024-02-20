@@ -6,9 +6,11 @@ public interface IRepository<TEntity> where TEntity : class
 
 	Task<TEntity> GetByIdAsync(Guid id);
 
-	Task<Guid> Add(TEntity entity);
+	Task<TEntity> Add(TEntity entity);
 
 	void Update(TEntity entity);
 
 	void Delete(TEntity entity);
+
+	Task<bool> ExistsAsync(Guid id);
 }

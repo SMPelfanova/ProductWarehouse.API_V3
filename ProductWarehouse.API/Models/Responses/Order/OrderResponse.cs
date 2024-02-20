@@ -2,9 +2,10 @@
 
 namespace ProductWarehouse.API.Models.Responses.Order;
 
-public class OrderStatusResponse
+public class OrderResponse
 {
 	public Guid Id { get; set; }
+	public Guid UserId { get; set; }
 	public OrderStatusDto Status { get; set; }
 	public Guid StatusId { get; set; }
 	public decimal TotalAmount { get; set; }

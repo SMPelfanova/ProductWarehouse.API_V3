@@ -2,7 +2,7 @@
 using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
-public record CreateOrderCommand() : IRequest<Guid>
+public record CreateOrderCommand() : IRequest<OrderDto>
 {
 	public Guid UserId { get; set; }
 	public decimal TotalAmount { get; set; }
