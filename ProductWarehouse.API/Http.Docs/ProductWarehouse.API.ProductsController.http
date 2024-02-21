@@ -1,0 +1,108 @@
+@ProductWarehouse.API_HostAddress = http://localhost:5068
+@BrandId = d6f201af-cf75-40d9-814a-1e0d17e9796c
+@ProductId = bf980d52-5df0-44ac-faa5-08dc2c6c47b9
+@UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
+@SizeId = da35ec2b-24e1-4652-ab48-7671b93b5edc
+@GroupId = cd95a5b4-efb0-4755-9379-73a81a3a2f9f
+@OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
+
+### Get Products
+GET {{ProductWarehouse.API_HostAddress}}/api/products
+
+### Get Products by Filter
+GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
+
+### Get Product
+GET {{ProductWarehouse.API_HostAddress}}/api/products/03a9f741-9a9e-4159-2de9-08dc320c7549
+
+### Create Product
+POST {{ProductWarehouse.API_HostAddress}}/api/products
+Content-Type: application/json
+ 
+{
+    "title": "Product X",
+    "description": "Description of Product 3",
+    "photo": "product3.jpg",
+    "price": 10,
+    "brandId": "{{BrandId}}",
+    "sizes": [
+      {
+        "id": "{{SizeId}}",
+        "quantityInStock": 10
+      }
+    ],
+    "groups": [
+      {
+        "id": "{{GroupId}}"
+      }
+    ]
+}
+
+### Update Product
+PUT {{ProductWarehouse.API_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+  "id": "03a9f741-9a9e-4159-2de9-08dc320c7549",
+  "title": "Product X",
+  "description": "Description of Product 3",
+  "brandId": "e8c25c64-44a8-4481-84fb-29718c37c6b4",
+  "price": 10,
+  "sizes": [
+    {
+      "id": "da35ec2b-24e1-4652-ab48-7671b93b5edc",
+      "quantityInStock": 0
+    }
+  ],
+  "groups": [
+    {
+      "id": "cd95a5b4-efb0-4755-9379-73a81a3a2f9f"
+    }
+  ]
+}
+
+### Delete Product
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/03a9f741-9a9e-4159-2de9-08dc320c7549
+
+
+GET {{ProductWarehouse.API_HostAddress}}/api/Products
+Accept: application/json
+
+###
+
+GET {{ProductWarehouse.API_HostAddress}}/api/Products/filter?MinPrice=10&MaxPrice=89&Highlight=red,blue&Size=M
+
+### Get Product Groups
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
+
+### Create Product Group
+POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
+Content-Type: application/json
+
+{
+    "id":"{{ProductId}}",
+    "groupId": "cd95a5b4-efb0-4755-9379-73a81a3a2f9f"
+}
+
+### Delete Product Group
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups/{{GroupId}}
+
+### Get Product Sizes
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes
+
+### Create Product Size
+POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes
+Content-Type: application/json
+
+{
+    "id": "{{ProductId}}",
+    "sizeId": "10c96071-d5d0-4915-aba0-f52585132de4",
+    "quantityInStock": 10
+}
+
+### Update Product Size
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/10c96071-d5d0-4915-aba0-f52585132de4?QuantityInStock=1
+
+
+### Delete Product Size
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/da35ec2b-24e1-4652-ab48-7671b93b5edc

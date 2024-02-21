@@ -1,56 +1,54 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.Application.Exceptions;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.API.Infrastructure;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
-    private readonly ILogger<GlobalExceptionHandler> _logger;
-    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
-    {
-        _logger = logger;
-    }
-    public async ValueTask<bool> TryHandleAsync(
-        HttpContext httpContext,
-        Exception exception,
-        CancellationToken cancellationToken)
-    {
-        _logger.LogError(exception, "Exception occured {Message}.", exception.Message);
+	private readonly ILogger<GlobalExceptionHandler> _logger;
 
-        if (exception is ValidatorException validationException)
-        {
-            var validationErrors = validationException.Errors.Select(error => new
-            {
-                Property = error.PropertyName,
-                Message = error.ErrorMessage
-            });
+	public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+	{
+		_logger = logger;
+	}
 
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-            await httpContext.Response.WriteAsJsonAsync(validationErrors, cancellationToken);
+	public async ValueTask<bool> TryHandleAsync(
+		HttpContext httpContext,
+		Exception exception,
+		CancellationToken cancellationToken)
+	{
+		_logger.LogError(exception, "Exception occured {Message}.", exception.Message);
 
-            return true;
-        }
+		var problemDetails = exception switch
+		{
+			ValidatorException validationException => new ProblemDetails
+			{
+				Status = StatusCodes.Status400BadRequest,
+				Title = "Validation Error",
+				Detail = string.Join("; ", validationException.Errors.Select(error => $"{error.PropertyName}: {error.ErrorMessage}"))
+			},
+			InvalidOperationException or NotFoundException => new ProblemDetails
+			{
+				Status = StatusCodes.Status404NotFound,
+				Title = exception.Message
+			},
+			BadHttpRequestException => new ProblemDetails
+			{
+				Status = StatusCodes.Status400BadRequest,
+				Title = exception.Message
+			},
+			_ => new ProblemDetails
+			{
+				Status = StatusCodes.Status500InternalServerError,
+				Title = "Internal Server Error"
+			}
+		};
 
-        var problemDetails = new ProblemDetails();
+		httpContext.Response.StatusCode = (int)problemDetails.Status;
+		await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
-        switch (exception)
-        {
-            case BadHttpRequestException:
-                problemDetails.Status = StatusCodes.Status400BadRequest;
-                problemDetails.Title = exception.GetType().Name;
-                break;
-            default:
-                problemDetails.Status = StatusCodes.Status500InternalServerError;
-                problemDetails.Title = "Internal Server Error";
-                break;
-        }
-
-        httpContext.Response.StatusCode = (int)problemDetails.Status;
-        await httpContext
-            .Response
-            .WriteAsJsonAsync(problemDetails, cancellationToken);
-
-        return true;
-    }
+		return true;
+	}
 }

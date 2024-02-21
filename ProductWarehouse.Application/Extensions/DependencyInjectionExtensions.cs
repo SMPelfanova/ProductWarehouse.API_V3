@@ -2,33 +2,27 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.Application.Behaviors;
-using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Mapping;
 
 namespace ProductWarehouse.Application.Extensions;
 
 public static class DependencyInjectionExtensions
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
-    {
-        var assembly = typeof(DependencyInjectionExtensions).Assembly;
+	public static IServiceCollection AddApplication(this IServiceCollection services)
+	{
+		var assembly = typeof(DependencyInjectionExtensions).Assembly;
+		services.AddValidatorsFromAssembly(assembly);
 
-        services.AddTransient<IValidator<ProductsQuery>, ProductsQueryValidator>();
+		services.AddMediatR(configuration =>
+		{
+			configuration.RegisterServicesFromAssembly(assembly);
+			configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+		});
 
-        services.AddValidatorsFromAssembly(assembly);
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
 
-        services.AddMediatR(configuration =>
-        {
-            configuration.RegisterServicesFromAssembly(assembly);
-            configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
+		services.AddAutoMapper(typeof(AutoMapperProfile));
 
-        });
-
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
-
-        services.AddAutoMapper(typeof(AutoMapperProfile));
-
-
-        return services;
-    }
+		return services;
+	}
 }

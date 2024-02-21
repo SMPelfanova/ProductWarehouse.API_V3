@@ -1,0 +1,21 @@
+@ProductWarehouse.API_HostAddress = http://localhost:5068
+@ProductId = bf980d52-5df0-44ac-faa5-08dc2c6c47b9
+@GroupId = cd95a5b4-efb0-4755-9379-73a81a3a2f9f
+
+### Get Product Groups
+GET {{ProductWarehouse.API_HostAddress}}/api/groups
+
+### Get Product Groups
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
+
+### Create Product Group
+POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
+Content-Type: application/json
+
+{
+    "id":"{{ProductId}}",
+    "groupId": "cd95a5b4-efb0-4755-9379-73a81a3a2f9f"
+}
+
+### Delete Product Group
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups/{{GroupId}}

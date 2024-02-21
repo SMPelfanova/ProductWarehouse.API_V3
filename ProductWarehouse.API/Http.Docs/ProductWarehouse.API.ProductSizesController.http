@@ -1,0 +1,22 @@
+@ProductWarehouse.API_HostAddress = http://localhost:5068
+@ProductId = bf980d52-5df0-44ac-faa5-08dc2c6c47b9
+@SizeId = da35ec2b-24e1-4652-ab48-7671b93b5edc
+
+### Get Product Sizes
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes
+
+### Create Product Size
+POST {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes
+Content-Type: application/json
+
+{
+    "id": "{{ProductId}}",
+    "sizeId": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
+    "quantityInStock": 10
+}
+### Update Product Size
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/2aef86e1-2190-455a-890f-c19b276c97e1?QuantityInStock=-10
+
+
+### Delete Product Size
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/ea88c493-9e58-47c7-80cd-766ac89a7a01
