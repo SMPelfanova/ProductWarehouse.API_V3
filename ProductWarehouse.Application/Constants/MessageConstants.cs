@@ -8,6 +8,7 @@ public static class MessageConstants
 	public static string MaxLengthValidationMessage(string paramName, int maxLength) => $"{paramName} cannot exceed {maxLength} characters.";
 	
 	public static string DoesNotExistMessage(string paramName) => $"{paramName} does not exist.";
+	public static string AlreadyExistMessage(string paramName) => $"{paramName} already exist.";
 
 	public static string NotAvailableQuantityMessage = "Requested quantity exceeds available quantity.";
 	public static string ProductSizeAlreadyAddedMessage = "Product with the same size is already added to the basket.";

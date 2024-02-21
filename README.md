@@ -1,3 +1,13 @@
+# Phase 2
+
+# Phase 1 + 
+EF Core with MSSQL
+EF Core - Code First Approach, Fluent API, Configuration Files
+Repository Pattern with Generic Approach
+ 
+CRUD operations
+
+
 # Phase 1 - Product Wherehouse API
 The API endpoint allows users to retrieve products and apply filters, with the ability to highlight specific keywords in product descriptions.
 
