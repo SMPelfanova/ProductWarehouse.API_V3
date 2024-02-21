@@ -25,7 +25,7 @@ public class CreateProductGroupCommandHandler : IRequestHandler<CreateProductGro
 		product.ProductGroups.Add(productGroup);
 		await _unitOfWork.SaveChangesAsync();
 
-		var productGroupDto = _mapper.Map<ProductGroupDto>(product.ProductGroups);
+		var productGroupDto = _mapper.Map<ProductGroupDto>(productGroup);
 
 		return productGroupDto;
 	}

@@ -52,7 +52,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 				.Include(p => p.Brand)
 				.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
 				.Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-				.SingleAsync(p => p.Id == id);
+				.SingleAsync(p => p.Id == id && !p.IsDeleted);
 		}
 		catch (InvalidOperationException ex)
 		{

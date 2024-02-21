@@ -12,6 +12,7 @@ using ProductWarehouse.API.Models.Responses.Basket;
 using ProductWarehouse.API.Models.Responses.Brands;
 using ProductWarehouse.API.Models.Responses.Group;
 using ProductWarehouse.API.Models.Responses.Order;
+using ProductWarehouse.API.Models.Responses.Product;
 using ProductWarehouse.API.Models.Responses.Size;
 using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasket;
@@ -21,6 +22,7 @@ using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.DeleteOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.Application.Features.Commands.Products;
+using ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProductGroup;
 using ProductWarehouse.Application.Features.Commands.Products.DeleteProductSize;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
@@ -107,21 +109,23 @@ public class AutoMapperProfile : Profile
 		CreateMap<BaseRequestId, GetProductGroupsQuery>();
 		CreateMap<BaseRequestId, GetProductSizesQuery>();
 		CreateMap<BaseRequestId, GetProductQuery>();
+		CreateMap<BaseRequestId, DeleteProductCommand>();
 		
 		CreateMap<BaseEmptyRequest, GetAllSizesQuery>();
 		CreateMap<BaseEmptyRequest, GetAllBrandsQuery>();
 		CreateMap<BaseEmptyRequest, GetAllOrderStatusesQuery>();
 		CreateMap<BaseEmptyRequest, GetAllGroupsQuery>();
 		CreateMap<BaseEmptyRequest, GetAllProductsQuery>();
-		
 	}
 
 	private void MapFromDtoToResponse()
 	{
 		CreateMap<BrandDto, BrandResponse>();
 		CreateMap<SizeDto, SizeResponse>();
+		CreateMap<ProductSizeDto, ProductSizeResponse>();
 		CreateMap<GroupDto, GroupResponse>();
 		CreateMap<OrderStatusDto, OrderStatusResponse>();
+		CreateMap<ProductGroupDto, ProductGroupResponse>();
 		
 		CreateMap<BasketDto, BasketResponse>()
 			.ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.BasketLines));

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Application.Models.Size;
+using ProductWarehouse.Application.Models.Product;
 
 namespace ProductWarehouse.Application.Features.Queries.Products.GetProductSizes;
 
-public class GetProductSizesQueryHandler : IRequestHandler<GetProductSizesQuery, List<SizeDto>>
+public class GetProductSizesQueryHandler : IRequestHandler<GetProductSizesQuery, List<ProductSizeDto>>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
@@ -16,10 +16,10 @@ public class GetProductSizesQueryHandler : IRequestHandler<GetProductSizesQuery,
 		_mapper = mapper;
 	}
 
-	public async Task<List<SizeDto>> Handle(GetProductSizesQuery request, CancellationToken cancellationToken)
+	public async Task<List<ProductSizeDto>> Handle(GetProductSizesQuery request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id);
-		var result = _mapper.Map<List<SizeDto>>(product.ProductSizes);
+		var result = _mapper.Map<List<ProductSizeDto>>(product.ProductSizes);
 
 		return result;
 	}

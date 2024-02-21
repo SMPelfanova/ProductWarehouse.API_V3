@@ -26,7 +26,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 			return await _dbContext.Orders
 						.Include(o => o.OrderLines)
 						.Include(o => o.Status)
-						.SingleAsync(o => o.Id == id);
+						.SingleAsync(o => o.Id == id && !o.IsDeleted);
 		}
 		catch (InvalidOperationException ex)
 		{

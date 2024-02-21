@@ -21,14 +21,14 @@ Content-Type: application/json
 }
 
 ### Delete Basket Line
-DELETE {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}/d3940cf3-a9e6-4764-8c88-08dc31e74d8d
+DELETE {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}/47ad195b-95cb-4690-e7f5-08dc32dbf94a
 
 ### Update Basket Line
 PUT {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}
 Content-Type: application/json
 
 {
-  "id": "bcebf7f9-27c8-4608-2c7c-08dc32c68562",
+  "id": "47ad195b-95cb-4690-e7f5-08dc32dbf94a",
   "productId": "a71b20c6-894e-40ad-29d5-08dc3209ece8",
   "quantity": 2,
   "price" : 20,
