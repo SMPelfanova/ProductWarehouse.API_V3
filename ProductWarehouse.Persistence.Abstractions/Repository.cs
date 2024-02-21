@@ -18,22 +18,26 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
 	public async Task<TEntity> GetByIdAsync(Guid id)
 	{
+		TEntity entity;
 		try
 		{
-			TEntity entity = await _dbContext.Set<TEntity>().FindAsync(id);
-			if (entity == null)
-			{
-				_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
-				throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.");
-			}
+			entity = await _dbContext.Set<TEntity>().FindAsync(id);
 
-			return entity;
 		}
 		catch (Exception ex)
 		{
 			_logger.Error("An error occurred while fetching the entity by id.", ex);
 			throw new DatabaseException("An error occurred while fetching the entity by id.", ex);
 		}
+
+		if (entity == null)
+		{
+			_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
+			throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.");
+		}
+
+		return entity;
+
 	}
 
 	public async Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties)
@@ -107,7 +111,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public async Task<bool> ExistsAsync(Guid id)
+	public async Task<bool> CheckIfExistsAsync(Guid id)
 	{
 		try
 		{

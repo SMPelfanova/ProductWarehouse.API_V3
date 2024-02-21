@@ -39,11 +39,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 			{
 				GroupId = groupDto.Id
 			});
-
 		}
+
 		_unitOfWork.Products.Update(product);
-
-
 		await _unitOfWork.SaveChangesAsync();
 	}
 }

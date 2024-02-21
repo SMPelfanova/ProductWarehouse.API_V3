@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Group;
 
 namespace ProductWarehouse.Application.Features.Queries.Groups.GetAllGroups;
 

@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Application.Models;
-using Serilog;
+using ProductWarehouse.Application.Models.Order;
 
 namespace ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
 

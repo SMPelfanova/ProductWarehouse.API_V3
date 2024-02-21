@@ -1,5 +1,7 @@
 ﻿using MediatR;
-using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Group;
+using ProductWarehouse.Application.Models.Product;
+using ProductWarehouse.Application.Models.Size;
 
 namespace ProductWarehouse.Application.Features.Commands.Products;
 public record CreateProductCommand : IRequest<ProductDto>

@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Base;
-using ProductWarehouse.Application.Features.Queries.Groups.GetAllGroups;
+using ProductWarehouse.API.Models.Responses.Order;
 using ProductWarehouse.Application.Features.Queries.OrderStatuses;
 
 namespace ProductWarehouse.API.Controllers;
@@ -25,8 +25,9 @@ public class OrderStatusesController : BaseController
 	{
 		var query = mapper.Map<GetAllOrderStatusesQuery>(request);
 		var result = await mediator.Send(query);
+		var orderStatuses = mapper.Map<List<OrderStatusResponse>>(result);
 
-		return Ok(result);
+		return Ok(orderStatuses);
 	}
 
 	/// <summary>
@@ -38,12 +39,13 @@ public class OrderStatusesController : BaseController
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> GetOrderStatus(
 		[FromRoute] BaseRequestId request,
-		[FromServices] IMapper mapper, 
+		[FromServices] IMapper mapper,
 		[FromServices] IMediator mediator)
 	{
 		var query = mapper.Map<GetOrderStatusQuery>(request);
 		var result = await mediator.Send(query);
+		var orderStatus = mapper.Map<OrderStatusResponse>(result);
 
-		return Ok(result);
+		return Ok(orderStatus);
 	}
 }

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Base;
+using ProductWarehouse.API.Models.Responses.Group;
 using ProductWarehouse.Application.Features.Queries.Groups.GetAllGroups;
 using ProductWarehouse.Application.Features.Queries.Groups.GetGroup;
 
@@ -25,8 +26,9 @@ public class GroupsController : BaseController
 	{
 		var query = mapper.Map<GetAllGroupsQuery>(request);
 		var result = await mediator.Send(query);
+		var groups = mapper.Map<List<GroupResponse>>(result);
 
-		return Ok(result);
+		return Ok(groups);
 	}
 
 	/// <summary>
@@ -43,7 +45,8 @@ public class GroupsController : BaseController
 	{
 		var query = mapper.Map<GetGroupQuery>(request);
 		var result = await mediator.Send(query);
+		var group = mapper.Map<GroupResponse>(result);
 
-		return Ok(result);
+		return Ok(group);
 	}
 }

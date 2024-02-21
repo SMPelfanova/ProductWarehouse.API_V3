@@ -2,6 +2,7 @@
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Order;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
@@ -27,12 +28,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 			StatusId = orderStatuses.FirstOrDefault(x => x.Name.ToLowerInvariant() == "initial").Id,
 			OrderLines = new List<OrderLine>()
 		};
-
 		var addedOrder = await _unitOfWork.Orders.Add(order);
 
 		foreach (var item in request.OrderLines)
 		{
-
 			order.OrderLines.Add(new OrderLine
 			{
 				OrderId = addedOrder.Id,
@@ -41,12 +40,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 				Quantity = item.Quantity,
 				Price = item.Price
 			});
-			var productSize = await _unitOfWork.Products.GetProductSizeAsync(item.ProductId, item.SizeId);
-			if (productSize != null)
-			{
-				productSize.QuantityInStock -= item.Quantity;
-				_unitOfWork.Products.UpdateProductSize(productSize);
-			}
+			await UpdateQuantityInStock(item);
 		}
 
 		_unitOfWork.Basket.DeleteBasketLines(request.UserId);
@@ -55,5 +49,15 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 		var orderDto = _mapper.Map<OrderDto>(order);
 
 		return orderDto;
+	}
+
+	private async Task UpdateQuantityInStock(OrderLineDto orderLine)
+	{
+		var productSize = await _unitOfWork.Products.GetProductSizeAsync(orderLine.ProductId, orderLine.SizeId);
+		if (productSize != null)
+		{
+			productSize.QuantityInStock -= orderLine.Quantity;
+			_unitOfWork.Products.UpdateQuantityInStock(productSize);
+		}
 	}
 }

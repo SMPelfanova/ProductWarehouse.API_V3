@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Group;
+using ProductWarehouse.Application.Models.Size;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 public record UpdateProductCommand() : IRequest

@@ -26,11 +26,9 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 			.GreaterThan(0)
 			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Quantity)))
 			.MustAsync(HaveSufficientQuantity)
-			.WithMessage("Requested quantity exceeds available quantity.");
+			.WithMessage(MessageConstants.NotAvailableQuantityMessage);
 
 		RuleFor(command => command.Price)
-			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.Price)))
 			.GreaterThan(0)
 			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Price)));
 		
@@ -38,7 +36,7 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(AddBasketLineCommand.SizeId)))
 			.MustAsync((command, sizeId, cancellationToken) => NotAlreadyAdded(command.UserId, command.ProductId, command.SizeId, cancellationToken))
-			.WithMessage("Product with the same size is already added to the basket.");
+			.WithMessage(MessageConstants.ProductSizeAlreadyAddedMessage);
 	}
 
 	private async Task<bool> HaveSufficientQuantity(AddBasketLineCommand command, int quantity, CancellationToken cancellationToken)

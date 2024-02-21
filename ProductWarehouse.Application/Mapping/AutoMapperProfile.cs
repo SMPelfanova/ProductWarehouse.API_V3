@@ -6,6 +6,12 @@ using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProductSize;
 using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Basket;
+using ProductWarehouse.Application.Models.Brand;
+using ProductWarehouse.Application.Models.Group;
+using ProductWarehouse.Application.Models.Order;
+using ProductWarehouse.Application.Models.Product;
+using ProductWarehouse.Application.Models.Size;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Mapping;
@@ -15,11 +21,8 @@ public class AutoMapperProfile : Profile
 	public AutoMapperProfile()
 	{
 		FromEntityToDto();
-
 		MapFromDtoToEntity();
-
 		MapFromCommandToEntity();
-
 		MapProductFilter();
 	}
 
@@ -29,7 +32,7 @@ public class AutoMapperProfile : Profile
 		CreateMap<Group, GroupDto>().ReverseMap();
 		CreateMap<BasketLine, BasketLineDto>().ReverseMap();
 		CreateMap<ProductGroups, ProductGroupDto>().ReverseMap();
-		
+
 		CreateMap<Baskets, BasketDto>()
 		   .ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.BasketLines));
 
@@ -46,7 +49,6 @@ public class AutoMapperProfile : Profile
 		CreateMap<ProductGroups, GroupDto>()
 		   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Group.Id))
 		   .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Group.Name));
-
 	}
 
 	private void MapFromDtoToEntity()
@@ -61,7 +63,6 @@ public class AutoMapperProfile : Profile
 		CreateMap<SizeDto, ProductSize>()
 			.ForMember(dest => dest.SizeId, opt => opt.MapFrom(src => src.Id))
 			.ForMember(dest => dest.QuantityInStock, opt => opt.MapFrom(src => src.QuantityInStock));
-
 	}
 
 	private void MapFromCommandToEntity()
@@ -70,7 +71,7 @@ public class AutoMapperProfile : Profile
 		CreateMap<CreateProductSizeCommand, ProductSize>();
 		CreateMap<UpdateProductCommand, Product>();
 		CreateMap<AddBasketLineCommand, BasketLine>();
-		
+
 		CreateMap<UpdateProductSizeCommand, ProductSize>()
 			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId));
 

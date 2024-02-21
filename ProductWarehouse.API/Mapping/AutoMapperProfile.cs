@@ -9,6 +9,7 @@ using ProductWarehouse.API.Models.Requests.Product.Group;
 using ProductWarehouse.API.Models.Requests.Product.Size;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.API.Models.Responses.Basket;
+using ProductWarehouse.API.Models.Responses.Brands;
 using ProductWarehouse.API.Models.Responses.Group;
 using ProductWarehouse.API.Models.Responses.Order;
 using ProductWarehouse.API.Models.Responses.Size;
@@ -38,6 +39,12 @@ using ProductWarehouse.Application.Features.Queries.Products.GetProductGroups;
 using ProductWarehouse.Application.Features.Queries.Products.GetProductSizes;
 using ProductWarehouse.Application.Features.Queries.Sizes;
 using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Basket;
+using ProductWarehouse.Application.Models.Brand;
+using ProductWarehouse.Application.Models.Group;
+using ProductWarehouse.Application.Models.Order;
+using ProductWarehouse.Application.Models.Product;
+using ProductWarehouse.Application.Models.Size;
 
 namespace ProductWarehouse.API.Mapping;
 
@@ -111,8 +118,11 @@ public class AutoMapperProfile : Profile
 
 	private void MapFromDtoToResponse()
 	{
+		CreateMap<BrandDto, BrandResponse>();
 		CreateMap<SizeDto, SizeResponse>();
 		CreateMap<GroupDto, GroupResponse>();
+		CreateMap<OrderStatusDto, OrderStatusResponse>();
+		
 		CreateMap<BasketDto, BasketResponse>()
 			.ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.BasketLines));
 

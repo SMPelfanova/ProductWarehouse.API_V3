@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ProductWarehouse.Application.Constants;
-using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProductSize;
 using ProductWarehouse.Application.Interfaces;
 
@@ -27,7 +26,7 @@ public class UpdateProductSizeCommandValidator : AbstractValidator<UpdateProduct
 			.GreaterThan(0)
 			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateProductSizeCommand.QuantityInStock)))
 			.MustAsync(HaveSufficientQuantity)
-			.WithMessage("Requested quantity exceeds available quantity.");
+			.WithMessage(MessageConstants.NotAvailableQuantityMessage);
 	}
 
 	private async Task<bool> HaveSufficientQuantity(UpdateProductSizeCommand command, int quantity, CancellationToken cancellationToken)
@@ -35,5 +34,4 @@ public class UpdateProductSizeCommandValidator : AbstractValidator<UpdateProduct
 		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId);
 		return availableSizes >= quantity;
 	}
-
 }

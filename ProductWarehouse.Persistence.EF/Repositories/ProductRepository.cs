@@ -84,7 +84,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public void UpdateProductSize(ProductSize productSize)
+	public void UpdateQuantityInStock(ProductSize productSize)
 	{
 		try
 		{

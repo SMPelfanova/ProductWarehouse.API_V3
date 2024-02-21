@@ -12,5 +12,5 @@ public interface IRepository<TEntity> where TEntity : class
 
 	void Delete(TEntity entity);
 
-	Task<bool> ExistsAsync(Guid id);
+	Task<bool> CheckIfExistsAsync(Guid id);
 }

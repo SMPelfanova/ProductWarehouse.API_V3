@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Base;
+using ProductWarehouse.API.Models.Responses.Brands;
 using ProductWarehouse.Application.Features.Queries.Brands.GetAllBrands;
 using ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
 
@@ -25,8 +26,9 @@ public class BrandsController : BaseController
 	{
 		var query = mapper.Map<GetAllBrandsQuery>(request);
 		var result = await mediator.Send(query);
+		var brands = mapper.Map<List<BrandResponse>>(result);
 
-		return Ok(result);
+		return Ok(brands);
 	}
 
 	/// <summary>
@@ -43,7 +45,8 @@ public class BrandsController : BaseController
 	{
 		var query = mapper.Map<GetBrandQuery>(request);
 		var result = await mediator.Send(query);
+		var brand = mapper.Map<BrandResponse>(result);
 
-		return Ok(result);
+		return Ok(brand);
 	}
 }

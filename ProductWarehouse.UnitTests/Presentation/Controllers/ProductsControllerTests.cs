@@ -13,6 +13,7 @@ using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Product;
 using ProductWarehouse.UnitTests;
 using Xunit;
 

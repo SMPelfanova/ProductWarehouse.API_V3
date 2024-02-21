@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.Application.Behaviors;
-using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Mapping;
 
 namespace ProductWarehouse.Application.Extensions;

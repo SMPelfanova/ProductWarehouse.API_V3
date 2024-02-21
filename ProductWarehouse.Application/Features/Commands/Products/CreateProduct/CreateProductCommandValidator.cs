@@ -7,10 +7,10 @@ namespace ProductWarehouse.Application.Features.Commands.Products.CreateProduct;
 public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {
 	private readonly IUnitOfWork _unitOfWork;
-    public CreateProductCommandValidator(IUnitOfWork unitOfWork)
+	public CreateProductCommandValidator(IUnitOfWork unitOfWork)
 	{
 		_unitOfWork = unitOfWork;
-	
+
 		RuleFor(command => command.Title)
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateProductCommand.Title)));
@@ -27,40 +27,39 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 			  .NotEmpty()
 			  .WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateProductCommand.BrandId)))
 			  .MustAsync(BrandExists)
-			  .WithMessage("Brand does not exist.");
+			  .WithMessage(MessageConstants.DoesNotExistMessage(nameof(CreateProductCommand.BrandId)));
 
 		RuleForEach(command => command.Sizes)
 			.MustAsync(async (sizeId, cancellation) => await SizeExists(sizeId.Id, cancellation))
-			.WithMessage("Size does not exist.");
+			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(CreateProductCommand.Sizes)));
 
 		RuleForEach(command => command.Groups)
 			.MustAsync(async (groupId, cancellation) => await GroupExists(groupId.Id, cancellation))
-			.WithMessage("Group does not exist.");
+			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(CreateProductCommand.Groups)));
 
 		RuleFor(command => command.Price)
-			.NotEmpty().WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateProductCommand.Price)))
-			.GreaterThan(0).WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(CreateProductCommand.Price)));
+			.GreaterThan(0)
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(CreateProductCommand.Price)));
 	}
 
 	private async Task<bool> SizeExists(Guid sizeId, CancellationToken cancellationToken)
 	{
-		var size = await _unitOfWork.Sizes.ExistsAsync(sizeId);
+		var size = await _unitOfWork.Sizes.CheckIfExistsAsync(sizeId);
 
 		return size;
 	}
 
 	private async Task<bool> GroupExists(Guid groupId, CancellationToken cancellationToken)
 	{
-		var group = await _unitOfWork.Group.ExistsAsync(groupId);
+		var group = await _unitOfWork.Group.CheckIfExistsAsync(groupId);
 
 		return group;
 	}
 
 	private async Task<bool> BrandExists(Guid brandId, CancellationToken cancellationToken)
 	{
-		var brand = await _unitOfWork.Brands.ExistsAsync(brandId);
+		var brand = await _unitOfWork.Brands.CheckIfExistsAsync(brandId);
 
 		return brand;
 	}
-
 }

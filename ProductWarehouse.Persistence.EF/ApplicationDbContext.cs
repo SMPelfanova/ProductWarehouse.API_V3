@@ -41,10 +41,4 @@ public class ApplicationDbContext : DbContext
 	public DbSet<OrderLine> OrderLines { get; set; }
 	public DbSet<Baskets> Baskets { get; set; }
 	public DbSet<BasketLine> BasketLines { get; set; }
-
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
-		EnsureDatabaseCreated(optionsBuilder.Options);
-		base.OnConfiguring(optionsBuilder);
-	}
 }

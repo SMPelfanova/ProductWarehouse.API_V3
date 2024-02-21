@@ -28,9 +28,9 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}
 Content-Type: application/json
 
 {
-  "id": "9d0cc97a-23eb-4262-e5ce-08dc31472970",
+  "id": "3dbc5af7-f015-437d-9731-dead1be11a1d",
   "productId": "{{ProductId}}",
   "quantity": 10,
-  "price" : 220,
+  "price" : 0,
   "sizeId": "{{SizeId}}"
 }

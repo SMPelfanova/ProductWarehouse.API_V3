@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Basket;
 
 namespace ProductWarehouse.Application.Features.Queries.Basket.GetBasket;
 
@@ -19,7 +19,6 @@ public class GetBasketQueryHandler : IRequestHandler<GetBasketQuery, BasketDto>
 	public async Task<BasketDto> Handle(GetBasketQuery request, CancellationToken cancellationToken)
 	{
 		var basket = await _unitOfWork.Basket.GetBasketByUserIdAsync(request.UserId);
-
 		var result = _mapper.Map<BasketDto>(basket);
 
 		return result;

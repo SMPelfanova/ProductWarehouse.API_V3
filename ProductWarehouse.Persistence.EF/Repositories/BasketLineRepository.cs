@@ -22,7 +22,7 @@ public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepositor
 	{
 		try
 		{
-			var basket = await _dbContext.Baskets.Include(x=>x.BasketLines).SingleAsync(x => x.UserId == userId);
+			var basket = await _dbContext.Baskets.Include(x => x.BasketLines).SingleAsync(x => x.UserId == userId);
 			if (basket?.BasketLines == null)
 			{
 				return false;

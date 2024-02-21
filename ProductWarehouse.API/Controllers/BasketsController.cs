@@ -72,7 +72,7 @@ public class BasketsController : BaseController
 		var command = mapper.Map<AddBasketLineCommand>(addBasketLineRequest);
 		command.UserId = userId;
 		var result = await mediator.Send(command);
-		
+
 		var basketLineRespose = mapper.Map<BasketLineResponse>(result);
 
 		return Ok(basketLineRespose);

@@ -1,20 +1,16 @@
 ﻿using MediatR;
-using ProductWarehouse.Application.Exceptions;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 using ProductWarehouse.Application.Interfaces;
-using Serilog;
 
 namespace ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 
 public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrderCommand>
 {
 	private readonly IUnitOfWork _unitOfWork;
-	private readonly ILogger _logger;
 
-	public PartialUpdateOrderCommandHandler(IUnitOfWork unitOfWork, ILogger logger)
+	public PartialUpdateOrderCommandHandler(IUnitOfWork unitOfWork)
 	{
 		_unitOfWork = unitOfWork;
-		_logger = logger;
 	}
 
 	public async Task Handle(PartialUpdateOrderCommand request, CancellationToken cancellationToken)

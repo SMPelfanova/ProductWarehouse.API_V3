@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Application.Models;
-using Serilog;
+using ProductWarehouse.Application.Models.Product;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProduct;
 
@@ -10,13 +9,11 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDt
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
-	private readonly ILogger _logger;
 
-	public GetProductQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger logger)
+	public GetProductQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
-		_logger = logger;
 	}
 
 	public async Task<ProductDto> Handle(GetProductQuery request, CancellationToken cancellationToken)

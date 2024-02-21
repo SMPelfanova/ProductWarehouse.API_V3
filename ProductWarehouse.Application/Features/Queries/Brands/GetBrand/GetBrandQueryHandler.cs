@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Brand;
 
 namespace ProductWarehouse.Application.Features.Queries.Brands.GetBrand;
 

@@ -27,43 +27,42 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateProductCommand.Description)));
 
 		RuleFor(command => command.Price)
-			.NotEmpty().WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateProductCommand.Price)))
-			.GreaterThan(0).WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateProductCommand.Price)));
+			.GreaterThan(0)
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateProductCommand.Price)));
 
 		RuleFor(command => command.BrandId)
 		  .NotEmpty()
 		  .WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateProductCommand.BrandId)))
 		  .MustAsync(BrandExists)
-		  .WithMessage("Brand does not exist.");
+		  .WithMessage(MessageConstants.DoesNotExistMessage(nameof(UpdateProductCommand.BrandId)));
 
 		RuleForEach(command => command.Sizes)
 			.MustAsync(async (sizeId, cancellation) => await SizeExists(sizeId.Id, cancellation))
-			.WithMessage("Size does not exist.");
+			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(UpdateProductCommand.Sizes)));
 
 		RuleForEach(command => command.Groups)
 			.MustAsync(async (groupId, cancellation) => await GroupExists(groupId.Id, cancellation))
-			.WithMessage("Group does not exist.");
+			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(UpdateProductCommand.Groups)));
 	}
 
 	private async Task<bool> SizeExists(Guid sizeId, CancellationToken cancellationToken)
 	{
-		var size = await _unitOfWork.Sizes.ExistsAsync(sizeId);
+		var size = await _unitOfWork.Sizes.CheckIfExistsAsync(sizeId);
 
 		return size;
 	}
 
 	private async Task<bool> GroupExists(Guid groupId, CancellationToken cancellationToken)
 	{
-		var group = await _unitOfWork.Group.ExistsAsync(groupId);
+		var group = await _unitOfWork.Group.CheckIfExistsAsync(groupId);
 
 		return group;
 	}
 
 	private async Task<bool> BrandExists(Guid brandId, CancellationToken cancellationToken)
 	{
-		var brand = await _unitOfWork.Brands.ExistsAsync(brandId);
+		var brand = await _unitOfWork.Brands.CheckIfExistsAsync(brandId);
 
 		return brand;
 	}
-
 }

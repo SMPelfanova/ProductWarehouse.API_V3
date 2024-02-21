@@ -30,11 +30,9 @@ public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLi
 			.GreaterThan(0)
 			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateBasketLineCommand.Quantity)))
 			.MustAsync(HaveSufficientQuantity)
-			.WithMessage("Requested quantity exceeds available quantity.");
+			.WithMessage(MessageConstants.NotAvailableQuantityMessage);
 
 		RuleFor(command => command.Price)
-			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateBasketLineCommand.Price)))
 			.GreaterThan(0)
 			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateBasketLineCommand.Price)));
 

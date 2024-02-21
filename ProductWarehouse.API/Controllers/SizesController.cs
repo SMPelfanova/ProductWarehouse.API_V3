@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests.Base;
+using ProductWarehouse.API.Models.Responses.Size;
 using ProductWarehouse.Application.Features.Queries.Sizes;
 
 namespace ProductWarehouse.API.Controllers;
@@ -24,8 +25,9 @@ public class SizesController : BaseController
 	{
 		var query = mapper.Map<GetAllSizesQuery>(request);
 		var result = await mediator.Send(query);
+		var sizes = mapper.Map<List<SizeResponse>>(result);
 
-		return Ok(result);
+		return Ok(sizes);
 	}
 
 	/// <summary>
@@ -42,7 +44,8 @@ public class SizesController : BaseController
 	{
 		var query = mapper.Map<GetSizeQuery>(request);
 		var result = await mediator.Send(query);
+		var size = mapper.Map<SizeResponse>(result);
 
-		return Ok(result);
+		return Ok(size);
 	}
 }

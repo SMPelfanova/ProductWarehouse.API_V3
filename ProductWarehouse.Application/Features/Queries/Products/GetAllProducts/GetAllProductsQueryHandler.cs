@@ -3,7 +3,7 @@ using FluentValidation;
 using MediatR;
 using ProductWarehouse.Application.Extensions;
 using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Application.Models;
+using ProductWarehouse.Application.Models.Product;
 using Serilog;
 
 namespace ProductWarehouse.Application.Features.Queries.GetProducts;

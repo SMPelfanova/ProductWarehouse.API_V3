@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
-using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 
-namespace ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
+namespace ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
 
 public class PartialUpdateOrderCommand() : IRequest
 {
