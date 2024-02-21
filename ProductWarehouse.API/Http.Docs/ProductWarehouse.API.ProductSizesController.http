@@ -19,7 +19,7 @@ Content-Type: application/json
     "quantityInStock": 10
 }
 ### Update Product Size
-PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/2aef86e1-2190-455a-890f-c19b276c97e1?QuantityInStock=12
+PUT {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/sizes/2aef86e1-2190-455a-890f-c19b276c97e1?QuantityInStock=-10
 
 
 ### Delete Product Size

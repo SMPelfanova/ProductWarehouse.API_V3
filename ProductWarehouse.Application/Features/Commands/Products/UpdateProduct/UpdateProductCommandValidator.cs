@@ -16,9 +16,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
 		RuleFor(command => command.Title)
 			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateProductCommand.Title)));
-
-		RuleFor(command => command.Title)
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateProductCommand.Title)))
 			.MaximumLength(100)
 			.WithMessage(MessageConstants.MaxLengthValidationMessage(nameof(UpdateProductCommand.Title), 100));
 

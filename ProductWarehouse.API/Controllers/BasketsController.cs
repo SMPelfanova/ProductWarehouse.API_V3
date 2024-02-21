@@ -49,7 +49,6 @@ public class BasketsController : BaseController
 		[FromServices] IMediator mediator)
 	{
 		var comamnd = mapper.Map<DeleteBasketCommand>(request);
-
 		await mediator.Send(comamnd);
 
 		return NoContent();

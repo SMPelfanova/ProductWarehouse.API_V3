@@ -13,7 +13,7 @@ public class BasketLineConfiguration : EntityConfiguration<BasketLine>
 
 		builder.Property(p => p.Quantity)
 			.IsRequired()
-			.HasDefaultValue(1);
+			.HasDefaultValue(DatabaseConstants.One);
 
 		builder.Property(p => p.Price)
 		   .HasColumnType(DatabaseConstants.DecimalColumnType)

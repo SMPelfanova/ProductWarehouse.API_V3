@@ -31,7 +31,6 @@ public class ProductsController : BaseController
 	{
 		var query = mapper.Map<GetAllProductsQuery>(request);
 		var result = await mediator.Send(query);
-
 		var products = mapper.Map<List<ProductResponse>>(result.Products);
 
 		return Ok(products);
@@ -71,7 +70,6 @@ public class ProductsController : BaseController
 	{
 		var query = mapper.Map<GetProductQuery>(request);
 		var product = await mediator.Send(query);
-
 		var productResponse = mapper.Map<ProductResponse>(product);
 
 		return Ok(productResponse);
@@ -91,7 +89,6 @@ public class ProductsController : BaseController
 	{
 		var command = mapper.Map<CreateProductCommand>(request);
 		var product = await mediator.Send(command);
-
 		var productResponse = mapper.Map<ProductResponse>(product);
 
 		return CreatedAtAction(nameof(GetProduct), new { id = productResponse.Id }, productResponse);

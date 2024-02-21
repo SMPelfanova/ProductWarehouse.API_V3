@@ -13,7 +13,7 @@ public class ProductSizesConfiguration : IEntityTypeConfiguration<ProductSize>
 
 		builder.Property(p => p.QuantityInStock)
 			.IsRequired()
-			.HasDefaultValue(1);
+			.HasDefaultValue(DatabaseConstants.One);
 
 		builder.HasOne(ps => ps.Product)
 			.WithMany(ps => ps.ProductSizes)

@@ -7,5 +7,6 @@ public record CreateOrderCommand() : IRequest<OrderDto>
 {
 	public Guid UserId { get; set; }
 	public decimal TotalAmount { get; set; }
+	public Guid StatusId { get; set; }
 	public List<OrderLineDto> OrderLines { get; set; }
 }

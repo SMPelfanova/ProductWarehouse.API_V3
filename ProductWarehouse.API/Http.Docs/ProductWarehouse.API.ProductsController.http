@@ -28,7 +28,7 @@ Content-Type: application/json
     "sizes": [
       {
         "id": "{{SizeId}}",
-        "quantityInStock": 16
+        "quantityInStock": 10
       }
     ],
     "groups": [
@@ -47,11 +47,11 @@ Content-Type: application/json
   "title": "Product X",
   "description": "Description of Product 3",
   "brandId": "e8c25c64-44a8-4481-84fb-29718c37c6b4",
-  "price": 10,
+  "price": 0,
   "sizes": [
     {
       "id": "da35ec2b-24e1-4652-ab48-7671b93b5edc",
-      "quantityInStock": 16
+      "quantityInStock": 0
     }
   ],
   "groups": [

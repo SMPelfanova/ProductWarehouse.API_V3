@@ -13,11 +13,11 @@ public class PaymentConfiguration : EntityConfiguration<Payment>
 
 		builder.Property(p => p.Method)
 			.IsRequired()
-			.HasMaxLength(50);
+			.HasMaxLength(DatabaseConstants.Fifty);
 
 		builder.Property(p => p.Status)
 			.IsRequired()
-			.HasMaxLength(50);
+			.HasMaxLength(DatabaseConstants.Fifty);
 
 		builder.Property(t => t.PaymentDate)
 			.IsRequired()

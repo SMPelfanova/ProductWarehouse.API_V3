@@ -11,6 +11,8 @@ public class OrderStatusConfiguration : EntityConfiguration<OrderStatus>
 	{
 		base.Configure(builder);
 
-		builder.Property(p => p.Name).IsRequired().HasMaxLength(30);
+		builder.Property(p => p.Name)
+			.IsRequired()
+			.HasMaxLength(DatabaseConstants.Thirty);
 	}
 }

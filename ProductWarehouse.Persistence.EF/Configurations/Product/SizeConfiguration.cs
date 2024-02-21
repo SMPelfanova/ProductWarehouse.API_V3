@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
@@ -11,6 +12,6 @@ public class SizeConfiguration : EntityConfiguration<Size>
 
 		builder.Property(p => p.Name)
 			.IsRequired()
-			.HasMaxLength(30);
+			.HasMaxLength(DatabaseConstants.Thirty);
 	}
 }

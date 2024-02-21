@@ -17,7 +17,7 @@ public class ProductConfiguration : EntityConfiguration<Product>
 
 		builder.Property(p => p.Title)
 			.IsRequired()
-			.HasMaxLength(100);
+			.HasMaxLength(DatabaseConstants.Hundred);
 
 		builder.Property(p => p.Price)
 			.HasColumnType(DatabaseConstants.DecimalColumnType)

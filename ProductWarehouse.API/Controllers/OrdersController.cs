@@ -72,9 +72,7 @@ public class OrdersController : BaseController
 	[FromServices] IMediator mediator)
 	{
 		var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
-
 		var order = await mediator.Send(command);
-
 		var orderResponse = mapper.Map<OrderResponse>(order);
 
 		return CreatedAtAction(nameof(GetOrder), new { id = orderResponse.Id, userId = orderResponse.UserId }, orderResponse);

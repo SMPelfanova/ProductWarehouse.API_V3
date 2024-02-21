@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.EF.Constants;
 
 namespace ProductWarehouse.Persistence.EF.Configurations;
 
@@ -12,25 +13,25 @@ public class UserConfiguration : EntityConfiguration<User>
 
 		builder.Property(p => p.FirstName)
 			.IsRequired()
-			.HasMaxLength(50);
+			.HasMaxLength(DatabaseConstants.Fifty);
 
 		builder.Property(p => p.LastName)
 			.IsRequired()
-			.HasMaxLength(50);
+			.HasMaxLength(DatabaseConstants.Fifty);
 
 		builder.Property(p => p.Email)
 			.IsRequired()
-			.HasMaxLength(100);
+			.HasMaxLength(DatabaseConstants.Hundred);
 
 		builder.Property(p => p.Password).IsRequired();
 
 		builder.Property(p => p.Phone)
 			.IsRequired()
-			.HasMaxLength(20);
+			.HasMaxLength(DatabaseConstants.Twenty);
 
 		builder.Property(p => p.Address)
 			.IsRequired()
-			.HasMaxLength(255);
+			.HasMaxLength(DatabaseConstants.TwoHundredFiftyFive);
 
 		builder.HasOne(b => b.Basket)
 			.WithOne(p => p.User)

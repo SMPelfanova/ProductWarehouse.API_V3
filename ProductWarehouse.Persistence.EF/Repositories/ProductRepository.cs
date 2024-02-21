@@ -3,6 +3,7 @@ using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
+using ProductWarehouse.Persistence.EF.Constants;
 using Serilog;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
@@ -33,13 +34,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning("No products found.", ex);
-			throw new NotFoundException("No products found.", ex);
+			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Product)), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Product)), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the products.", ex);
-			throw new DatabaseException("An error occurred while fetching the products.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
 		}
 	}
 
@@ -55,13 +56,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning($"Product with specified id: {id} not found.", ex);
-			throw new NotFoundException($"Product with specified id: {id} not found.", ex);
+			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Product), id), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Product), id), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the products.", ex);
-			throw new DatabaseException("An error occurred while fetching the products.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
 		}
 	}
 
@@ -74,13 +75,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning($"ProductGroup not found for the specified productId: {productId} and groupId: {groupId}.", ex);
-			throw new NotFoundException($"ProductGroup not found for the specified productId: {productId} and groupId: {groupId}.", ex);
+			_logger.Warning(MessageConstants.ProductGroupNotFoundErrorMessage(productId, groupId), ex);
+			throw new NotFoundException(MessageConstants.ProductGroupNotFoundErrorMessage(productId, groupId), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the product groups.", ex);
-			throw new DatabaseException("An error occurred while fetching the product groups.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductGroups)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductGroups)), ex);
 		}
 	}
 
@@ -94,13 +95,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning($"ProductSize not found for the specified productId: {productSize.ProductId} and sizeId: {productSize.SizeId}.", ex);
-			throw new NotFoundException($"ProductSize not found for the specified productId: {productSize.ProductId} and sizeId: {productSize.SizeId}.", ex);
+			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
+			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the product sizes.", ex);
-			throw new DatabaseException("An error occurred while fetching the product sizes.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 		}
 	}
 
@@ -113,13 +114,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning($"ProductSize not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
-			throw new NotFoundException($"ProductSize not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
+			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the product sizes.", ex);
-			throw new DatabaseException("An error occurred while fetching the product sizes.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 		}
 	}
 
@@ -132,13 +133,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning($"ProductGroup not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
-			throw new NotFoundException($"ProductGroup not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
+			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the product sizes.", ex);
-			throw new DatabaseException("An error occurred while fetching the product sizes.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 		}
 	}
 
@@ -153,13 +154,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning($"ProductSize not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
-			throw new NotFoundException($"ProductSize not found for the specified productId: {productId} and sizeId: {sizeId}.", ex);
+			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the product sizes.", ex);
-			throw new DatabaseException("An error occurred while fetching the product sizes.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 		}
 	}
 }

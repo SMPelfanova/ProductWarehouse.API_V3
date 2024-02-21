@@ -13,9 +13,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 		RuleFor(command => command.Title)
 			.NotEmpty()
-			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateProductCommand.Title)));
-
-		RuleFor(command => command.Title)
+			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(CreateProductCommand.Title)))
 			.MaximumLength(100)
 			.WithMessage(MessageConstants.MaxLengthValidationMessage(nameof(CreateProductCommand.Title), 100));
 
@@ -31,7 +29,10 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 		RuleForEach(command => command.Sizes)
 			.MustAsync(async (sizeId, cancellation) => await SizeExists(sizeId.Id, cancellation))
-			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(CreateProductCommand.Sizes)));
+			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(CreateProductCommand.Sizes)))
+			.Must(size => size.QuantityInStock > 0)
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(CreateProductCommand.Sizes)))
+			.When(size => size != null);
 
 		RuleForEach(command => command.Groups)
 			.MustAsync(async (groupId, cancellation) => await GroupExists(groupId.Id, cancellation))

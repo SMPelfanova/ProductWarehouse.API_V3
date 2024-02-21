@@ -3,6 +3,7 @@ using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
+using ProductWarehouse.Persistence.EF.Constants;
 using Serilog;
 
 namespace ProductWarehouse.Persistence.EF.Repositories;
@@ -28,13 +29,13 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning("Basket not found for the specified user.", ex);
-			throw new NotFoundException("Basket not found for the specified user.", ex);
+			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Baskets)), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Baskets)), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the basket.", ex);
-			throw new DatabaseException("An error occurred while fetching the basket.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Baskets)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Baskets)), ex);
 		}
 	}
 
@@ -50,13 +51,13 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning("Basket not found for the specified user.", ex);
-			throw new NotFoundException("Basket not found for the specified user.", ex);
+			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Baskets)), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Baskets)), ex);
 		}
 		catch (Exception ex)
 		{
-			_logger.Error("An error occurred while fetching the basket.", ex);
-			throw new DatabaseException("An error occurred while fetching the basket.", ex);
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Baskets)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Baskets)), ex);
 		}
 	}
 }

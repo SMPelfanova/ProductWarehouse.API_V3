@@ -2,6 +2,7 @@
 using ProductWarehouse.Application.Extensions;
 using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
+using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Products;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProductSize;
@@ -69,8 +70,10 @@ public class AutoMapperProfile : Profile
 	{
 		CreateMap<CreateProductGroupCommand, ProductGroups>();
 		CreateMap<CreateProductSizeCommand, ProductSize>();
+		CreateMap<CreateOrderCommand, Order>();
 		CreateMap<UpdateProductCommand, Product>();
 		CreateMap<AddBasketLineCommand, BasketLine>();
+		CreateMap<UpdateBasketLineCommand, BasketLine>();
 
 		CreateMap<UpdateProductSizeCommand, ProductSize>()
 			.ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId));
