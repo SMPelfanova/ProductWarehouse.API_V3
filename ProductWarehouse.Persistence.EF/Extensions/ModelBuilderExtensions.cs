@@ -39,6 +39,7 @@ public static class ModelBuilderExtensions
 		);
 
 		modelBuilder.Entity<OrderStatus>().HasData(
+			new OrderStatus { Id = Guid.NewGuid(), Name = "Initial" },
 			new OrderStatus { Id = Guid.NewGuid(), Name = "Pending" },
 			new OrderStatus { Id = Guid.NewGuid(), Name = "Delivered" }
 		);

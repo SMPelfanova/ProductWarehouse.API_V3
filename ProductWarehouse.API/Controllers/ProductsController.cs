@@ -109,7 +109,7 @@ public class ProductsController : BaseController
 		var command = mapper.Map<UpdateProductCommand>(request);
 		await mediator.Send(command);
 
-		return Ok();
+		return NoContent();
 	}
 
 	/// <summary>

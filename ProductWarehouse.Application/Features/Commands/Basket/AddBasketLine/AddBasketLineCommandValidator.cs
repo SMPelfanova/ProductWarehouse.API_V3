@@ -27,10 +27,6 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Quantity)))
 			.MustAsync(HaveSufficientQuantity)
 			.WithMessage(MessageConstants.NotAvailableQuantityMessage);
-
-		RuleFor(command => command.Price)
-			.GreaterThan(0)
-			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Price)));
 		
 		RuleFor(command => command.SizeId)
 			.NotEmpty()

@@ -112,8 +112,10 @@ public class BasketsController : BaseController
 	{
 		var command = mapper.Map<UpdateBasketLineCommand>(updatedBasketRequest);
 		command.UserId = userId;
-		await mediator.Send(command);
+		var basketLineDto = await mediator.Send(command);
 
-		return Ok();
+		var basketLineResponse = mapper.Map<BasketLineResponse>(basketLineDto);
+
+		return Ok(basketLineResponse);
 	}
 }

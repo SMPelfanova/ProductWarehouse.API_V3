@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Application.Models.Product;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 
-public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
+public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, ProductDto>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
@@ -16,7 +17,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 		_mapper = mapper;
 	}
 
-	public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
+	public async Task<ProductDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id);
 
@@ -43,5 +44,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
 
 		_unitOfWork.Products.Update(product);
 		await _unitOfWork.SaveChangesAsync();
+
+		var productDto = _mapper.Map<ProductDto>(product);
+
+		return productDto;
 	}
 }

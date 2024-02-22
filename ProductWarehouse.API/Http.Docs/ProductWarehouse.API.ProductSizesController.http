@@ -1,5 +1,5 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@ProductId = 288d5d4f-a2fd-4e01-4a21-08dc2c862878
+@ProductId = 11ead65f-14e8-4362-1b2f-08dc2c6aea3f
 @SizeId = da35ec2b-24e1-4652-ab48-7671b93b5edc
 
 ### Get Product Sizes

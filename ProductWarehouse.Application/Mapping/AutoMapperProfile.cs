@@ -31,7 +31,9 @@ public class AutoMapperProfile : Profile
 	{
 		CreateMap<Brand, BrandDto>().ReverseMap();
 		CreateMap<Group, GroupDto>().ReverseMap();
-		CreateMap<BasketLine, BasketLineDto>().ReverseMap();
+		CreateMap<BasketLine, BasketLineDto>()
+			.ForMember(x=>x.TotalAmount, opt=>opt.MapFrom(x=>x.Quantity * x.Price))
+			.ReverseMap();
 		CreateMap<ProductGroups, ProductGroupDto>().ReverseMap();
 		CreateMap<Baskets, BasketDto>()
 		   .ForMember(dest => dest.BasketLines, opt => opt.MapFrom(src => src.BasketLines));

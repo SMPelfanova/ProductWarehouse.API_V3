@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using ProductWarehouse.Application.Models;
 
 namespace ProductWarehouse.Application.Features.Commands.Basket.UpdateBasketLine;
-public record UpdateBasketLineCommand() : IRequest
+public record UpdateBasketLineCommand() : IRequest<BasketLineDto>
 {
 	public Guid UserId { get; set; }
 	public Guid Id { get; set; }

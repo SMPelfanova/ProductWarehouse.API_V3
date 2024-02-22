@@ -13,7 +13,7 @@ GET {{ProductWarehouse.API_HostAddress}}/api/products
 GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
 
 ### Get Product
-GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}
+GET {{ProductWarehouse.API_HostAddress}}/api/products/a56b78bc-55f8-4fc4-139d-08dc338a8040
 
 ### Create Product
 POST {{ProductWarehouse.API_HostAddress}}/api/products
@@ -28,7 +28,7 @@ Content-Type: application/json
     "sizes": [
       {
         "id": "{{SizeId}}",
-        "quantityInStock": 10
+        "quantityInStock": 1
       }
     ],
     "groups": [
@@ -43,15 +43,15 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-  "id": "{{ProductId}}",
-  "title": "Product X",
-  "description": "Description of Product 3",
+  "id": "a56b78bc-55f8-4fc4-139d-08dc338a8040",
+  "title": "Product",
+  "description": "Product Descr",
   "brandId": "e8c25c64-44a8-4481-84fb-29718c37c6b4",
-  "price": 10,
+  "price": 100,
   "sizes": [
     {
       "id": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
-      "quantityInStock": 100000
+      "quantityInStock": 10
     }
   ],
   "groups": [
@@ -62,4 +62,4 @@ Content-Type: application/json
 }
 
 ### Delete Product
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/bf980d52-5df0-44ac-faa5-08dc2c6c47b9
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/a56b78bc-55f8-4fc4-139d-08dc338a8040

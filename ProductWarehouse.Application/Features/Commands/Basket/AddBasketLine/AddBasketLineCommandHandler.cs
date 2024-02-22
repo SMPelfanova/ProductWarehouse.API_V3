@@ -21,12 +21,20 @@ public class AddBasketLineCommandHandler : IRequestHandler<AddBasketLineCommand,
 	{
 		var basketLineRequest = _mapper.Map<BasketLine>(request);
 		var basket = await _unitOfWork.Basket.GetBasketByUserIdAsync(request.UserId);
-
 		basketLineRequest.BasketId = basket.Id;
+
+		await SetBasketLinePrice(basketLineRequest);
+
 		var basketLine = await _unitOfWork.BasketLines.Add(basketLineRequest);
 		await _unitOfWork.SaveChangesAsync();
 
 		var basketDto = _mapper.Map<BasketLineDto>(basketLine);
 		return basketDto;
+	}
+
+	private async Task SetBasketLinePrice(BasketLine basketLine)
+	{
+		var productDetails = await _unitOfWork.Products.GetByIdAsync(basketLine.ProductId);
+		basketLine.Price = productDetails.Price;
 	}
 }
