@@ -23,7 +23,7 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, P
 
 	public async Task<ProductsFilterDto> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
 	{
-		var products = await _unitOfWork.Products.GetProductsAsync();
+		var products = await _unitOfWork.Products.GetProductsAsync(cancellationToken);
 
 		if (!products.Any())
 		{

@@ -27,10 +27,11 @@ public class ProductsController : BaseController
 	public async Task<IActionResult> GetProducts(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetAllProductsQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var products = mapper.Map<List<ProductResponse>>(result.Products);
 
 		return Ok(products);
@@ -47,10 +48,11 @@ public class ProductsController : BaseController
 	public async Task<IActionResult> GetProducts(
 		[FromQuery] FilterProductsRequest productsFilter,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var productsQueryMap = mapper.Map<GetAllProductsQuery>(productsFilter);
-		var result = await mediator.Send(productsQueryMap);
+		var result = await mediator.Send(productsQueryMap, cancellationToken);
 		var response = mapper.Map<ProductFilterResponse>(result);
 
 		return Ok(response);
@@ -66,10 +68,11 @@ public class ProductsController : BaseController
 	public async Task<IActionResult> GetProduct(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetProductQuery>(request);
-		var product = await mediator.Send(query);
+		var product = await mediator.Send(query, cancellationToken);
 		var productResponse = mapper.Map<ProductResponse>(product);
 
 		return Ok(productResponse);
@@ -85,10 +88,11 @@ public class ProductsController : BaseController
 	public async Task<IActionResult> CreateProduct(
 		[FromBody] CreateProductRequest request,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<CreateProductCommand>(request);
-		var product = await mediator.Send(command);
+		var product = await mediator.Send(command, cancellationToken);
 		var productResponse = mapper.Map<ProductResponse>(product);
 
 		return CreatedAtAction(nameof(GetProduct), new { id = productResponse.Id }, productResponse);
@@ -104,10 +108,11 @@ public class ProductsController : BaseController
 	public async Task<IActionResult> UpdateProduct(
 		[FromBody] UpdateProductRequest request,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<UpdateProductCommand>(request);
-		await mediator.Send(command);
+		await mediator.Send(command, cancellationToken);
 
 		return NoContent();
 	}
@@ -122,10 +127,11 @@ public class ProductsController : BaseController
 	public async Task<IActionResult> DeleteProduct(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<DeleteProductCommand>(request);
-		await mediator.Send(command);
+		await mediator.Send(command, cancellationToken);
 
 		return NoContent();
 	}

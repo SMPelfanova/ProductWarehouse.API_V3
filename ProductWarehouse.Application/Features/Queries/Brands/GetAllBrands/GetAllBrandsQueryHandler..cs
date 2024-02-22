@@ -18,7 +18,7 @@ public class GetAllBrandsQueryHandler : IRequestHandler<GetAllBrandsQuery, List<
 
 	public async Task<List<BrandDto>> Handle(GetAllBrandsQuery request, CancellationToken cancellationToken)
 	{
-		var brands = await _unitOfWork.Brands.GetAllAsync();
+		var brands = await _unitOfWork.Brands.GetAllAsync(cancellationToken);
 		var result = _mapper.Map<List<BrandDto>>(brands);
 
 		return result;

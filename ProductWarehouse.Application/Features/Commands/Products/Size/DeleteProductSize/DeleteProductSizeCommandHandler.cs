@@ -14,7 +14,7 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductSize
 
 	public async Task Handle(DeleteProductSizeCommand request, CancellationToken cancellationToken)
 	{
-		_unitOfWork.Products.DeleteProductSize(request.ProductId, request.SizeId);
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.Products.DeleteProductSizeAsync(request.ProductId, request.SizeId, cancellationToken);
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 	}
 }

@@ -19,7 +19,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		_logger = logger;
 	}
 
-	public async Task<List<Product>> GetProductsAsync()
+	public async Task<List<Product>> GetProductsAsync(CancellationToken cancellationToken = default)
 	{
 		try
 		{
@@ -28,7 +28,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 				.Include(p => p.Brand)
 				.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
 				.Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 
 			return products;
 		}
@@ -44,15 +44,16 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task<Product> GetProductDetailsAsync(Guid id)
+	public async Task<Product> GetProductDetailsAsync(Guid id, CancellationToken cancellationToken = default)
 	{
 		try
 		{
 			return await _dbContext.Products
+				.AsNoTracking()
 				.Include(p => p.Brand)
 				.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
 				.Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-				.SingleAsync(p => p.Id == id && !p.IsDeleted);
+				.SingleAsync(p => p.Id == id && !p.IsDeleted, cancellationToken);
 		}
 		catch (InvalidOperationException ex)
 		{
@@ -66,11 +67,51 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public void DeleteProductGroup(Guid productId, Guid groupId)
+	public async Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
 	{
 		try
 		{
-			var entityToDelete = _dbContext.ProductGroups.Single(x => x.ProductId == productId && x.GroupId == groupId);
+			return await _dbContext.ProductSizes
+						.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId, cancellationToken);
+		}
+		catch (InvalidOperationException ex)
+		{
+			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+		}
+		catch (Exception ex)
+		{
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+		}
+	}
+
+	public async Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
+	{
+		try
+		{
+			var productSize = await _dbContext.ProductSizes
+						.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId, cancellationToken);
+
+			return productSize.QuantityInStock;
+		}
+		catch (InvalidOperationException ex)
+		{
+			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+		}
+		catch (Exception ex)
+		{
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
+		}
+	}
+
+	public async Task DeleteProductGroupAsync(Guid productId, Guid groupId, CancellationToken cancellationToken = default)
+	{
+		try
+		{
+			var entityToDelete = await _dbContext.ProductGroups.SingleAsync(x => x.ProductId == productId && x.GroupId == groupId, cancellationToken);
 			_dbContext.ProductGroups.Remove(entityToDelete);
 		}
 		catch (InvalidOperationException ex)
@@ -85,50 +126,11 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public void UpdateQuantityInStock(ProductSize productSize)
+	public async Task DeleteProductSizeAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
 	{
 		try
 		{
-			var entityToUpdate = _dbContext.ProductSizes.Single(x => x.ProductId == productSize.ProductId && x.SizeId == productSize.SizeId);
-			entityToUpdate.QuantityInStock = productSize.QuantityInStock;
-			_dbContext.ProductSizes.Update(entityToUpdate);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
-			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
-		}
-		catch (Exception ex)
-		{
-			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
-			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
-		}
-	}
-
-	public async Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId)
-	{
-		try
-		{
-			return await _dbContext.ProductSizes
-						.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-		}
-		catch (Exception ex)
-		{
-			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
-			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
-		}
-	}
-
-	public void DeleteProductSize(Guid productId, Guid sizeId)
-	{
-		try
-		{
-			var entityToDelete = _dbContext.ProductSizes.Single(x => x.ProductId == productId && x.SizeId == sizeId);
+			var entityToDelete = await _dbContext.ProductSizes.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId, cancellationToken);
 			_dbContext.ProductSizes.Remove(entityToDelete);
 		}
 		catch (InvalidOperationException ex)
@@ -143,19 +145,18 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId)
+	public async Task UpdateQuantityInStockAsync(ProductSize productSize, CancellationToken cancellationToken = default)
 	{
 		try
 		{
-			var productSize = await _dbContext.ProductSizes
-						.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId);
-
-			return productSize.QuantityInStock;
+			var entityToUpdate = await _dbContext.ProductSizes.SingleAsync(x => x.ProductId == productSize.ProductId && x.SizeId == productSize.SizeId, cancellationToken);
+			entityToUpdate.QuantityInStock = productSize.QuantityInStock;
+			_dbContext.ProductSizes.Update(entityToUpdate);
 		}
 		catch (InvalidOperationException ex)
 		{
-			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
+			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
 		}
 		catch (Exception ex)
 		{

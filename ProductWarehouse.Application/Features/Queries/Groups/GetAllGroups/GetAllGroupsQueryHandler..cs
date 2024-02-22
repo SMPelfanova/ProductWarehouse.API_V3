@@ -18,7 +18,7 @@ public class GetAllGroupsQueryHandler : IRequestHandler<GetAllGroupsQuery, List<
 
 	public async Task<List<GroupDto>> Handle(GetAllGroupsQuery request, CancellationToken cancellationToken)
 	{
-		var groups = await _unitOfWork.Group.GetAllAsync();
+		var groups = await _unitOfWork.Group.GetAllAsync(cancellationToken);
 		var result = _mapper.Map<List<GroupDto>>(groups);
 
 		return result;

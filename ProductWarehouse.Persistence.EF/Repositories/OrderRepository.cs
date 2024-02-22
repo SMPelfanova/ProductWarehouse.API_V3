@@ -19,14 +19,15 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		_logger = logger;
 	}
 
-	public async Task<Order> GetOrderDetailsAsync(Guid id)
+	public async Task<Order> GetOrderDetailsAsync(Guid id, CancellationToken cancellationToken = default)
 	{
 		try
 		{
 			return await _dbContext.Orders
+						.AsNoTracking()
 						.Include(o => o.OrderLines)
 						.Include(o => o.Status)
-						.SingleAsync(o => o.Id == id && !o.IsDeleted);
+						.SingleAsync(o => o.Id == id && !o.IsDeleted, cancellationToken);
 		}
 		catch (InvalidOperationException ex)
 		{
@@ -40,15 +41,17 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		}
 	}
 
-	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
+	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
 	{
+		await Task.Delay(60000, cancellationToken);
 		try
 		{
 			return await _dbContext.Orders
+			  .AsNoTracking()
 			  .Where(o => o.UserId == userId && !o.IsDeleted)
 			  .Include(o => o.Status)
 			  .Include(o => o.OrderLines)
-			  .ToListAsync();
+			  .ToListAsync(cancellationToken);
 		}
 		catch (InvalidOperationException ex)
 		{

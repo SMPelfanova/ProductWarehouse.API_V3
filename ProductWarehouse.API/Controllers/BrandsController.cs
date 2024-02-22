@@ -22,10 +22,11 @@ public class BrandsController : BaseController
 	public async Task<IActionResult> GetBrands(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetAllBrandsQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var brands = mapper.Map<List<BrandResponse>>(result);
 
 		return Ok(brands);
@@ -41,10 +42,11 @@ public class BrandsController : BaseController
 	public async Task<IActionResult> GetBrand(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetBrandQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var brand = mapper.Map<BrandResponse>(result);
 
 		return Ok(brand);

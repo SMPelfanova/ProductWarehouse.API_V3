@@ -21,10 +21,11 @@ public class OrderStatusesController : BaseController
 	public async Task<IActionResult> GetOrderStatuses(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetAllOrderStatusesQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var orderStatuses = mapper.Map<List<OrderStatusResponse>>(result);
 
 		return Ok(orderStatuses);
@@ -40,10 +41,11 @@ public class OrderStatusesController : BaseController
 	public async Task<IActionResult> GetOrderStatus(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetOrderStatusQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var orderStatus = mapper.Map<OrderStatusResponse>(result);
 
 		return Ok(orderStatus);

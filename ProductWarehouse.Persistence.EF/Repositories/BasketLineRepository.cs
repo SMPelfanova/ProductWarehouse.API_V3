@@ -19,11 +19,14 @@ public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepositor
 		_logger = logger;
 	}
 
-	public async Task<bool> CheckProductAndSizeAddedAsync(Guid userId, Guid productId, Guid sizeId)
+	public async Task<bool> CheckProductAndSizeAddedAsync(Guid userId, Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
 	{
 		try
 		{
-			var basket = await _dbContext.Baskets.Include(x => x.BasketLines).SingleAsync(x => x.UserId == userId);
+			var basket = await _dbContext.Baskets
+				.AsNoTracking()
+				.Include(x => x.BasketLines)
+				.SingleAsync(x => x.UserId == userId, cancellationToken);
 			if (basket?.BasketLines == null)
 			{
 				return false;

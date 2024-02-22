@@ -14,7 +14,7 @@ public class DeleteProductGroupCommandHandler : IRequestHandler<DeleteProductGro
 
 	public async Task Handle(DeleteProductGroupCommand request, CancellationToken cancellationToken)
 	{
-		_unitOfWork.Products.DeleteProductGroup(request.ProductId, request.GroupId);
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.Products.DeleteProductGroupAsync(request.ProductId, request.GroupId, cancellationToken);
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 	}
 }

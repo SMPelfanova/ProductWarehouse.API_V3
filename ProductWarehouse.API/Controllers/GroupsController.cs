@@ -22,10 +22,11 @@ public class GroupsController : BaseController
 	public async Task<IActionResult> GetGroups(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetAllGroupsQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var groups = mapper.Map<List<GroupResponse>>(result);
 
 		return Ok(groups);
@@ -41,10 +42,11 @@ public class GroupsController : BaseController
 	public async Task<IActionResult> GetGroup(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetGroupQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var group = mapper.Map<GroupResponse>(result);
 
 		return Ok(group);

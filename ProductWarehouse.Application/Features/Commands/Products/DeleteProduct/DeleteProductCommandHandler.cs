@@ -14,10 +14,10 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductComm
 
 	public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
 	{
-		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id);
+		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id, cancellationToken);
 		product.IsDeleted = true;
-		_unitOfWork.Products.Update(product);
+		await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
 
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 	}
 }

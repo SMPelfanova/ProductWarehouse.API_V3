@@ -18,9 +18,9 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, List<
 
 	public async Task<List<OrderDto>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
 	{
-		var orders = await _unitOfWork.Orders.GetOrdersByUserIdAsync(request.UserId);
+		var orders = await _unitOfWork.Orders.GetOrdersByUserIdAsync(request.UserId, cancellationToken);
 		var result = _mapper.Map<List<OrderDto>>(orders);
-
+		
 		return result;
 	}
 }

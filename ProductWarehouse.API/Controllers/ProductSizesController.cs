@@ -27,10 +27,11 @@ public class ProductSizesController : BaseController
 	public async Task<IActionResult> GetProductSizes(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetProductSizesQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var productSizesResonse = mapper.Map<List<ProductSizeResponse>>(result);
 
 		return Ok(productSizesResonse);
@@ -48,10 +49,11 @@ public class ProductSizesController : BaseController
 		Guid id,
 		[FromBody] CreateProductSizeRequest request,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<CreateProductSizeCommand>(request);
-		var result = await mediator.Send(command);
+		var result = await mediator.Send(command, cancellationToken);
 		var productSizeResonse = mapper.Map<ProductSizeResponse>(result);
 
 		return CreatedAtAction(nameof(GetProductSizes), new { id = id }, productSizeResonse);
@@ -68,10 +70,11 @@ public class ProductSizesController : BaseController
 	public async Task<IActionResult> DeleteProductSize(
 		[FromRoute] DeleteProductSizeRequest request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<DeleteProductSizeCommand>(request);
-		await mediator.Send(command);
+		await mediator.Send(command, cancellationToken);
 
 		return NoContent();
 	}

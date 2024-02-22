@@ -14,6 +14,7 @@ using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
 using ProductWarehouse.Application.Models.Product;
 using ProductWarehouse.UnitTests;
+using System.Threading;
 using Xunit;
 
 public class ProductsControllerTests
@@ -27,6 +28,9 @@ public class ProductsControllerTests
 		fixture.Customize(new AutoMoqCustomization());
 		var loggerMock = A.Fake<ILogger<ProductsController>>();
 		var mediatorMock = A.Fake<IMediator>();
+		var cancellationTokenSource = new CancellationTokenSource();
+		cancellationTokenSource.Cancel(); 
+		var cancellationToken = cancellationTokenSource.Token;
 		var mapperMock = TestStartup.CreateMapper();
 		var controller = new ProductsController();
 
@@ -39,7 +43,7 @@ public class ProductsControllerTests
 					});
 
 		// Act
-		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock);
+		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock, cancellationToken);
 
 		// Assert
 		result.Should().BeOfType<OkObjectResult>();
@@ -56,6 +60,9 @@ public class ProductsControllerTests
 		var loggerMock = A.Fake<ILogger<ProductsController>>();
 		var mediatorMock = A.Fake<IMediator>();
 		var mapperMock = TestStartup.CreateMapper();
+		var cancellationTokenSource = new CancellationTokenSource();
+		cancellationTokenSource.Cancel();
+		var cancellationToken = cancellationTokenSource.Token;
 
 		var searchFilter = new GetAllProductsQuery { Highlight = "string", MaxPrice = 13, MinPrice = 1, Size = "Small" };
 		var filteredProducts = fixture.CreateMany<ProductResponse>(2);
@@ -70,7 +77,7 @@ public class ProductsControllerTests
 		var controller = new ProductsController();
 
 		// Act
-		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock);
+		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock, cancellationToken);
 
 		// Assert
 		result.Should().BeOfType<OkObjectResult>();

@@ -5,5 +5,5 @@ namespace ProductWarehouse.Application.Interfaces;
 
 public interface IBasketLineRepository : IRepository<BasketLine>
 {
-	Task<bool> CheckProductAndSizeAddedAsync(Guid userId, Guid productId, Guid sizeId);
+	Task<bool> CheckProductAndSizeAddedAsync(Guid userId, Guid productId, Guid sizeId, CancellationToken cancellationToken = default);
 }

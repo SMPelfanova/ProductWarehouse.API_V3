@@ -52,10 +52,9 @@ internal class UnitOfWork : IUnitOfWork
 		User = userRepository;
 		ProductSizes = productSizeRepository;
 	}
-
-	public Task<int> SaveChangesAsync()
+	public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
 	{
-		return _dbContext.SaveChangesAsync();
+		return _dbContext.SaveChangesAsync(cancellationToken);
 	}
 
 	public void Rollback()
