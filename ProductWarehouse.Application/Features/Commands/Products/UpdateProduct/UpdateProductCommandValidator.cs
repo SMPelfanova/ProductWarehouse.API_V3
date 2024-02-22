@@ -36,7 +36,10 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
 		RuleForEach(command => command.Sizes)
 			.MustAsync(async (sizeId, cancellation) => await SizeExists(sizeId.Id, cancellation))
-			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(UpdateProductCommand.Sizes)));
+			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(UpdateProductCommand.Sizes)))
+			.Must(size => size.QuantityInStock > 0)
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateProductCommand.Sizes)))
+			.When(size => size != null);
 
 		RuleForEach(command => command.Groups)
 			.MustAsync(async (groupId, cancellation) => await GroupExists(groupId.Id, cancellation))

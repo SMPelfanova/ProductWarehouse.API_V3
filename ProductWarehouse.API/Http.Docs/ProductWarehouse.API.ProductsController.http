@@ -28,7 +28,7 @@ Content-Type: application/json
     "sizes": [
       {
         "id": "{{SizeId}}",
-        "quantityInStock": 10
+        "quantityInStock": 0
       }
     ],
     "groups": [
