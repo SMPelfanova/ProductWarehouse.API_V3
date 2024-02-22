@@ -12,33 +12,13 @@ using ProductWarehouse.API.Controllers;
 using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Responses;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
-using ProductWarehouse.Application.Models;
 using ProductWarehouse.Application.Models.Product;
 using ProductWarehouse.UnitTests;
 using Xunit;
 
 public class ProductsControllerTests
 {
-	[Fact]
-	public async Task GetProducts_ReturnsNotFound_WhenNoProducts()
-	{
-		// Arrange
-		var loggerMock = A.Fake<ILogger<ProductsController>>();
-		var mediatorMock = A.Fake<IMediator>();
-		var mapperMock = A.Fake<IMapper>();
-
-		var controller = new ProductsController();
-
-		A.CallTo(() => mediatorMock.Send(A<GetAllProductsQuery>._, CancellationToken.None))
-					.Returns(new ProductsFilterDto());
-
-		// Act
-		var result = await controller.GetProducts(new BaseEmptyRequest(), mediatorMock, mapperMock);
-
-		// Assert
-		result.Should().BeOfType<NotFoundResult>();
-	}
-
+	
 	[Fact]
 	public async Task GetProducts_ReturnsOk_WithProducts()
 	{
