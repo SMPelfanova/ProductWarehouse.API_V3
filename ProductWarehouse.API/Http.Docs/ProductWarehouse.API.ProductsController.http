@@ -28,7 +28,7 @@ Content-Type: application/json
     "sizes": [
       {
         "id": "{{SizeId}}",
-        "quantityInStock": 0
+        "quantityInStock": 10
       }
     ],
     "groups": [
@@ -51,7 +51,7 @@ Content-Type: application/json
   "sizes": [
     {
       "id": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
-      "quantityInStock": 10
+      "quantityInStock": 100000
     }
   ],
   "groups": [

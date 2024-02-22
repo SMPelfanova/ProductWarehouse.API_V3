@@ -21,8 +21,11 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 	public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
 	{
 		var orderStatuses = await _unitOfWork.OrdersStatuses.GetAllAsync();
-		request.StatusId = orderStatuses.FirstOrDefault(x => x.Name.ToLowerInvariant() == "initial").Id;
-		
+		if (orderStatuses != null && orderStatuses.Any())
+		{
+			request.StatusId = orderStatuses.FirstOrDefault(x => x.Name.ToLowerInvariant() == "initial").Id;
+		}
+
 		foreach (var item in request.OrderLines)
 		{
 			await UpdateQuantityInStockAsync(item);
