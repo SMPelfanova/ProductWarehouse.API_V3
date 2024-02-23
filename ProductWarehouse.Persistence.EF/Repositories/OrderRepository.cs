@@ -43,7 +43,6 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
 	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken)
 	{
-	    Thread.Sleep(60000);
 		try
 		{
 			return await _dbContext.Orders
