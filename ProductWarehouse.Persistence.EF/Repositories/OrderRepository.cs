@@ -32,7 +32,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Order), id), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order), id), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order)), ex);
 		}
 		catch (Exception ex)
 		{

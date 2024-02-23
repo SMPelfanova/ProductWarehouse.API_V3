@@ -58,7 +58,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Product), id), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Product), id), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Product)), ex);
 		}
 		catch (Exception ex)
 		{
@@ -77,7 +77,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
 		}
 		catch (Exception ex)
 		{
@@ -98,7 +98,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
 		}
 		catch (Exception ex)
 		{
@@ -117,7 +117,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.ProductGroupNotFoundErrorMessage(productId, groupId), ex);
-			throw new NotFoundException(MessageConstants.ProductGroupNotFoundErrorMessage(productId, groupId), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductGroups)), ex);
 		}
 		catch (Exception ex)
 		{
@@ -136,7 +136,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
 		}
 		catch (Exception ex)
 		{
@@ -156,7 +156,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
-			throw new NotFoundException(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
 		}
 		catch (Exception ex)
 		{

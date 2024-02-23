@@ -24,7 +24,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 			if (entity == null)
 			{
 				_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
-				throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.");
+				throw new NotFoundException($"Entity of type {typeof(TEntity)} not found.");
 			}
 			return entity;
 		}
