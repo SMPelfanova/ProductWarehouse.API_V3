@@ -16,7 +16,7 @@ public class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
             .HasDefaultValue(DatabaseConstants.One);
 
         builder.Property(p => p.Price)
-            .HasColumnType(DatabaseConstants.DecimalColumnType)
+            .HasColumnType(DatabaseConstants.DecimalColumnTypeNpgsql)
             .IsRequired();
 
         builder.HasOne(b => b.Orders)

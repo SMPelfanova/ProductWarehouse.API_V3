@@ -9,7 +9,11 @@ public static class DatabaseConstants
 	public const int Hundred = 100;
 	public const int TwoHundredFiftyFive = 255;
 
-	public const string DecimalColumnType = "decimal(18, 2)";
-	public const string DateColumnType = "Date";
+	public const string DecimalColumnTypeSql = "decimal(18, 2)";
+	public const string DateColumnTypeSql = "Date";
 	public const string DateDefaultValueSql = "GetDate()";
+
+	public const string DecimalColumnTypeNpgsql = "numeric(18, 2)";
+	public const string DateColumnTypeNpgsql = "date";
+	public const string DateDefaultValueNpgsql = "CURRENT_DATE";
 }

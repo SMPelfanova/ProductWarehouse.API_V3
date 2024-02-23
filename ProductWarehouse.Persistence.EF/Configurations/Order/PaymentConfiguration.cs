@@ -21,8 +21,8 @@ public class PaymentConfiguration : EntityConfiguration<Payment>
 
 		builder.Property(t => t.PaymentDate)
 			.IsRequired()
-			.HasColumnType(DatabaseConstants.DateColumnType)
-			.HasDefaultValueSql(DatabaseConstants.DecimalColumnType);
+			.HasColumnType(DatabaseConstants.DateColumnTypeNpgsql)
+			.HasDefaultValueSql(DatabaseConstants.DateDefaultValueNpgsql);
 
 		builder.HasOne(b => b.Order)
 			.WithOne(p => p.Payment)

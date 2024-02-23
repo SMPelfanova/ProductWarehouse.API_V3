@@ -12,15 +12,15 @@ public class OrderConfiguration : EntityConfiguration<Order>
         base.Configure(builder);
 
         builder.Property(p => p.TotalAmount)
-            .HasColumnType(DatabaseConstants.DecimalColumnType)
+            .HasColumnType(DatabaseConstants.DecimalColumnTypeNpgsql)
             .IsRequired();
 
         builder.Property(p => p.OrderDate).IsRequired();
 
         builder.Property(t => t.OrderDate)
             .IsRequired()
-            .HasColumnType(DatabaseConstants.DateColumnType)
-            .HasDefaultValueSql(DatabaseConstants.DateDefaultValueSql);
+            .HasColumnType(DatabaseConstants.DateColumnTypeNpgsql)
+            .HasDefaultValueSql(DatabaseConstants.DateDefaultValueNpgsql);
 
         builder.HasOne(b => b.Status)
             .WithMany(p => p.Orders)

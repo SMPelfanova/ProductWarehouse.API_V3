@@ -2,9 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProductWarehouse.Persistence.EF;
 
 #nullable disable
@@ -12,96 +12,125 @@ using ProductWarehouse.Persistence.EF;
 namespace ProductWarehouse.Persistence.EF.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240205131926_WerehouseAddSeedDataAndNulableColumns")]
-    partial class WerehouseAddSeedDataAndNulableColumns
+    [Migration("20240223142053_WerehouseInitialMigration.")]
+    partial class WerehouseInitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Basket", b =>
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.BasketLine", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BasketId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric(18, 2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<Guid>("SizeId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SizeId");
+
+                    b.ToTable("BasketLines");
+                });
+
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Baskets", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Baskets", (string)null);
-                });
+                    b.ToTable("Baskets");
 
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.BasketLine", b =>
-                {
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BasketId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
-
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<Guid>("SizeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ProductId", "BasketId");
-
-                    b.HasIndex("BasketId");
-
-                    b.HasIndex("SizeId");
-
-                    b.ToTable("BasketLines", (string)null);
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8be53f04-cb10-46ff-a703-91737621e899"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UserId = new Guid("1fd3d9f7-c171-4596-b332-fa0f65d0f057")
+                        });
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Brand", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ae9a0433-d14e-4afb-a426-8ac9d4dec43b"),
+                            Id = new Guid("a72c2afc-884a-4b8c-ad86-85b3f24c30f5"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Zara"
                         },
                         new
                         {
-                            Id = new Guid("2f77702d-6e45-4410-bbf4-b4391c6eedf5"),
+                            Id = new Guid("9499fc71-2228-4a5f-9edf-77c945806cb5"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Bershka"
                         },
                         new
                         {
-                            Id = new Guid("941b7ad4-018d-4c57-9c39-f56bf6e7705e"),
+                            Id = new Guid("656b14b5-849b-4f18-b149-3391429960cb"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Stella Nova"
                         });
                 });
@@ -110,26 +139,33 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2de8ef85-45d6-4853-8b46-34a55bb9ed5e"),
+                            Id = new Guid("6306dd20-9279-4715-932f-8baa92a10235"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Casual"
                         },
                         new
                         {
-                            Id = new Guid("496ca0ac-0933-4d20-9a02-7c50af5fc946"),
+                            Id = new Guid("597b7de6-62a3-4fe2-969b-2ecd18b42892"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Comfortable"
                         });
                 });
@@ -138,91 +174,116 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("Date")
-                        .HasDefaultValueSql("GetDate()");
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<Guid?>("PaymentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("StatusId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("numeric(18, 2)");
 
-                    b.Property<Guid?>("Userid")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("PaymentId")
+                        .IsUnique();
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("Userid");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.OrderLine", b =>
                 {
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("numeric(18, 2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
                     b.Property<Guid>("SizeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("OrderLines", (string)null);
+                    b.ToTable("OrderLines");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.OrderStatus", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("character varying(30)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderStatus", (string)null);
+                    b.ToTable("OrderStatus");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("102e2835-f81b-4451-a0ef-10c8d93c3dcb"),
+                            Id = new Guid("aa1fce0b-076a-4f20-9e08-71e5d5fa7f73"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Initial"
+                        },
+                        new
+                        {
+                            Id = new Guid("4ed37c1c-caeb-434b-8d76-8f1fcaf28c22"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Pending"
                         },
                         new
                         {
-                            Id = new Guid("c95a1488-b79e-421c-94df-b93bc232e153"),
+                            Id = new Guid("7da8cf0f-cd9d-49c7-9e86-69d74c0f42b7"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Delivered"
                         });
                 });
@@ -231,138 +292,179 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Method")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("PaymentDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("Date")
-                        .HasDefaultValueSql("GetDate()");
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("BrandId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<string>("Photo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
+                        .HasColumnType("numeric(18, 2)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.ProductGroups", b =>
                 {
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("GroupId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("ProductId", "GroupId");
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("ProductGroups", (string)null);
+                    b.ToTable("ProductGroups");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.ProductSize", b =>
                 {
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SizeId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("QuantityInStock")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
                     b.HasKey("ProductId", "SizeId");
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("ProductSizes", (string)null);
+                    b.ToTable("ProductSizes");
+                });
+
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Size", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("character varying(30)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sizes", (string)null);
+                    b.ToTable("Sizes");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0663c983-db43-4848-89d1-4289cc0bbb16"),
+                            Id = new Guid("25badb4e-f7f6-4486-bf58-cb99d57a13a0"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XS"
                         },
                         new
                         {
-                            Id = new Guid("56005af8-3ae8-4f2b-9f76-e961166773e1"),
+                            Id = new Guid("248d56c5-0f13-4ef4-a259-bc6f951788a4"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "S"
                         },
                         new
                         {
-                            Id = new Guid("c761edf7-9d6e-4117-ae7c-082ed7ff05de"),
+                            Id = new Guid("e12acf55-0f96-4316-98ad-5db8fd8b2cfe"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "M"
                         },
                         new
                         {
-                            Id = new Guid("87f8aa05-d90e-4bf1-bf32-54372968e052"),
+                            Id = new Guid("9082a2cc-3235-4aed-89ac-c63d67203894"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "L"
                         },
                         new
                         {
-                            Id = new Guid("ddf505ac-9535-41fd-a66a-3eb421ad0694"),
+                            Id = new Guid("e157eb9a-f8c0-4bbb-a1bc-5972e27031e8"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XL"
                         });
                 });
@@ -370,75 +472,83 @@ namespace ProductWarehouse.Persistence.EF.Migrations
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1fd3d9f7-c171-4596-b332-fa0f65d0f057"),
+                            Address = "Street default",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "test@email.com",
+                            FirstName = "First",
+                            IsDeleted = false,
+                            LastName = "Last",
+                            Password = "asd",
+                            Phone = "0888888877"
+                        });
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.ToTable("UserRoles", (string)null);
-                });
+                    b.HasIndex("RoleId");
 
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Basket", b =>
-                {
-                    b.HasOne("ProductWarehouse.Domain.Entities.User", "User")
-                        .WithOne("Basket")
-                        .HasForeignKey("ProductWarehouse.Domain.Entities.Basket", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.BasketLine", b =>
                 {
-                    b.HasOne("ProductWarehouse.Domain.Entities.Basket", "Basket")
+                    b.HasOne("ProductWarehouse.Domain.Entities.Baskets", "Basket")
                         .WithMany("BasketLines")
                         .HasForeignKey("BasketId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -463,11 +573,22 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Navigation("Size");
                 });
 
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Baskets", b =>
+                {
+                    b.HasOne("ProductWarehouse.Domain.Entities.User", "User")
+                        .WithOne("Basket")
+                        .HasForeignKey("ProductWarehouse.Domain.Entities.Baskets", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ProductWarehouse.Domain.Entities.Payment", "Payment")
-                        .WithMany("Orders")
-                        .HasForeignKey("PaymentId");
+                        .WithOne("Order")
+                        .HasForeignKey("ProductWarehouse.Domain.Entities.Order", "PaymentId");
 
                     b.HasOne("ProductWarehouse.Domain.Entities.OrderStatus", "Status")
                         .WithMany("Orders")
@@ -477,7 +598,7 @@ namespace ProductWarehouse.Persistence.EF.Migrations
 
                     b.HasOne("ProductWarehouse.Domain.Entities.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("Userid");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Payment");
 
@@ -562,18 +683,26 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.User", b =>
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.UserRole", b =>
                 {
-                    b.HasOne("ProductWarehouse.Domain.Entities.UserRole", "UserRole")
-                        .WithMany("Users")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("ProductWarehouse.Domain.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserRole");
+                    b.HasOne("ProductWarehouse.Domain.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Basket", b =>
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Baskets", b =>
                 {
                     b.Navigation("BasketLines");
                 });
@@ -600,7 +729,8 @@ namespace ProductWarehouse.Persistence.EF.Migrations
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Payment", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Order")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Product", b =>
@@ -612,6 +742,11 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                     b.Navigation("ProductGroups");
 
                     b.Navigation("ProductSizes");
+                });
+
+            modelBuilder.Entity("ProductWarehouse.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("ProductWarehouse.Domain.Entities.Size", b =>
@@ -629,11 +764,8 @@ namespace ProductWarehouse.Persistence.EF.Migrations
                         .IsRequired();
 
                     b.Navigation("Orders");
-                });
 
-            modelBuilder.Entity("ProductWarehouse.Domain.Entities.UserRole", b =>
-                {
-                    b.Navigation("Users");
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

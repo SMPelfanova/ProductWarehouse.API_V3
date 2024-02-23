@@ -16,7 +16,7 @@ public class BasketLineConfiguration : EntityConfiguration<BasketLine>
 			.HasDefaultValue(DatabaseConstants.One);
 
 		builder.Property(p => p.Price)
-		   .HasColumnType(DatabaseConstants.DecimalColumnType)
+		   .HasColumnType(DatabaseConstants.DecimalColumnTypeNpgsql)
 		   .IsRequired();
 
 		builder.HasOne(bl => bl.Basket)

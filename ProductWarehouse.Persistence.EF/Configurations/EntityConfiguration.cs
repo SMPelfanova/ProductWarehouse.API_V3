@@ -13,7 +13,7 @@ public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T> where
 
 		builder.Property(e => e.CreatedAt)
 			.IsRequired()
-			.HasColumnType(DatabaseConstants.DateColumnType)
-			.HasDefaultValueSql(DatabaseConstants.DateDefaultValueSql);
+			.HasColumnType(DatabaseConstants.DateColumnTypeNpgsql)
+			.HasDefaultValueSql(DatabaseConstants.DateDefaultValueNpgsql);
 	}
 }
