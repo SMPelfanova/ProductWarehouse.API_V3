@@ -16,7 +16,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		_logger = logger;
 	}
 
-	public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+	public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -35,7 +35,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default, params string[] includeProperties)
+	public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken, params string[] includeProperties)
 	{
 		try
 		{
@@ -53,7 +53,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+	public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -67,7 +67,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
+	public Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -81,7 +81,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+	public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -95,7 +95,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public async Task<bool> CheckIfExistsAsync(Guid id, CancellationToken cancellationToken = default)
+	public async Task<bool> CheckIfExistsAsync(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{

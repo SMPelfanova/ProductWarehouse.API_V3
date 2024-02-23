@@ -13,7 +13,7 @@ public interface IUnitOfWork : IDisposable
 	IBasketLineRepository BasketLines { get; }
 	IUserRepository User { get; }
 
-	Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+	Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 	void Rollback();
 }

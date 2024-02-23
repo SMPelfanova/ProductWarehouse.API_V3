@@ -19,7 +19,7 @@ public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepositor
 		_logger = logger;
 	}
 
-	public async Task<bool> CheckProductAndSizeAddedAsync(Guid userId, Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
+	public async Task<bool> CheckProductAndSizeAddedAsync(Guid userId, Guid productId, Guid sizeId, CancellationToken cancellationToken)
 	{
 		try
 		{

@@ -31,7 +31,7 @@ public class UpdateProductSizeCommandValidator : AbstractValidator<UpdateProduct
 
 	private async Task<bool> HaveSufficientQuantity(UpdateProductSizeCommand command, int quantity, CancellationToken cancellationToken)
 	{
-		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId);
+		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId, cancellationToken);
 		return availableSizes >= quantity;
 	}
 }

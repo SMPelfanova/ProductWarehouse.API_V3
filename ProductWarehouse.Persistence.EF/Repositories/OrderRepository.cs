@@ -19,7 +19,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		_logger = logger;
 	}
 
-	public async Task<Order> GetOrderDetailsAsync(Guid id, CancellationToken cancellationToken = default)
+	public async Task<Order> GetOrderDetailsAsync(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -41,9 +41,9 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		}
 	}
 
-	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken)
 	{
-		await Task.Delay(60000, cancellationToken);
+	    Thread.Sleep(60000);
 		try
 		{
 			return await _dbContext.Orders

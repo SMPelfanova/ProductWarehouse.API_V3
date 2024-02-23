@@ -19,7 +19,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		_logger = logger;
 	}
 
-	public async Task<List<Product>> GetProductsAsync(CancellationToken cancellationToken = default)
+	public async Task<List<Product>> GetProductsAsync(CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -44,7 +44,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task<Product> GetProductDetailsAsync(Guid id, CancellationToken cancellationToken = default)
+	public async Task<Product> GetProductDetailsAsync(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -67,7 +67,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
+	public async Task<ProductSize> GetProductSizeAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -86,7 +86,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
+	public async Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -107,7 +107,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task DeleteProductGroupAsync(Guid productId, Guid groupId, CancellationToken cancellationToken = default)
+	public async Task DeleteProductGroupAsync(Guid productId, Guid groupId, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -126,7 +126,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task DeleteProductSizeAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken = default)
+	public async Task DeleteProductSizeAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -145,7 +145,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task UpdateQuantityInStockAsync(ProductSize productSize, CancellationToken cancellationToken = default)
+	public async Task UpdateQuantityInStockAsync(ProductSize productSize, CancellationToken cancellationToken)
 	{
 		try
 		{

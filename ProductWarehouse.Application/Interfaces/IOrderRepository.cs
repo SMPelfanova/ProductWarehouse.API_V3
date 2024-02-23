@@ -5,6 +5,6 @@ namespace ProductWarehouse.Application.Interfaces;
 
 public interface IOrderRepository : IRepository<Order>
 {
-	Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
-	Task<Order> GetOrderDetailsAsync(Guid id, CancellationToken cancellationToken = default);
+	Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+	Task<Order> GetOrderDetailsAsync(Guid id, CancellationToken cancellationToken);
 }

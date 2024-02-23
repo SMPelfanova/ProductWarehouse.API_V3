@@ -37,7 +37,7 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 
 	private async Task<bool> HaveSufficientQuantity(AddBasketLineCommand command, int quantity, CancellationToken cancellationToken)
 	{
-		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId);
+		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId, cancellationToken);
 		return availableSizes >= quantity;
 	}
 
