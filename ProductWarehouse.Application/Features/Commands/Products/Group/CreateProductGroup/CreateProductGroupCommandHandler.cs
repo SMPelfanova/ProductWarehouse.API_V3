@@ -19,11 +19,11 @@ public class CreateProductGroupCommandHandler : IRequestHandler<CreateProductGro
 
 	public async Task<ProductGroupDto> Handle(CreateProductGroupCommand request, CancellationToken cancellationToken)
 	{
-		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId);
+		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.ProductId, cancellationToken);
 
 		var productGroup = _mapper.Map<ProductGroups>(request);
 		product.ProductGroups.Add(productGroup);
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 		var productGroupDto = _mapper.Map<ProductGroupDto>(productGroup);
 

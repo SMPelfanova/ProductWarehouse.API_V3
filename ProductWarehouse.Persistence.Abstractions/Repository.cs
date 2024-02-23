@@ -16,42 +16,35 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		_logger = logger;
 	}
 
-	public async Task<TEntity> GetByIdAsync(Guid id)
+	public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
 	{
-		TEntity entity;
 		try
 		{
-			entity = await _dbContext.Set<TEntity>().FindAsync(id);
-
+			var entity = await _dbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken);
+			if (entity == null)
+			{
+				_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
+				throw new NotFoundException($"Entity of type {typeof(TEntity)} not found.");
+			}
+			return entity;
 		}
 		catch (Exception ex)
 		{
 			_logger.Error("An error occurred while fetching the entity by id.", ex);
 			throw new DatabaseException("An error occurred while fetching the entity by id.", ex);
 		}
-
-		if (entity == null)
-		{
-			_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
-			throw new NotFoundException($"Entity of type {typeof(TEntity)} with id {id} not found.");
-		}
-
-		return entity;
-
 	}
 
-	public async Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties)
+	public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken, params string[] includeProperties)
 	{
 		try
 		{
 			IQueryable<TEntity> query = _dbContext.Set<TEntity>();
-
 			foreach (var includeProperty in includeProperties)
 			{
 				query = query.Include(includeProperty);
 			}
-
-			return await query.ToListAsync();
+			return await query.ToListAsync(cancellationToken);
 		}
 		catch (Exception ex)
 		{
@@ -60,12 +53,11 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public async Task<TEntity> Add(TEntity entity)
+	public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
 	{
 		try
 		{
-			var entry = await _dbContext.Set<TEntity>().AddAsync(entity);
-
+			var entry = await _dbContext.Set<TEntity>().AddAsync(entity, cancellationToken);
 			return entry.Entity;
 		}
 		catch (Exception ex)
@@ -75,16 +67,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public void Delete(TEntity entity)
+	public Task DeleteAsync(TEntity entity, CancellationToken cancellationToken)
 	{
 		try
 		{
 			_dbContext.Set<TEntity>().Remove(entity);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning("Entity to be deleted not found.", ex);
-			throw new NotFoundException("Entity to be deleted not found.", ex);
+			return Task.CompletedTask;
 		}
 		catch (Exception ex)
 		{
@@ -93,16 +81,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public void Update(TEntity entity)
+	public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)
 	{
 		try
 		{
 			_dbContext.Set<TEntity>().Update(entity);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning("Entity to be updated not found.", ex);
-			throw new NotFoundException("Entity to be updated not found.", ex);
+			return Task.CompletedTask;
 		}
 		catch (Exception ex)
 		{
@@ -111,11 +95,11 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		}
 	}
 
-	public async Task<bool> CheckIfExistsAsync(Guid id)
+	public async Task<bool> CheckIfExistsAsync(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{
-			TEntity entity = await _dbContext.Set<TEntity>().FindAsync(id);
+			var entity = await _dbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken);
 			return entity != null;
 		}
 		catch (Exception ex)

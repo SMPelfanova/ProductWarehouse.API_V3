@@ -18,7 +18,7 @@ public class GetProductGroupsQueryHandler : IRequestHandler<GetProductGroupsQuer
 
 	public async Task<List<GroupDto>> Handle(GetProductGroupsQuery request, CancellationToken cancellationToken)
 	{
-		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id);
+		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id, cancellationToken);
 
 		var result = _mapper.Map<List<GroupDto>>(product.ProductGroups);
 

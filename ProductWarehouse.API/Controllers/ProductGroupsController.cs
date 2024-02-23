@@ -27,10 +27,11 @@ public class ProductGroupsController : BaseController
 	public async Task<IActionResult> GetProductGroups(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetProductGroupsQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var productGroupsResonse = mapper.Map<List<GroupResponse>>(result);
 
 		return Ok(productGroupsResonse);
@@ -48,10 +49,11 @@ public class ProductGroupsController : BaseController
 		Guid id,
 		[FromBody] CreateProductGroupRequest request,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<CreateProductGroupCommand>(request);
-		var result = await mediator.Send(command);
+		var result = await mediator.Send(command, cancellationToken);
 		var productGroupsResonse = mapper.Map<ProductGroupResponse>(result);
 
 		return CreatedAtAction(nameof(GetProductGroups), new { id = request.Id }, productGroupsResonse);
@@ -68,10 +70,11 @@ public class ProductGroupsController : BaseController
 	public async Task<IActionResult> DeleteProductGroup(
 		[FromRoute] DeleteProductGroupRequest request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<DeleteProductGroupCommand>(request);
-		await mediator.Send(command);
+		await mediator.Send(command, cancellationToken);
 
 		return NoContent();
 	}

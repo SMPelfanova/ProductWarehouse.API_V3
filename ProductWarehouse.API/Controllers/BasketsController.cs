@@ -27,10 +27,11 @@ public class BasketsController : BaseController
 	public async Task<IActionResult> GetBasket(
 		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var comamnd = mapper.Map<GetBasketQuery>(request);
-		var result = await mediator.Send(comamnd);
+		var result = await mediator.Send(comamnd, cancellationToken);
 		var basket = mapper.Map<BasketResponse>(result);
 
 		return Ok(basket);
@@ -46,10 +47,11 @@ public class BasketsController : BaseController
 	public async Task<IActionResult> DeleteBasket(
 		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var comamnd = mapper.Map<DeleteBasketCommand>(request);
-		await mediator.Send(comamnd);
+		await mediator.Send(comamnd, cancellationToken);
 
 		return NoContent();
 	}
@@ -66,11 +68,12 @@ public class BasketsController : BaseController
 		Guid userId,
 		[FromBody] AddBasketLineRequest addBasketLineRequest,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<AddBasketLineCommand>(addBasketLineRequest);
 		command.UserId = userId;
-		var result = await mediator.Send(command);
+		var result = await mediator.Send(command, cancellationToken);
 
 		var basketLineRespose = mapper.Map<BasketLineResponse>(result);
 
@@ -88,10 +91,11 @@ public class BasketsController : BaseController
 	public async Task<IActionResult> DeleteBaskeLine(
 		 [FromRoute] DeleteBasketLineRequest request,
 		 [FromServices] IMapper mapper,
-		 [FromServices] IMediator mediator)
+		 [FromServices] IMediator mediator,
+		 CancellationToken cancellationToken)
 	{
 		var comand = mapper.Map<DeleteBasketLineCommand>(request);
-		await mediator.Send(comand);
+		await mediator.Send(comand, cancellationToken);
 
 		return NoContent();
 	}
@@ -108,12 +112,15 @@ public class BasketsController : BaseController
 		Guid userId,
 		[FromBody] UpdateBasketLineRequest updatedBasketRequest,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<UpdateBasketLineCommand>(updatedBasketRequest);
 		command.UserId = userId;
-		await mediator.Send(command);
+		var basketLineDto = await mediator.Send(command, cancellationToken);
 
-		return Ok();
+		var basketLineResponse = mapper.Map<BasketLineResponse>(basketLineDto);
+
+		return Ok(basketLineResponse);
 	}
 }

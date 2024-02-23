@@ -14,7 +14,7 @@ public class DeleteBasketCommandHandler : IRequestHandler<DeleteBasketCommand>
 
 	public async Task Handle(DeleteBasketCommand request, CancellationToken cancellationToken)
 	{
-		_unitOfWork.Basket.DeleteBasketLines(request.UserId);
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.Basket.DeleteBasketLinesAsync(request.UserId, cancellationToken);
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 	}
 }

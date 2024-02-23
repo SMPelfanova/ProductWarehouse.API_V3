@@ -2,15 +2,10 @@
 
 public interface IRepository<TEntity> where TEntity : class
 {
-	Task<IReadOnlyList<TEntity>> GetAllAsync(params string[] includeProperties);
-
-	Task<TEntity> GetByIdAsync(Guid id);
-
-	Task<TEntity> Add(TEntity entity);
-
-	void Update(TEntity entity);
-
-	void Delete(TEntity entity);
-
-	Task<bool> CheckIfExistsAsync(Guid id);
+	Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+	Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken, params string[] includeProperties);
+	Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken);
+	Task DeleteAsync(TEntity entity, CancellationToken cancellationToken);
+	Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
+	Task<bool> CheckIfExistsAsync(Guid id, CancellationToken cancellationToken);
 }

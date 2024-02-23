@@ -18,7 +18,7 @@ public class GetAllOrderStatusesQueryHandler : IRequestHandler<GetAllOrderStatus
 
 	public async Task<List<OrderStatusDto>> Handle(GetAllOrderStatusesQuery request, CancellationToken cancellationToken)
 	{
-		var orderStatuses = await _unitOfWork.OrdersStatuses.GetAllAsync();
+		var orderStatuses = await _unitOfWork.OrdersStatuses.GetAllAsync(cancellationToken);
 		var result = _mapper.Map<List<OrderStatusDto>>(orderStatuses);
 
 		return result;

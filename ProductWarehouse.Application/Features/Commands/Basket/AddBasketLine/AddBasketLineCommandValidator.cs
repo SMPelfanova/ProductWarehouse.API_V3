@@ -27,10 +27,6 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Quantity)))
 			.MustAsync(HaveSufficientQuantity)
 			.WithMessage(MessageConstants.NotAvailableQuantityMessage);
-
-		RuleFor(command => command.Price)
-			.GreaterThan(0)
-			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(AddBasketLineCommand.Price)));
 		
 		RuleFor(command => command.SizeId)
 			.NotEmpty()
@@ -41,13 +37,13 @@ public class AddBasketLineCommandValidator : AbstractValidator<AddBasketLineComm
 
 	private async Task<bool> HaveSufficientQuantity(AddBasketLineCommand command, int quantity, CancellationToken cancellationToken)
 	{
-		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId);
+		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId, cancellationToken);
 		return availableSizes >= quantity;
 	}
 
 	private async Task<bool> NotAlreadyAdded(Guid userId, Guid productId, Guid sizeId, CancellationToken cancellationToken)
 	{
-		bool alreadyAded = await _unitOfWork.BasketLines.CheckProductAndSizeAddedAsync(userId, productId, sizeId);
+		bool alreadyAded = await _unitOfWork.BasketLines.CheckProductAndSizeAddedAsync(userId, productId, sizeId, cancellationToken);
 		
 		return !alreadyAded;
 	}

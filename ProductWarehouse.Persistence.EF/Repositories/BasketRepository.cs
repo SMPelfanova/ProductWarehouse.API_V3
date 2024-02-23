@@ -19,13 +19,14 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 		_logger = logger;
 	}
 
-	public async Task<Baskets> GetBasketByUserIdAsync(Guid userId)
+	public async Task<Baskets> GetBasketByUserIdAsync(Guid userId, CancellationToken cancellationToken)
 	{
 		try
 		{
 			return await _dbContext.Baskets
+						.AsNoTracking()
 						.Include(b => b.BasketLines)
-						.SingleAsync(b => b.UserId == userId);
+						.SingleAsync(b => b.UserId == userId, cancellationToken);
 		}
 		catch (InvalidOperationException ex)
 		{
@@ -39,13 +40,14 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 		}
 	}
 
-	public void DeleteBasketLines(Guid userId)
+	public async Task DeleteBasketLinesAsync(Guid userId, CancellationToken cancellationToken)
 	{
 		try
 		{
-			var basket = _dbContext.Baskets
+			var basket = await _dbContext.Baskets
+						.AsNoTracking()
 						.Include(b => b.BasketLines)
-						.Single(x => x.UserId == userId);
+						.SingleAsync(x => x.UserId == userId, cancellationToken);
 
 			_dbContext.BasketLines.RemoveRange(basket.BasketLines);
 		}

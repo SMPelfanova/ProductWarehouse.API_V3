@@ -18,7 +18,7 @@ public class GetAllSizesQueryHandler : IRequestHandler<GetAllSizesQuery, List<Si
 
 	public async Task<List<SizeDto>> Handle(GetAllSizesQuery request, CancellationToken cancellationToken)
 	{
-		var sizes = await _unitOfWork.Sizes.GetAllAsync();
+		var sizes = await _unitOfWork.Sizes.GetAllAsync(cancellationToken);
 		var result = _mapper.Map<List<SizeDto>>(sizes);
 
 		return result;

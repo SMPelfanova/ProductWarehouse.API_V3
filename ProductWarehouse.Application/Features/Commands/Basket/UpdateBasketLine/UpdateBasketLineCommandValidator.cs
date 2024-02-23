@@ -32,10 +32,6 @@ public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLi
 			.MustAsync(HaveSufficientQuantity)
 			.WithMessage(MessageConstants.NotAvailableQuantityMessage);
 
-		RuleFor(command => command.Price)
-			.GreaterThan(0)
-			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateBasketLineCommand.Price)));
-
 		RuleFor(command => command.SizeId)
 			.NotEmpty()
 			.WithMessage(MessageConstants.RequiredValidationMessage(nameof(UpdateBasketLineCommand.SizeId)));
@@ -43,7 +39,7 @@ public class UpdateBasketLineCommandValidator : AbstractValidator<UpdateBasketLi
 	
 	private async Task<bool> HaveSufficientQuantity(UpdateBasketLineCommand command, int quantity, CancellationToken cancellationToken)
 	{
-		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId);
+		var availableSizes = await _unitOfWork.Products.CheckQuantityInStockAsync(command.ProductId, command.SizeId, cancellationToken);
 		return availableSizes >= quantity;
 	}
 }

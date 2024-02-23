@@ -36,7 +36,10 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
 		RuleForEach(command => command.Sizes)
 			.MustAsync(async (sizeId, cancellation) => await SizeExists(sizeId.Id, cancellation))
-			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(UpdateProductCommand.Sizes)));
+			.WithMessage(MessageConstants.DoesNotExistMessage(nameof(UpdateProductCommand.Sizes)))
+			.Must(size => size.QuantityInStock > 0)
+			.WithMessage(MessageConstants.GraterThanZeroValidationMessage(nameof(UpdateProductCommand.Sizes)))
+			.When(size => size != null);
 
 		RuleForEach(command => command.Groups)
 			.MustAsync(async (groupId, cancellation) => await GroupExists(groupId.Id, cancellation))
@@ -45,21 +48,21 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
 
 	private async Task<bool> SizeExists(Guid sizeId, CancellationToken cancellationToken)
 	{
-		var size = await _unitOfWork.Sizes.CheckIfExistsAsync(sizeId);
+		var size = await _unitOfWork.Sizes.CheckIfExistsAsync(sizeId, cancellationToken);
 
 		return size;
 	}
 
 	private async Task<bool> GroupExists(Guid groupId, CancellationToken cancellationToken)
 	{
-		var group = await _unitOfWork.Group.CheckIfExistsAsync(groupId);
+		var group = await _unitOfWork.Group.CheckIfExistsAsync(groupId, cancellationToken);
 
 		return group;
 	}
 
 	private async Task<bool> BrandExists(Guid brandId, CancellationToken cancellationToken)
 	{
-		var brand = await _unitOfWork.Brands.CheckIfExistsAsync(brandId);
+		var brand = await _unitOfWork.Brands.CheckIfExistsAsync(brandId, cancellationToken);
 
 		return brand;
 	}

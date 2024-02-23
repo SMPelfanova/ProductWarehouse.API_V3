@@ -7,7 +7,7 @@
 GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
 
 ### Get Order
-GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/f93a44ec-26a7-4857-8ec6-08dc2c84457f
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/ca087a94-4452-48b7-4db6-08dc3381e749
 
 ### Create Order
 POST {{ProductWarehouse.API_HostAddress}}/api/orders
@@ -34,7 +34,7 @@ Content-Type: application/json
 
 
 ### Partially Update Order
-PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/a21114b2-c828-4970-4ad9-08dc2c6d4d8d
+PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/2be26ede-cee2-43c9-3997-08dc338dbf74
 Content-Type: application/json-patch+json
 
 [
@@ -46,4 +46,4 @@ Content-Type: application/json-patch+json
 ]
 
 ### Delete Order
-DELETE {{ProductWarehouse.API_HostAddress}}/api/orders/f93a44ec-26a7-4857-8ec6-08dc2c84457f
+DELETE {{ProductWarehouse.API_HostAddress}}/api/orders/ca087a94-4452-48b7-4db6-08dc3381e749

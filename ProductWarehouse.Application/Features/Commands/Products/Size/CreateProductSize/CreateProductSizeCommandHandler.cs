@@ -20,9 +20,9 @@ public class CreateProductSizeCommandHandler : IRequestHandler<CreateProductSize
 	public async Task<ProductSizeDto> Handle(CreateProductSizeCommand request, CancellationToken cancellationToken)
 	{
 		var productSize = _mapper.Map<ProductSize>(request);
-		var result  = await _unitOfWork.ProductSizes.Add(productSize);
+		var result  = await _unitOfWork.ProductSizes.AddAsync(productSize, cancellationToken);
 
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 		
 		var productSizeDto = _mapper.Map<ProductSizeDto>(result);
 

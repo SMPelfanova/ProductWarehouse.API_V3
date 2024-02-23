@@ -20,32 +20,35 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 
 	public async Task<OrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
 	{
-		var orderStatuses = await _unitOfWork.OrdersStatuses.GetAllAsync();
-		request.StatusId = orderStatuses.FirstOrDefault(x => x.Name.ToLowerInvariant() == "initial").Id;
-		
+		var orderStatuses = await _unitOfWork.OrdersStatuses.GetAllAsync(cancellationToken);
+		if (orderStatuses != null && orderStatuses.Any())
+		{
+			request.StatusId = orderStatuses.FirstOrDefault(x => x.Name.ToLowerInvariant() == "initial").Id;
+		}
+
 		foreach (var item in request.OrderLines)
 		{
-			await UpdateQuantityInStockAsync(item);
+			await UpdateQuantityInStockAsync(item, cancellationToken);
 		}
 
 		var order = _mapper.Map<Order>(request);
-		var addedOrder = await _unitOfWork.Orders.Add(order);
+		var addedOrder = await _unitOfWork.Orders.AddAsync(order, cancellationToken);
 
-		_unitOfWork.Basket.DeleteBasketLines(request.UserId);
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.Basket.DeleteBasketLinesAsync(request.UserId, cancellationToken);
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 		var orderDto = _mapper.Map<OrderDto>(addedOrder);
 
 		return orderDto;
 	}
 
-	private async Task UpdateQuantityInStockAsync(OrderLineDto orderLine)
+	private async Task UpdateQuantityInStockAsync(OrderLineDto orderLine, CancellationToken cancellationToken)
 	{
-		var productSize = await _unitOfWork.Products.GetProductSizeAsync(orderLine.ProductId, orderLine.SizeId);
+		var productSize = await _unitOfWork.Products.GetProductSizeAsync(orderLine.ProductId, orderLine.SizeId, cancellationToken);
 		if (productSize != null)
 		{
 			productSize.QuantityInStock -= orderLine.Quantity;
-			_unitOfWork.Products.UpdateQuantityInStock(productSize);
+			await _unitOfWork.Products.UpdateQuantityInStockAsync(productSize, cancellationToken);
 		}
 	}
 }

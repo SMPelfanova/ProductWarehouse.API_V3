@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Serialization;
 using ProductWarehouse.API.Infrastructure;
 using ProductWarehouse.API.Mapping;
 using ProductWarehouse.Application.Extensions;
@@ -10,7 +11,10 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
-	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+{
+	options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+	options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+});
 builder.Services.AddHttpClient();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

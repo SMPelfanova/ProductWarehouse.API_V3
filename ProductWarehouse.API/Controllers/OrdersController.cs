@@ -9,7 +9,6 @@ using ProductWarehouse.API.Models.Responses.Order;
 using ProductWarehouse.Application.Features.Commands.Orders.CreateOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.DeleteOrder;
 using ProductWarehouse.Application.Features.Commands.Orders.PartialUpdate;
-using ProductWarehouse.Application.Features.Commands.Orders.UpdateOrder;
 using ProductWarehouse.Application.Features.Queries.Orders.GetAllOrders;
 using ProductWarehouse.Application.Features.Queries.Orders.GetOrder;
 
@@ -31,10 +30,11 @@ public class OrdersController : BaseController
 	public async Task<IActionResult> GetOrders(
 		[FromRoute] BaseRequestUserId request,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetAllOrdersQuery>(request);
-		var orders = await mediator.Send(query);
+		var orders = await mediator.Send(query, cancellationToken);
 		var result = mapper.Map<List<OrderResponse>>(orders);
 
 		return Ok(result);
@@ -50,10 +50,11 @@ public class OrdersController : BaseController
 	public async Task<IActionResult> GetOrder(
 		[FromRoute] GetOrderRequest request,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetOrderQuery>(request);
-		var order = await mediator.Send(query);
+		var order = await mediator.Send(query, cancellationToken);
 		var result = mapper.Map<OrderResponse>(order);
 
 		return Ok(result);
@@ -69,10 +70,11 @@ public class OrdersController : BaseController
 	public async Task<IActionResult> CreateOrder(
 	[FromBody] CreateOrderRequest createOrderRequest,
 	[FromServices] IMapper mapper,
-	[FromServices] IMediator mediator)
+	[FromServices] IMediator mediator,
+	CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<CreateOrderCommand>(createOrderRequest);
-		var order = await mediator.Send(command);
+		var order = await mediator.Send(command, cancellationToken);
 		var orderResponse = mapper.Map<OrderResponse>(order);
 
 		return CreatedAtAction(nameof(GetOrder), new { id = orderResponse.Id, userId = orderResponse.UserId }, orderResponse);
@@ -90,10 +92,11 @@ public class OrdersController : BaseController
 		Guid id,
 		[FromBody] JsonPatchDocument<UpdateOrderRequest> patchDocument,
 		[FromServices] IMediator mediator,
-		[FromServices] IMapper mapper)
+		[FromServices] IMapper mapper,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<JsonPatchDocument<PartialUpdateOrderCommandRequest>>(patchDocument);
-		await mediator.Send(new PartialUpdateOrderCommand() { Id = id, PatchDocument = command });
+		await mediator.Send(new PartialUpdateOrderCommand() { Id = id, PatchDocument = command }, cancellationToken);
 
 		return NoContent();
 	}
@@ -108,10 +111,11 @@ public class OrdersController : BaseController
 	public async Task<IActionResult> DeleteOrder(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var command = mapper.Map<DeleteOrderCommand>(request);
-		await mediator.Send(command);
+		await mediator.Send(command, cancellationToken);
 
 		return NoContent();
 	}

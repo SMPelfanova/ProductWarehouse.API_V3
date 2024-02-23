@@ -1,9 +1,6 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@ProductId = bf980d52-5df0-44ac-faa5-08dc2c6c47b9
-@GroupId = cd95a5b4-efb0-4755-9379-73a81a3a2f9f
-
-### Get Product Groups
-GET {{ProductWarehouse.API_HostAddress}}/api/groups
+@ProductId = 288d5d4f-a2fd-4e01-4a21-08dc2c862878
+@GroupId = 0e596ec6-bc97-4e5d-9593-69387ac3cb03
 
 ### Get Product Groups
 GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
@@ -14,7 +11,7 @@ Content-Type: application/json
 
 {
     "id":"{{ProductId}}",
-    "groupId": "cd95a5b4-efb0-4755-9379-73a81a3a2f9f"
+    "groupId": "{{GroupId}}"
 }
 
 ### Delete Product Group

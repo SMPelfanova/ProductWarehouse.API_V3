@@ -21,10 +21,11 @@ public class SizesController : BaseController
 	public async Task<IActionResult> GetSizes(
 		[FromRoute] BaseEmptyRequest request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetAllSizesQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var sizes = mapper.Map<List<SizeResponse>>(result);
 
 		return Ok(sizes);
@@ -40,10 +41,11 @@ public class SizesController : BaseController
 	public async Task<IActionResult> GetSize(
 		[FromRoute] BaseRequestId request,
 		[FromServices] IMapper mapper,
-		[FromServices] IMediator mediator)
+		[FromServices] IMediator mediator,
+		CancellationToken cancellationToken)
 	{
 		var query = mapper.Map<GetSizeQuery>(request);
-		var result = await mediator.Send(query);
+		var result = await mediator.Send(query, cancellationToken);
 		var size = mapper.Map<SizeResponse>(result);
 
 		return Ok(size);

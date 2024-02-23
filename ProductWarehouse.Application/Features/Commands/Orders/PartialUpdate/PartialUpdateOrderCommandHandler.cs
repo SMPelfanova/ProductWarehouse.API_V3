@@ -15,7 +15,7 @@ public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrd
 
 	public async Task Handle(PartialUpdateOrderCommand request, CancellationToken cancellationToken)
 	{
-		var order = await _unitOfWork.Orders.GetByIdAsync(request.Id);
+		var order = await _unitOfWork.Orders.GetByIdAsync(request.Id, cancellationToken);
 
 		var partialUpdate = new PartialUpdateOrderCommandRequest();
 		request.PatchDocument.ApplyTo(partialUpdate);
@@ -29,6 +29,6 @@ public class PartialUpdateOrderCommandHandler : IRequestHandler<PartialUpdateOrd
 			order.StatusId = partialUpdate.StatusId.Value;
 		}
 
-		await _unitOfWork.SaveChangesAsync();
+		await _unitOfWork.SaveChangesAsync(cancellationToken);
 	}
 }

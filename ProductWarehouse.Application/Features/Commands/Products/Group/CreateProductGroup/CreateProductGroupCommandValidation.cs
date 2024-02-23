@@ -20,7 +20,7 @@ public class CreateProductGroupCommandValidation : AbstractValidator<CreateProdu
 
 	private async Task<bool> ProductSizeExists(Guid productId, Guid groupId, CancellationToken cancellationToken)
 	{
-		var product = await _unitOfWork.Products.GetProductDetailsAsync(productId);
+		var product = await _unitOfWork.Products.GetProductDetailsAsync(productId, cancellationToken);
 
 		if (product != null)
 		{

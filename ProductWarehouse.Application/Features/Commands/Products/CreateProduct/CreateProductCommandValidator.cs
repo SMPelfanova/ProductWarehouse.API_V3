@@ -45,21 +45,21 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
 	private async Task<bool> SizeExists(Guid sizeId, CancellationToken cancellationToken)
 	{
-		var size = await _unitOfWork.Sizes.CheckIfExistsAsync(sizeId);
+		var size = await _unitOfWork.Sizes.CheckIfExistsAsync(sizeId, cancellationToken);
 
 		return size;
 	}
 
 	private async Task<bool> GroupExists(Guid groupId, CancellationToken cancellationToken)
 	{
-		var group = await _unitOfWork.Group.CheckIfExistsAsync(groupId);
+		var group = await _unitOfWork.Group.CheckIfExistsAsync(groupId, cancellationToken);
 
 		return group;
 	}
 
 	private async Task<bool> BrandExists(Guid brandId, CancellationToken cancellationToken)
 	{
-		var brand = await _unitOfWork.Brands.CheckIfExistsAsync(brandId);
+		var brand = await _unitOfWork.Brands.CheckIfExistsAsync(brandId, cancellationToken);
 
 		return brand;
 	}

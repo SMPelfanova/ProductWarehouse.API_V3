@@ -19,19 +19,20 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		_logger = logger;
 	}
 
-	public async Task<Order> GetOrderDetailsAsync(Guid id)
+	public async Task<Order> GetOrderDetailsAsync(Guid id, CancellationToken cancellationToken)
 	{
 		try
 		{
 			return await _dbContext.Orders
+						.AsNoTracking()
 						.Include(o => o.OrderLines)
 						.Include(o => o.Status)
-						.SingleAsync(o => o.Id == id && !o.IsDeleted);
+						.SingleAsync(o => o.Id == id && !o.IsDeleted, cancellationToken);
 		}
 		catch (InvalidOperationException ex)
 		{
 			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Order), id), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order), id), ex);
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order)), ex);
 		}
 		catch (Exception ex)
 		{
@@ -40,15 +41,16 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		}
 	}
 
-	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId)
+	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken)
 	{
 		try
 		{
 			return await _dbContext.Orders
+			  .AsNoTracking()
 			  .Where(o => o.UserId == userId && !o.IsDeleted)
 			  .Include(o => o.Status)
 			  .Include(o => o.OrderLines)
-			  .ToListAsync();
+			  .ToListAsync(cancellationToken);
 		}
 		catch (InvalidOperationException ex)
 		{
