@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.PostgreSQL.Repositories;
+using System.Data;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Extensions;
 
@@ -16,6 +19,24 @@ public static class DependencyInjectionExtensions
 		{
 			options.EnableSensitiveDataLogging();
 			options.UseNpgsql(configuration.GetConnectionString("WerehouseNpgsqlDbConnectionString"));
+		});
+
+		services.AddScoped<NpgsqlConnection>(provider =>
+		{
+			var connectionString = configuration.GetConnectionString("WerehouseNpgsqlDbConnectionString");
+			return new NpgsqlConnection(connectionString);
+		});
+
+		services.AddScoped<IDbConnection>(provider =>
+		{
+			return provider.GetRequiredService<NpgsqlConnection>();
+		});
+
+		services.AddScoped<IDbTransaction>(provider =>
+		{
+			var connection = provider.GetRequiredService<NpgsqlConnection>();
+			connection.Open();
+			return connection.BeginTransaction();
 		});
 
 		services.AddScoped<IProductRepository, ProductRepository>();

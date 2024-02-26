@@ -5,6 +5,7 @@ using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL.Constants;
 using Serilog;
+using System.Data;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
@@ -13,7 +14,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 	private readonly ApplicationDbContext _dbContext;
 	private readonly ILogger _logger;
 
-	public OrderRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext, logger)
+	public OrderRepository(ApplicationDbContext dbContext, IDbConnection dbConection, IDbTransaction dbTransaction, ILogger logger) : base(dbContext, dbConection, dbTransaction, logger)
 	{
 		_dbContext = dbContext;
 		_logger = logger;

@@ -1,12 +1,13 @@
 ﻿using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.PostgreSQL;
+using System.Data;
 
 namespace ProductWarehouse.Persistence;
 
 internal class UnitOfWork : IUnitOfWork
 {
 	private readonly ApplicationDbContext _dbContext;
-
+	IDbTransaction _dbTransaction;
 	public IProductRepository Products { get; }
 
 	public ISizeRepository Sizes { get; }
@@ -28,6 +29,7 @@ internal class UnitOfWork : IUnitOfWork
 	public IProductSizeRepository ProductSizes { get; }
 
 	public UnitOfWork(ApplicationDbContext dbContext,
+						IDbTransaction dbTransaction,
 						IOrderStatusRepository orderStatusRepository,
 						IGroupRepository groupRepository,
 						IProductRepository productRepository,
@@ -41,6 +43,7 @@ internal class UnitOfWork : IUnitOfWork
 						)
 	{
 		_dbContext = dbContext;
+		_dbTransaction = dbTransaction;
 		OrdersStatuses = orderStatusRepository;
 		Group = groupRepository;
 		Products = productRepository;
@@ -54,11 +57,15 @@ internal class UnitOfWork : IUnitOfWork
 	}
 	public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
 	{
+		_dbTransaction.Commit();
+		// By adding this we can have muliple transactions as part of a single request
+		_dbTransaction?.Connection?.BeginTransaction();
 		return _dbContext.SaveChangesAsync(cancellationToken);
 	}
 
 	public void Rollback()
 	{
+		_dbTransaction.Rollback();
 		_dbContext.Database.RollbackTransaction();
 	}
 
@@ -72,6 +79,9 @@ internal class UnitOfWork : IUnitOfWork
 	{
 		if (disposing)
 		{
+			_dbTransaction.Connection?.Close();
+			_dbTransaction.Connection?.Dispose();
+			_dbTransaction.Dispose();
 			_dbContext.Dispose();
 		}
 	}

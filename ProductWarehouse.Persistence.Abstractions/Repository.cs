@@ -1,50 +1,57 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.Abstractions.Interfaces;
 using Serilog;
+using System.Data;
 
 namespace ProductWarehouse.Persistence.Abstractions;
 
 public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
 	protected readonly DbContext _dbContext;
+	private readonly IDbConnection _connection;
+	private readonly IDbTransaction _dbTransaction;
 	private readonly ILogger _logger;
 
-	protected Repository(DbContext context, ILogger logger)
+	protected Repository(DbContext context, IDbConnection connection, IDbTransaction dbTransaction, ILogger logger)
 	{
 		_dbContext = context;
+		_connection = connection ?? throw new ArgumentNullException(nameof(connection));
+		_dbTransaction = dbTransaction;
 		_logger = logger;
 	}
 
 	public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
 	{
+		TEntity? entity;
 		try
 		{
-			var entity = await _dbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken);
-			if (entity == null)
-			{
-				_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
-				throw new NotFoundException($"Entity of type {typeof(TEntity)} not found.");
-			}
-			return entity;
+			string query = $"SELECT * FROM {typeof(TEntity).Name}s WHERE Id = @Id";
+			entity = await _connection.QueryFirstOrDefaultAsync<TEntity>(query, new { Id = id }, _dbTransaction);
+			
 		}
 		catch (Exception ex)
 		{
 			_logger.Error("An error occurred while fetching the entity by id.", ex);
 			throw new DatabaseException("An error occurred while fetching the entity by id.", ex);
 		}
+		if (entity is null)
+		{
+			_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
+			throw new NotFoundException($"Entity of type {typeof(TEntity)} not found.");
+		}
+	
+		return entity;
 	}
 
-	public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken, params string[] includeProperties)
+	public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken)
 	{
 		try
 		{
-			IQueryable<TEntity> query = _dbContext.Set<TEntity>();
-			foreach (var includeProperty in includeProperties)
-			{
-				query = query.Include(includeProperty);
-			}
-			return await query.ToListAsync(cancellationToken);
+			string query = $"SELECT * FROM \"{typeof(TEntity).Name}s\"";
+			var entities = await _connection.QueryAsync<TEntity>(query, _dbTransaction);
+			return entities.ToList().AsReadOnly();
 		}
 		catch (Exception ex)
 		{

@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.28" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,6 +30,11 @@
   <ItemGroup>
 	  <ProjectReference Include="..\ProductWarehouse.Application\ProductWarehouse.Application.csproj" />
 	  <ProjectReference Include="..\ProductWarehouse.Persistence.Abstractions\ProductWarehouse.Persistence.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Constants\Dapper\Commands\" />
+    <Folder Include="Constants\Dapper\Queries\" />
   </ItemGroup>
 
 </Project>
