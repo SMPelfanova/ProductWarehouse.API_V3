@@ -3,7 +3,7 @@ using ProductWarehouse.API.Infrastructure;
 using ProductWarehouse.API.Mapping;
 using ProductWarehouse.Application.Extensions;
 using ProductWarehouse.Infrastructure.Extensions;
-using ProductWarehouse.Persistence.EF.Extensions;
+using ProductWarehouse.Persistence.PostgreSQL.Extensions;
 using ProductWarehouse.Persistence.Extensions;
 using Serilog;
 using System.Reflection;
@@ -19,7 +19,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPersistence();
-builder.Services.AddPersistenceEF(builder.Configuration);
+builder.Services.AddPersistencePostgreSql(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

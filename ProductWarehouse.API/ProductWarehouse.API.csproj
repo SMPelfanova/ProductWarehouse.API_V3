@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProductWarehouse.Application\ProductWarehouse.Application.csproj" />
-    <ProjectReference Include="..\ProductWarehouse.Persistence.EF\ProductWarehouse.Persistence.EF.csproj" />
+    <ProjectReference Include="..\ProductWarehouse.Persistence.PostgreSQL\ProductWarehouse.Persistence.PostgreSQL.csproj" />
     <ProjectReference Include="..\ProductWarehouse.Persistence\ProductWarehouse.Persistence.csproj" />
   </ItemGroup>
 

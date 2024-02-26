@@ -1,5 +1,5 @@
 ﻿using ProductWarehouse.Application.Interfaces;
-using ProductWarehouse.Persistence.EF;
+using ProductWarehouse.Persistence.PostgreSQL;
 
 namespace ProductWarehouse.Persistence;
 
