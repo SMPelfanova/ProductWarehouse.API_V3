@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
+using ProductWarehouse.Persistence.Abstractions.Constants;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.Abstractions.Interfaces;
 using Serilog;
@@ -27,8 +28,8 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		TEntity? entity;
 		try
 		{
-			string query = $"SELECT * FROM {typeof(TEntity).Name}s WHERE Id = @Id";
-			entity = await _connection.QueryFirstOrDefaultAsync<TEntity>(query, new { Id = id }, _dbTransaction);
+			var query = QueryConstants.SelectEntityById(typeof(TEntity).Name);
+			entity = await _connection.QueryFirstOrDefaultAsync<TEntity>(query, new { Id = id });
 			
 		}
 		catch (Exception ex)
@@ -49,8 +50,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 	{
 		try
 		{
-			string query = $"SELECT * FROM \"{typeof(TEntity).Name}s\"";
-			var entities = await _connection.QueryAsync<TEntity>(query, _dbTransaction);
+			var entities = await _connection.QueryAsync<TEntity>(QueryConstants.SelectEntity(typeof(TEntity).Name), _dbTransaction);
 			return entities.ToList().AsReadOnly();
 		}
 		catch (Exception ex)

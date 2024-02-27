@@ -1,9 +1,9 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@BrandId = d6f201af-cf75-40d9-814a-1e0d17e9796c
+@BrandId = 656b14b5-849b-4f18-b149-3391429960cb
 @ProductId = 288d5d4f-a2fd-4e01-4a21-08dc2c862878
 @UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
-@SizeId = ea88c493-9e58-47c7-80cd-766ac89a7a01
-@GroupId = 0e596ec6-bc97-4e5d-9593-69387ac3cb03
+@SizeId = 9082a2cc-3235-4aed-89ac-c63d67203894
+@GroupId = 597b7de6-62a3-4fe2-969b-2ecd18b42892
 @OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
 
 ### Get Products
@@ -28,7 +28,7 @@ Content-Type: application/json
     "sizes": [
       {
         "id": "{{SizeId}}",
-        "quantityInStock": 1
+        "quantityInStock": 10
       }
     ],
     "groups": [
@@ -50,7 +50,7 @@ Content-Type: application/json
   "price": 100,
   "sizes": [
     {
-      "id": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
+      "id": "9082a2cc-3235-4aed-89ac-c63d67203894",
       "quantityInStock": 10
     }
   ],

@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Constants\Dapper\Commands\" />
-    <Folder Include="Constants\Dapper\Queries\" />
   </ItemGroup>
 
 </Project>

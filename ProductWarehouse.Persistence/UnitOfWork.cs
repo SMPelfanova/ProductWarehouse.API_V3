@@ -55,12 +55,10 @@ internal class UnitOfWork : IUnitOfWork
 		User = userRepository;
 		ProductSizes = productSizeRepository;
 	}
-	public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+	public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
 	{
-		_dbTransaction.Commit();
-		// By adding this we can have muliple transactions as part of a single request
-		_dbTransaction?.Connection?.BeginTransaction();
-		return _dbContext.SaveChangesAsync(cancellationToken);
+	_dbTransaction.Commit();	
+		return await _dbContext.SaveChangesAsync(cancellationToken);
 	}
 
 	public void Rollback()

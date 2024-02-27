@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
@@ -12,17 +13,17 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 public class ProductRepository : Repository<Product>, IProductRepository
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly IDbConnection _dbConection;
+	private readonly IDbConnection _dbConnection;
 	private readonly ILogger _logger;
 
 	public ProductRepository(
 		ApplicationDbContext dbContext, 
-		IDbConnection dbConection,
+		IDbConnection  dbConnection,
 		IDbTransaction dbTransaction, 
-		ILogger logger) : base(dbContext, dbConection, dbTransaction, logger)
+		ILogger logger) : base(dbContext,  dbConnection, dbTransaction, logger)
 	{
 		_dbContext = dbContext;
-		_dbConection = dbConection;
+		 _dbConnection =  dbConnection;
 		_logger = logger;
 	}
 
@@ -30,19 +31,47 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var products = await _dbContext.Products
-				.Where(x => !x.IsDeleted)
-				.Include(p => p.Brand)
-				.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
-				.Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-				.ToListAsync(cancellationToken);
+			var query = @"
+                    SELECT p.*, b.*, pg.*, s.*
+                    FROM Products p
+                    LEFT JOIN Brands b ON p.BrandId = b.Id
+                    LEFT JOIN ProductGroups pg ON p.Id = pg.ProductId
+                    LEFT JOIN Groups g ON pg.GroupId = g.Id
+                    LEFT JOIN ProductSizes ps ON p.Id = ps.ProductId
+                    LEFT JOIN Sizes s ON ps.SizeId = s.Id
+                    WHERE p.IsDeleted = FALSE";
 
-			return products;
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Product)), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Product)), ex);
+			var productsDictionary = new Dictionary<Guid, Product>();
+			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, Group, ProductSize, Size, Product>(
+				query,
+				(product, brand, productGroup, group, productSize, size) =>
+				{
+					if (!productsDictionary.TryGetValue(product.Id, out var productEntry))
+					{
+						productEntry = product;
+						productEntry.Brand = brand;
+						productEntry.ProductGroups = new List<ProductGroups>();
+						productEntry.ProductSizes = new List<ProductSize>();
+						productsDictionary.Add(productEntry.Id, productEntry);
+					}
+
+					if (productGroup != null && !productEntry.ProductGroups.Any(pg => pg.GroupId == productGroup.GroupId))
+					{
+						productGroup.Group = group;
+						productEntry.ProductGroups.Add(productGroup);
+					}
+
+					if (productSize != null && !productEntry.ProductSizes.Any(ps => ps.SizeId == productSize.SizeId))
+					{
+						productSize.Size = size;
+						productEntry.ProductSizes.Add(productSize);
+					}
+
+					return productEntry;
+				},
+				splitOn: "Id,Id,Id,Id,Id");
+
+			return products.AsList();
 		}
 		catch (Exception ex)
 		{
@@ -55,17 +84,48 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			return await _dbContext.Products
-				.AsNoTracking()
-				.Include(p => p.Brand)
-				.Include(p => p.ProductGroups).ThenInclude(pg => pg.Group)
-				.Include(p => p.ProductSizes).ThenInclude(pg => pg.Size)
-				.SingleAsync(p => p.Id == id && !p.IsDeleted, cancellationToken);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Product), id), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Product)), ex);
+			var query = @"
+            SELECT p.*, b.*, pg.*, s.*
+            FROM Products p
+            LEFT JOIN Brands b ON p.BrandId = b.Id
+            LEFT JOIN ProductGroups pg ON p.Id = pg.ProductId
+            LEFT JOIN Groups g ON pg.GroupId = g.Id
+            LEFT JOIN ProductSizes ps ON p.Id = ps.ProductId
+            LEFT JOIN Sizes s ON ps.SizeId = s.Id
+            WHERE p.Id = @Id AND p.IsDeleted = FALSE";
+
+			var productsDictionary = new Dictionary<Guid, Product>();
+			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, Group, ProductSize, Size, Product>(
+				query,
+				(product, brand, productGroup, group, productSize, size) =>
+				{
+					if (!productsDictionary.TryGetValue(product.Id, out var productEntry))
+					{
+						productEntry = product;
+						productEntry.Brand = brand;
+						productEntry.ProductGroups = new List<ProductGroups>();
+						productEntry.ProductSizes = new List<ProductSize>();
+						productsDictionary.Add(productEntry.Id, productEntry);
+					}
+
+					if (productGroup != null && !productEntry.ProductGroups.Any(pg => pg.GroupId == productGroup.GroupId))
+					{
+						productGroup.Group = group;
+						productEntry.ProductGroups.Add(productGroup);
+					}
+
+					if (productSize != null && !productEntry.ProductSizes.Any(ps => ps.SizeId == productSize.SizeId))
+					{
+						productSize.Size = size;
+						productEntry.ProductSizes.Add(productSize);
+					}
+
+					return productEntry;
+				},
+				new { Id = id },
+				splitOn: "Id,Id,Id,Id,Id");
+
+			return products.FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
@@ -78,13 +138,14 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			return await _dbContext.ProductSizes
-						.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId, cancellationToken);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
+			var query = @"
+            SELECT *
+            FROM ProductSizes
+            WHERE ProductId = @ProductId AND SizeId = @SizeId";
+
+			return await _dbConnection.QueryFirstOrDefaultAsync<ProductSize>(
+				query,
+				new { ProductId = productId, SizeId = sizeId });
 		}
 		catch (Exception ex)
 		{
@@ -97,15 +158,14 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var productSize = await _dbContext.ProductSizes
-						.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId, cancellationToken);
+			var query = @"
+            SELECT QuantityInStock
+            FROM ProductSizes
+            WHERE ProductId = @ProductId AND SizeId = @SizeId";
 
-			return productSize.QuantityInStock;
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
+			return await _dbConnection.ExecuteScalarAsync<int>(
+				query,
+				new { ProductId = productId, SizeId = sizeId });
 		}
 		catch (Exception ex)
 		{
@@ -118,13 +178,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var entityToDelete = await _dbContext.ProductGroups.SingleAsync(x => x.ProductId == productId && x.GroupId == groupId, cancellationToken);
-			_dbContext.ProductGroups.Remove(entityToDelete);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.ProductGroupNotFoundErrorMessage(productId, groupId), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductGroups)), ex);
+			var query = @"
+            DELETE FROM ProductGroups
+            WHERE ProductId = @ProductId AND GroupId = @GroupId";
+
+			await _dbConnection.ExecuteAsync(
+				query,
+				new { ProductId = productId, GroupId = groupId });
 		}
 		catch (Exception ex)
 		{
@@ -137,13 +197,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var entityToDelete = await _dbContext.ProductSizes.SingleAsync(x => x.ProductId == productId && x.SizeId == sizeId, cancellationToken);
-			_dbContext.ProductSizes.Remove(entityToDelete);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productId, sizeId), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
+			var query = @"
+            DELETE FROM ProductSizes
+            WHERE ProductId = @ProductId AND SizeId = @SizeId";
+
+			await _dbConnection.ExecuteAsync(
+				query,
+				new { ProductId = productId, SizeId = sizeId });
 		}
 		catch (Exception ex)
 		{
@@ -156,14 +216,14 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var entityToUpdate = await _dbContext.ProductSizes.SingleAsync(x => x.ProductId == productSize.ProductId && x.SizeId == productSize.SizeId, cancellationToken);
-			entityToUpdate.QuantityInStock = productSize.QuantityInStock;
-			_dbContext.ProductSizes.Update(entityToUpdate);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.ProductSizeNotFoundErrorMessage(productSize.ProductId, productSize.SizeId), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(ProductSize)), ex);
+			var query = @"
+            UPDATE ProductSizes
+            SET QuantityInStock = @QuantityInStock
+            WHERE ProductId = @ProductId AND SizeId = @SizeId";
+
+			await _dbConnection.ExecuteAsync(
+				query,
+				new { QuantityInStock = productSize.QuantityInStock, ProductId = productSize.ProductId, SizeId = productSize.SizeId });
 		}
 		catch (Exception ex)
 		{
@@ -171,4 +231,5 @@ public class ProductRepository : Repository<Product>, IProductRepository
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 		}
 	}
+
 }

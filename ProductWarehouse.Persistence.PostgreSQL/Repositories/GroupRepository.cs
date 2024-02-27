@@ -8,7 +8,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
 public class GroupRepository : Repository<Group>, IGroupRepository
 {
-	public GroupRepository(ApplicationDbContext dbContext, IDbConnection dbConection, IDbTransaction dbTransaction, ILogger logger) : base(dbContext, dbConection, dbTransaction, logger)
+	public GroupRepository(ApplicationDbContext dbContext, IDbConnection  dbConnection, IDbTransaction dbTransaction, ILogger logger) : base(dbContext,  dbConnection, dbTransaction, logger)
 	{
 	}
 }

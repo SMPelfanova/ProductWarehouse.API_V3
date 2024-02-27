@@ -12,17 +12,17 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepository
 {
 	private readonly ApplicationDbContext _dbContext;
-	private readonly IDbConnection _dbConection;
+	private readonly IDbConnection _dbConnection;
 	private readonly ILogger _logger;
 
 	public BasketLineRepository(
 		ApplicationDbContext dbContext,
-		IDbConnection dbConection,
+		IDbConnection  dbConnection,
 		IDbTransaction dbTransaction,
-		ILogger logger) : base(dbContext, dbConection, dbTransaction, logger)
+		ILogger logger) : base(dbContext,  dbConnection, dbTransaction, logger)
 	{
 		_dbContext = dbContext;
-		_dbConection = dbConection;
+		 _dbConnection =  dbConnection;
 		_logger = logger;
 	}
 

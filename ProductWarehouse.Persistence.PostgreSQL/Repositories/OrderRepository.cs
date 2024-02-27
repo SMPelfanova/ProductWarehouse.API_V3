@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Dapper;
+using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
@@ -6,17 +7,20 @@ using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL.Constants;
 using Serilog;
 using System.Data;
+using System.Data.Common;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
 public class OrderRepository : Repository<Order>, IOrderRepository
 {
 	private readonly ApplicationDbContext _dbContext;
+	private readonly IDbConnection _dbConnection;
 	private readonly ILogger _logger;
 
-	public OrderRepository(ApplicationDbContext dbContext, IDbConnection dbConection, IDbTransaction dbTransaction, ILogger logger) : base(dbContext, dbConection, dbTransaction, logger)
+	public OrderRepository(ApplicationDbContext dbContext, IDbConnection dbConnection, IDbTransaction dbTransaction, ILogger logger) : base(dbContext, dbConnection, dbTransaction, logger)
 	{
 		_dbContext = dbContext;
+		_dbConnection = dbConnection;
 		_logger = logger;
 	}
 
@@ -24,16 +28,38 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 	{
 		try
 		{
-			return await _dbContext.Orders
-						.AsNoTracking()
-						.Include(o => o.OrderLines)
-						.Include(o => o.Status)
-						.SingleAsync(o => o.Id == id && !o.IsDeleted, cancellationToken);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Order), id), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order)), ex);
+			string query = @"
+                    SELECT 
+                        o.*, 
+                        ol.*
+                    FROM 
+                        ""Orders"" o
+                    LEFT JOIN 
+                        ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
+                    WHERE 
+                        o.""Id"" = @Id 
+                        AND NOT o.""IsDeleted""";
+
+			var ordersLookup = new Dictionary<Guid, Order>();
+
+			await _dbConnection.QueryAsync<Order, OrderLine, Order>(
+				query,
+				(order, orderLine) =>
+				{
+					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))
+					{
+						currentOrder = order;
+						currentOrder.OrderLines = new List<OrderLine>();
+						ordersLookup.Add(currentOrder.Id, currentOrder);
+					}
+
+					currentOrder.OrderLines.Add(orderLine);
+					return currentOrder;
+				},
+				new { Id = id },
+				splitOn: "Id");
+
+			return ordersLookup.Count > 0 ? ordersLookup[id] : null;
 		}
 		catch (Exception ex)
 		{
@@ -46,17 +72,38 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 	{
 		try
 		{
-			return await _dbContext.Orders
-			  .AsNoTracking()
-			  .Where(o => o.UserId == userId && !o.IsDeleted)
-			  .Include(o => o.Status)
-			  .Include(o => o.OrderLines)
-			  .ToListAsync(cancellationToken);
-		}
-		catch (InvalidOperationException ex)
-		{
-			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Order)), ex);
-			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order)), ex);
+			string query = @"
+                    SELECT 
+                        o.*, 
+                        ol.*
+                    FROM 
+                        ""Orders"" o
+                    LEFT JOIN 
+                        ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
+                    WHERE 
+                        o.""UserId"" = @UserId 
+                        AND NOT o.""IsDeleted""";
+
+			var ordersLookup = new Dictionary<Guid, Order>();
+
+			await _dbConnection.QueryAsync<Order, OrderLine, Order>(
+				query,
+				(order, orderLine) =>
+				{
+					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))
+					{
+						currentOrder = order;
+						currentOrder.OrderLines = new List<OrderLine>();
+						ordersLookup.Add(currentOrder.Id, currentOrder);
+					}
+
+					currentOrder.OrderLines.Add(orderLine);
+					return currentOrder;
+				},
+				new { UserId = userId },
+				splitOn: "Id");
+
+			return new List<Order>(ordersLookup.Values);
 		}
 		catch (Exception ex)
 		{

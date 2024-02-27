@@ -1,6 +1,6 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
 @ProductId = 288d5d4f-a2fd-4e01-4a21-08dc2c862878
-@GroupId = 0e596ec6-bc97-4e5d-9593-69387ac3cb03
+@GroupId = 597b7de6-62a3-4fe2-969b-2ecd18b42892
 
 ### Get Product Groups
 GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}/groups
