@@ -7,23 +7,24 @@ using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL.Constants;
 using Serilog;
 using System.Data;
+using static Dapper.SqlMapper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
 public class ProductRepository : Repository<Product>, IProductRepository
 {
-	private readonly ApplicationDbContext _dbContext;
 	private readonly IDbConnection _dbConnection;
 	private readonly ILogger _logger;
-
+	private readonly IDbTransaction _dbTransaction;
 	public ProductRepository(
 		ApplicationDbContext dbContext, 
 		IDbConnection  dbConnection,
 		IDbTransaction dbTransaction, 
 		ILogger logger) : base(dbContext,  dbConnection, dbTransaction, logger)
 	{
-		_dbContext = dbContext;
 		 _dbConnection =  dbConnection;
+		_dbTransaction = dbTransaction;
 		_logger = logger;
 	}
 
@@ -32,14 +33,14 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var query = @"
-                    SELECT p.*, b.*, pg.*, s.*
-                    FROM Products p
-                    LEFT JOIN Brands b ON p.BrandId = b.Id
-                    LEFT JOIN ProductGroups pg ON p.Id = pg.ProductId
-                    LEFT JOIN Groups g ON pg.GroupId = g.Id
-                    LEFT JOIN ProductSizes ps ON p.Id = ps.ProductId
-                    LEFT JOIN Sizes s ON ps.SizeId = s.Id
-                    WHERE p.IsDeleted = FALSE";
+                SELECT p.*, b.*, pg.*, s.*
+                FROM ""Products"" p
+                LEFT JOIN ""Brands"" b ON p.""BrandId"" = b.""Id""
+                LEFT JOIN ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
+                LEFT JOIN ""Groups"" g ON pg.""GroupId"" = g.""Id""
+                LEFT JOIN ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
+                LEFT JOIN ""Sizes"" s ON ps.""SizeId"" = s.""Id""
+                WHERE p.""IsDeleted"" = FALSE";
 
 			var productsDictionary = new Dictionary<Guid, Product>();
 			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, Group, ProductSize, Size, Product>(
@@ -69,7 +70,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
 					return productEntry;
 				},
-				splitOn: "Id,Id,Id,Id,Id");
+				splitOn: "Id,Id,ProductId,Id,ProductId,Id,Id");
 
 			return products.AsList();
 		}
@@ -86,13 +87,13 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		{
 			var query = @"
             SELECT p.*, b.*, pg.*, s.*
-            FROM Products p
-            LEFT JOIN Brands b ON p.BrandId = b.Id
-            LEFT JOIN ProductGroups pg ON p.Id = pg.ProductId
-            LEFT JOIN Groups g ON pg.GroupId = g.Id
-            LEFT JOIN ProductSizes ps ON p.Id = ps.ProductId
-            LEFT JOIN Sizes s ON ps.SizeId = s.Id
-            WHERE p.Id = @Id AND p.IsDeleted = FALSE";
+            FROM ""Products"" p
+            LEFT JOIN ""Brands"" b ON p.""BrandId"" = b.""Id""
+            LEFT JOIN ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
+            LEFT JOIN ""Groups"" g ON pg.""GroupId"" = g.""Id""
+            LEFT JOIN ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
+            LEFT JOIN ""Sizes"" s ON ps.""SizeId"" = s.""Id""
+            WHERE p.""Id"" = @Id AND p.""IsDeleted"" = FALSE";
 
 			var productsDictionary = new Dictionary<Guid, Product>();
 			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, Group, ProductSize, Size, Product>(
@@ -123,7 +124,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 					return productEntry;
 				},
 				new { Id = id },
-				splitOn: "Id,Id,Id,Id,Id");
+				splitOn: "Id,Id,ProductId,Id,ProductId,Id,Id");
 
 			return products.FirstOrDefault();
 		}
@@ -140,8 +141,8 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		{
 			var query = @"
             SELECT *
-            FROM ProductSizes
-            WHERE ProductId = @ProductId AND SizeId = @SizeId";
+            FROM ""ProductSizes""
+            WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
 
 			return await _dbConnection.QueryFirstOrDefaultAsync<ProductSize>(
 				query,
@@ -159,9 +160,9 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var query = @"
-            SELECT QuantityInStock
-            FROM ProductSizes
-            WHERE ProductId = @ProductId AND SizeId = @SizeId";
+            SELECT ""QuantityInStock""
+            FROM ""ProductSizes""
+            WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
 
 			return await _dbConnection.ExecuteScalarAsync<int>(
 				query,
@@ -179,8 +180,8 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var query = @"
-            DELETE FROM ProductGroups
-            WHERE ProductId = @ProductId AND GroupId = @GroupId";
+            DELETE FROM ""ProductGroups""
+            WHERE ""ProductId"" = @ProductId AND ""GroupId"" = @GroupId";
 
 			await _dbConnection.ExecuteAsync(
 				query,
@@ -198,8 +199,8 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var query = @"
-            DELETE FROM ProductSizes
-            WHERE ProductId = @ProductId AND SizeId = @SizeId";
+            DELETE FROM ""ProductSizes""
+            WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
 
 			await _dbConnection.ExecuteAsync(
 				query,
@@ -217,9 +218,9 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var query = @"
-            UPDATE ProductSizes
-            SET QuantityInStock = @QuantityInStock
-            WHERE ProductId = @ProductId AND SizeId = @SizeId";
+            UPDATE ""ProductSizes""
+            SET ""QuantityInStock"" = @QuantityInStock
+            WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
 
 			await _dbConnection.ExecuteAsync(
 				query,
@@ -230,6 +231,100 @@ public class ProductRepository : Repository<Product>, IProductRepository
 			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 		}
+	}
+
+	new public async Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
+	{
+		try
+		{
+			// Update the product
+			var productUpdateQuery = @"
+                    UPDATE ""Products"" 
+                    SET 
+                        ""BrandId"" = @BrandId,
+                        ""Title"" = @Title,
+                        ""Photo"" = @Photo,
+                        ""Price"" = @Price,
+                        ""Description"" = @Description,
+                        ""IsDeleted"" = @IsDeleted
+                    WHERE 
+                        ""Id"" = @Id;
+                ";
+			await _dbConnection.ExecuteAsync(productUpdateQuery, product, _dbTransaction);
+
+			// Delete existing related entries
+			var deleteProductGroupsQuery = @"
+                    DELETE FROM ""ProductGroups"" 
+                    WHERE ""ProductId"" = @ProductId;
+                ";
+			await _dbConnection.ExecuteAsync(deleteProductGroupsQuery, new { ProductId = product.Id }, _dbTransaction);
+
+			var deleteProductSizesQuery = @"
+                    DELETE FROM ""ProductSizes"" 
+                    WHERE ""ProductId"" = @ProductId;
+                ";
+			await _dbConnection.ExecuteAsync(deleteProductSizesQuery, new { ProductId = product.Id }, _dbTransaction);
+
+			// Insert new related entries
+			foreach (var group in product.ProductGroups)
+			{
+				var productGroupInsertQuery = @"
+                        INSERT INTO ""ProductGroups"" (""ProductId"", ""GroupId"")
+                        VALUES (@ProductId, @GroupId);
+                    ";
+				await _dbConnection.ExecuteAsync(productGroupInsertQuery, new { ProductId = product.Id, GroupId = group.GroupId }, _dbTransaction);
+			}
+
+			foreach (var size in product.ProductSizes)
+			{
+				var productSizeInsertQuery = @"
+                        INSERT INTO ""ProductSizes"" (""ProductId"", ""SizeId"", ""QuantityInStock"")
+                        VALUES (@ProductId, @SizeId, @QuantityInStock);
+                    ";
+				await _dbConnection.ExecuteAsync(productSizeInsertQuery, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock }, _dbTransaction);
+			}
+
+		}
+		catch
+		{
+			// Rollback the transaction if an error occurs
+			_dbTransaction.Rollback();
+			throw; // Re-throw the exception to propagate it to the caller
+		}
+	}
+
+	new public async Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default)
+	{
+		var query = @"
+                INSERT INTO ""Products"" (""BrandId"", ""Title"", ""Photo"", ""Price"", ""Description"", ""IsDeleted"") 
+                VALUES (@BrandId, @Title, @Photo, @Price, @Description, @IsDeleted)
+				RETURNING ""Id"";";
+
+		var id = await _dbConnection.ExecuteScalarAsync<Guid>(query, product, _dbTransaction);
+		product.Id = id;
+		foreach (var group in product.ProductGroups)
+		{
+
+			var productGroupQuery = @"
+
+					INSERT INTO ""ProductGroups"" (""ProductId"", ""GroupId"")
+                    VALUES (@ProductId, @GroupId)
+                     ON CONFLICT (""ProductId"", ""GroupId"") DO NOTHING;";
+
+			await _dbConnection.ExecuteAsync(productGroupQuery, new { ProductId = product.Id, GroupId = group.GroupId }, _dbTransaction);
+		}
+
+		foreach (var size in product.ProductSizes)
+		{
+			var productSizeQuery = @"
+                    INSERT INTO ""ProductSizes"" (""ProductId"", ""SizeId"", ""QuantityInStock"")
+                    VALUES (@ProductId, @SizeId, @QuantityInStock)
+                    ON CONFLICT (""ProductId"", ""SizeId"") DO UPDATE SET ""QuantityInStock"" = @QuantityInStock;";
+
+			await _dbConnection.ExecuteAsync(productSizeQuery, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock }, _dbTransaction);
+		}
+
+		return product;
 	}
 
 }

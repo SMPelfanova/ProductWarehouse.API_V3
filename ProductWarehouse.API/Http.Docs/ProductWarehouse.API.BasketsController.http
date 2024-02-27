@@ -1,7 +1,7 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
 @ProductId =b5415b0d-9264-4c93-a64c-1439a7ffdbc8
 @UserId = 1fd3d9f7-c171-4596-b332-fa0f65d0f057
-@SizeId = 9082a2cc-3235-4aed-89ac-c63d67203894
+@SizeId = 6bec10ff-0fbd-4881-99f4-6acf188d2bea
 
 ### Get Basket
 GET {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}
