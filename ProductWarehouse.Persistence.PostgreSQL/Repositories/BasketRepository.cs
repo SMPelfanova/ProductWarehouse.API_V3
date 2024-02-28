@@ -1,12 +1,11 @@
 ﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL.Constants;
-using ProductWarehouse.Persistence.PostgreSQL.Constants.Dapper.Queries;
+using ProductWarehouse.Persistence.PostgreSQL.Constants.Dapper;
 using Serilog;
 using System.Data;
 
@@ -31,15 +30,12 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 
 	public async Task<Baskets> GetBasketByUserIdAsync(Guid userId, CancellationToken cancellationToken)
 	{
-		Baskets? result;
+		Baskets currentBasket = null;
 		try
 		{
-			Baskets currentBasket = null;
-
-			// Use Dapper's QueryAsync method with multi-mapping configuration
 			var basketsLookup = new Dictionary<Guid, Baskets>();
 			await _dbConnection.QueryAsync<Baskets, BasketLine, Baskets>(
-				QueryConstants.SelectBasketByUserId,
+				QueryConstants.GetBasketByUserIdQuery,
 				(basket, basketLine) =>
 				{
 					if (currentBasket == null || currentBasket.Id != basket.Id)
@@ -53,9 +49,9 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 					return currentBasket;
 				},
 				new { UserId = userId },
-				splitOn: "Id"); // Split the result by BasketId
+				splitOn: $"{nameof(Baskets.Id)}");
 
-			result = basketsLookup.Values.FirstOrDefault();
+			currentBasket = basketsLookup.Values.FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
@@ -63,13 +59,13 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Baskets)), ex);
 		}
 
-		if (result is null)
+		if (currentBasket is null)
 		{
 			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Baskets)));
 			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Baskets)));
 		}
 
-		return result;
+		return currentBasket;
 	}
 
 	public async Task DeleteBasketLinesAsync(Guid userId, CancellationToken cancellationToken)

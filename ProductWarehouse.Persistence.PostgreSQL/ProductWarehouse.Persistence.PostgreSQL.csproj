@@ -32,8 +32,4 @@
 	  <ProjectReference Include="..\ProductWarehouse.Persistence.Abstractions\ProductWarehouse.Persistence.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Constants\Dapper\Commands\" />
-  </ItemGroup>
-
 </Project>

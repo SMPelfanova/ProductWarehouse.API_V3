@@ -46,16 +46,23 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
 	public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken)
 	{
+		IEnumerable<TEntity?> entities;
 		try
 		{
-			var entities = await _connection.QueryAsync<TEntity>(QueryConstants.SelectEntity(typeof(TEntity).Name));
-			return entities.ToList().AsReadOnly();
+			entities = await _connection.QueryAsync<TEntity>(QueryConstants.SelectEntity(typeof(TEntity).Name));
 		}
 		catch (Exception ex)
 		{
 			_logger.Error("An error occurred while fetching all entities.", ex);
 			throw new DatabaseException("An error occurred while fetching all entities.", ex);
 		}
+		if (entities is null)
+		{
+			_logger.Warning($"Entities of type {typeof(TEntity)} not found.");
+			throw new NotFoundException($"Entities of type {typeof(TEntity)} not found.");
+		}
+
+		return entities.ToList().AsReadOnly();
 	}
 
 	public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)

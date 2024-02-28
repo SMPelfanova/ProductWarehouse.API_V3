@@ -1,13 +1,13 @@
 ﻿using Dapper;
-using Microsoft.EntityFrameworkCore;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Domain.Entities;
 using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL.Constants;
+using ProductWarehouse.Persistence.PostgreSQL.Constants.Dapper;
 using Serilog;
 using System.Data;
-using System.Data.Common;
+using static Dapper.SqlMapper;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
@@ -26,24 +26,11 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
 	public async Task<Order> GetOrderDetailsAsync(Guid id, CancellationToken cancellationToken)
 	{
+		var ordersLookup = new Dictionary<Guid, Order>();
 		try
 		{
-			string query = @"
-                    SELECT 
-                        o.*, 
-                        ol.*
-                    FROM 
-                        ""Orders"" o
-                    LEFT JOIN 
-                        ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
-                    WHERE 
-                        o.""Id"" = @Id 
-                        AND NOT o.""IsDeleted""";
-
-			var ordersLookup = new Dictionary<Guid, Order>();
-
 			await _dbConnection.QueryAsync<Order, OrderLine, Order>(
-				query,
+                QueryConstants.GetOrderDetailsQuery,
 				(order, orderLine) =>
 				{
 					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))
@@ -57,40 +44,31 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 					return currentOrder;
 				},
 				new { Id = id },
-				splitOn: "Id");
-
-			return ordersLookup.Count > 0 ? ordersLookup[id] : null;
+				splitOn: $"{nameof(Order.Id)}");
 		}
 		catch (Exception ex)
 		{
 			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Order)), ex);
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Order)), ex);
 		}
+
+		if (ordersLookup is null || ordersLookup.Count is 0)
+		{
+			_logger.Warning($"Orders not found.");
+			throw new NotFoundException($"Orders not found.");
+		}
+
+		return ordersLookup.Count > 0 ? ordersLookup[id] : null;
 	}
 
 	public async Task<List<Order>> GetOrdersByUserIdAsync(Guid userId, CancellationToken cancellationToken)
 	{
+		var ordersLookup = new Dictionary<Guid, Order>();
+
 		try
 		{
-			string query = @"
-                    SELECT 
-                        o.*, 
-                        ol.*,
-						os.*
-                    FROM 
-                        ""Orders"" o
-                    LEFT JOIN 
-                        ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
-					LEFT JOIN
-                    ""OrderStatus"" os ON o.""StatusId"" = os.""Id""
-                    WHERE 
-                        o.""UserId"" = @UserId 
-                        AND NOT o.""IsDeleted""";
-
-			var ordersLookup = new Dictionary<Guid, Order>();
-
 			await _dbConnection.QueryAsync<Order, OrderLine, OrderStatus, Order>(
-				query,
+				QueryConstants.GetOrdersByUserIdQuery,
 				(order, orderLine, orderStatus) =>
 				{
 					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))
@@ -105,14 +83,21 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 					return currentOrder;
 				},
 				new { UserId = userId },
-				splitOn: "Id,Id");
+				splitOn: $"{nameof(OrderLine.Id)},{nameof(OrderStatus.Id)}");
 
-			return new List<Order>(ordersLookup.Values);
 		}
 		catch (Exception ex)
 		{
 			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Order)), ex);
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Order)), ex);
 		}
+
+		if (ordersLookup is null || ordersLookup.Count is 0)
+		{
+			_logger.Warning($"Order not found.");
+			throw new NotFoundException($"Order not found.");
+		}
+
+		return new List<Order>(ordersLookup.Values);
 	}
 }
