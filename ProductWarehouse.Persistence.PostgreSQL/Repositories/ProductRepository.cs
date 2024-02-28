@@ -121,7 +121,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (Exception ex)
 		{
-			_dbTransaction.Rollback();
 			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
 		}
@@ -211,7 +210,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 		catch (Exception ex)
 		{
-			_dbTransaction.Rollback();
 			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
 		}

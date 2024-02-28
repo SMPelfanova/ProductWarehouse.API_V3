@@ -16,8 +16,14 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductComm
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id, cancellationToken);
 		product.IsDeleted = true;
-		await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
-
-		await _unitOfWork.SaveChangesAsync(cancellationToken);
+		try
+		{
+			await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+		}
+		catch
+		{
+			_unitOfWork.Rollback();
+		}
 	}
 }

@@ -20,7 +20,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 	public async Task<ProductDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id, cancellationToken);
-
+		
 		_mapper.Map(request, product);
 
 		product.ProductSizes.Clear();
@@ -41,9 +41,15 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 				GroupId = groupDto.Id
 			});
 		}
-
-		await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
-		await _unitOfWork.SaveChangesAsync(cancellationToken);
+		try
+		{
+			await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
+			await _unitOfWork.SaveChangesAsync(cancellationToken);
+		}
+		catch
+		{
+			_unitOfWork.Rollback();
+		}
 
 		var productDto = _mapper.Map<ProductDto>(product);
 

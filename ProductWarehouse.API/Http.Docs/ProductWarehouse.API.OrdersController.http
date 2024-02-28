@@ -8,7 +8,7 @@
 GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
 
 ### Get Order
-GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/41e5cf2a-aa17-4b81-9389-836cdd84c889
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/e519ed7e-5c57-4439-9c67-9ac0e1049ece
 
 ### Create Order
 POST {{ProductWarehouse.API_HostAddress}}/api/orders
