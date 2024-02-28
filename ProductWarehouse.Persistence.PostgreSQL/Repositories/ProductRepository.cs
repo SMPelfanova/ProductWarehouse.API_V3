@@ -33,19 +33,19 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var query = @"
-                SELECT p.*, b.*, pg.*, s.*
+                SELECT p.*, b.*, pg.*, ps.*, s.*, g.*
                 FROM ""Products"" p
                 LEFT JOIN ""Brands"" b ON p.""BrandId"" = b.""Id""
-                LEFT JOIN ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
-                LEFT JOIN ""Groups"" g ON pg.""GroupId"" = g.""Id""
-                LEFT JOIN ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
-                LEFT JOIN ""Sizes"" s ON ps.""SizeId"" = s.""Id""
+				LEFT JOIN ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
+				LEFT JOIN ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
+				LEFT JOIN ""Sizes"" s ON ps.""SizeId"" = s.""Id""
+				LEFT JOIN ""Groups"" g ON pg.""GroupId"" = g.""Id""
                 WHERE p.""IsDeleted"" = FALSE";
 
 			var productsDictionary = new Dictionary<Guid, Product>();
-			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, Group, ProductSize, Size, Product>(
+			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, ProductSize, Size, Group, Product>(
 				query,
-				(product, brand, productGroup, group, productSize, size) =>
+				(product, brand, productGroup, productSize, size, group) =>
 				{
 					if (!productsDictionary.TryGetValue(product.Id, out var productEntry))
 					{
@@ -70,7 +70,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
 					return productEntry;
 				},
-				splitOn: "Id,Id,ProductId,Id,ProductId,Id,Id");
+				splitOn: "Id,ProductId,ProductId,Id,Id");
 
 			return products.AsList();
 		}
@@ -86,14 +86,27 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var query = @"
-            SELECT p.*, b.*, pg.*, s.*
-            FROM ""Products"" p
-            LEFT JOIN ""Brands"" b ON p.""BrandId"" = b.""Id""
-            LEFT JOIN ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
-            LEFT JOIN ""Groups"" g ON pg.""GroupId"" = g.""Id""
-            LEFT JOIN ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
-            LEFT JOIN ""Sizes"" s ON ps.""SizeId"" = s.""Id""
-            WHERE p.""Id"" = @Id AND p.""IsDeleted"" = FALSE";
+            SELECT 
+                p.*, 
+                b.*, 
+                pg.*, 
+                g.*, 
+                ps.*, 
+                s.*
+            FROM 
+                ""Products"" p
+            LEFT JOIN 
+                ""Brands"" b ON p.""BrandId"" = b.""Id""
+            LEFT JOIN 
+                ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
+            LEFT JOIN 
+                ""Groups"" g ON pg.""GroupId"" = g.""Id""
+            LEFT JOIN 
+                ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
+            LEFT JOIN 
+                ""Sizes"" s ON ps.""SizeId"" = s.""Id""
+            WHERE 
+                p.""Id"" = @Id AND p.""IsDeleted"" = FALSE";
 
 			var productsDictionary = new Dictionary<Guid, Product>();
 			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, Group, ProductSize, Size, Product>(
@@ -109,22 +122,25 @@ public class ProductRepository : Repository<Product>, IProductRepository
 						productsDictionary.Add(productEntry.Id, productEntry);
 					}
 
-					if (productGroup != null && !productEntry.ProductGroups.Any(pg => pg.GroupId == productGroup.GroupId))
+					if (productGroup != null)
 					{
+						productGroup.Product = productEntry;
 						productGroup.Group = group;
 						productEntry.ProductGroups.Add(productGroup);
 					}
 
-					if (productSize != null && !productEntry.ProductSizes.Any(ps => ps.SizeId == productSize.SizeId))
+					if (productSize != null)
 					{
+						productSize.Product = productEntry;
 						productSize.Size = size;
+						productSize.ProductId = product.Id;
 						productEntry.ProductSizes.Add(productSize);
 					}
 
 					return productEntry;
 				},
 				new { Id = id },
-				splitOn: "Id,Id,ProductId,Id,ProductId,Id,Id");
+				splitOn: "Id,GroupId,Id,SizeId,Id"); // Split on appropriate columns
 
 			return products.FirstOrDefault();
 		}
@@ -324,6 +340,26 @@ public class ProductRepository : Repository<Product>, IProductRepository
 			await _dbConnection.ExecuteAsync(productSizeQuery, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock }, _dbTransaction);
 		}
 
+		// Fetch newly added groups associated with the product
+		var groupsQuery = @"
+                        SELECT g.*
+                        FROM ""Groups"" g
+                        INNER JOIN ""ProductGroups"" pg ON g.""Id"" = pg.""GroupId""
+                        WHERE pg.""ProductId"" = @ProductId;";
+
+		var groups = await _dbConnection.QueryAsync<ProductGroups>(groupsQuery, new { ProductId = product.Id }, _dbTransaction);
+
+		// Fetch newly added sizes associated with the product
+		var sizesQuery = @"
+                        SELECT ps.*
+                        FROM ""ProductSizes"" ps
+                        WHERE ps.""ProductId"" = @ProductId;";
+
+		var sizes = await _dbConnection.QueryAsync<ProductSize>(sizesQuery, new { ProductId = product.Id }, _dbTransaction);
+
+		// Update product with newly added groups and sizes
+		product.ProductGroups = groups.ToList();
+		product.ProductSizes = sizes.ToList();
 		return product;
 	}
 

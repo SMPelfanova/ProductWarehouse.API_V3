@@ -1,7 +1,8 @@
 ﻿namespace ProductWarehouse.Persistence.PostgreSQL.Constants.Dapper.Queries;
 public static class QueryConstants
 {
-	public static string SelectOrderStatuses => "SELECT * FROM \"OrderStatus\"";
+	public static string GetAllOrderStatusesQuery => "SELECT * FROM \"OrderStatus\"";
+	public static string GetOrderStatusByIdQuery => "SELECT * FROM \"OrderStatus\" WHERE \"Id\" = @Id;";
 
 	public static string SelectBasketByUserId = @"
             SELECT 

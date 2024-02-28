@@ -12,14 +12,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 {
 	protected readonly DbContext _dbContext;
 	private readonly IDbConnection _connection;
-	private readonly IDbTransaction _dbTransaction;
 	private readonly ILogger _logger;
 
 	protected Repository(DbContext context, IDbConnection connection, IDbTransaction dbTransaction, ILogger logger)
 	{
 		_dbContext = context;
 		_connection = connection ?? throw new ArgumentNullException(nameof(connection));
-		_dbTransaction = dbTransaction;
 		_logger = logger;
 	}
 
@@ -50,7 +48,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 	{
 		try
 		{
-			var entities = await _connection.QueryAsync<TEntity>(QueryConstants.SelectEntity(typeof(TEntity).Name), _dbTransaction);
+			var entities = await _connection.QueryAsync<TEntity>(QueryConstants.SelectEntity(typeof(TEntity).Name));
 			return entities.ToList().AsReadOnly();
 		}
 		catch (Exception ex)

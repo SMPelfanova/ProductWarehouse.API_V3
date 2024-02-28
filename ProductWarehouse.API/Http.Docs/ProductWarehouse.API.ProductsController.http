@@ -1,7 +1,7 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
 @BrandId =62262d18-7d45-4347-8994-d276fff745fa
-@ProductId = 288d5d4f-a2fd-4e01-4a21-08dc2c862878
-@UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
+@ProductId =1ea10c67-d092-4348-9b3e-65587ab98d5b
+@UserId = b491e486-c1b1-44b8-9e83-6e226073d7f2
 @SizeId = 6bec10ff-0fbd-4881-99f4-6acf188d2bea
 @GroupId = c6d8c25e-2810-439c-960d-a34191d8f46c
 @OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
@@ -13,7 +13,7 @@ GET {{ProductWarehouse.API_HostAddress}}/api/products
 GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
 
 ### Get Product
-GET {{ProductWarehouse.API_HostAddress}}/api/products/c6dd00dd-29f5-44f2-8529-9746aa9595d0
+GET {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}
 
 ### Create Product
 POST {{ProductWarehouse.API_HostAddress}}/api/products
@@ -26,7 +26,9 @@ Content-Type: application/json
     "price": 10,
     "brandId": "{{BrandId}}",
     "sizes": [
-     
+    { "id":"{{SizeId}}",
+     "QuantityInStock":2
+    }
     ],
     "groups": [
       {
@@ -40,7 +42,7 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-  "id": "d927799f-5e68-4783-ba35-08dc33bc4507",
+  "id": "67e59dad-5ec2-454c-bd35-e9c0e320ab01",
   "title": "Product",
   "description": "Product Descr",
   "brandId": "{{BrandId}}",
@@ -54,4 +56,4 @@ Content-Type: application/json
 }
 
 ### Delete Product
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/c072e518-5668-4da7-9377-8f09d95f614e
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/{{ProductId}}

@@ -75,20 +75,23 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 			string query = @"
                     SELECT 
                         o.*, 
-                        ol.*
+                        ol.*,
+						os.*
                     FROM 
                         ""Orders"" o
                     LEFT JOIN 
                         ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
+					LEFT JOIN
+                    ""OrderStatus"" os ON o.""StatusId"" = os.""Id""
                     WHERE 
                         o.""UserId"" = @UserId 
                         AND NOT o.""IsDeleted""";
 
 			var ordersLookup = new Dictionary<Guid, Order>();
 
-			await _dbConnection.QueryAsync<Order, OrderLine, Order>(
+			await _dbConnection.QueryAsync<Order, OrderLine, OrderStatus, Order>(
 				query,
-				(order, orderLine) =>
+				(order, orderLine, orderStatus) =>
 				{
 					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))
 					{
@@ -98,10 +101,11 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 					}
 
 					currentOrder.OrderLines.Add(orderLine);
+					currentOrder.Status = orderStatus;
 					return currentOrder;
 				},
 				new { UserId = userId },
-				splitOn: "Id");
+				splitOn: "Id,Id");
 
 			return new List<Order>(ordersLookup.Values);
 		}

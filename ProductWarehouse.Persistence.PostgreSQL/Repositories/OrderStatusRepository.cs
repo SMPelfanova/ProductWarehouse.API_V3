@@ -6,6 +6,8 @@ using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL.Constants.Dapper.Queries;
 using Serilog;
 using System.Data;
+using static Dapper.SqlMapper;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
@@ -24,8 +26,22 @@ public class OrderStatusRepository : Repository<OrderStatus>, IOrderStatusReposi
 	{
 		try
 		{
-			var entities = await _dbConnection.QueryAsync<OrderStatus>(QueryConstants.SelectOrderStatuses);
+			var entities = await _dbConnection.QueryAsync<OrderStatus>(QueryConstants.GetAllOrderStatusesQuery);
 			return entities.ToList().AsReadOnly();
+		}
+		catch (Exception ex)
+		{
+			_logger.Error("An error occurred while fetching all orders.", ex);
+			throw new DatabaseException("An error occurred while fetching all orders.", ex);
+		}
+	}
+
+	new public async Task<OrderStatus> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+	{
+		try
+		{
+			var orderStatus = await _dbConnection.QueryFirstOrDefaultAsync<OrderStatus>(QueryConstants.GetOrderStatusByIdQuery, new { Id = id });
+			return orderStatus;
 		}
 		catch (Exception ex)
 		{

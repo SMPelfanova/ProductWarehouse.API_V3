@@ -1,8 +1,8 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@ProductId = b5415b0d-9264-4c93-a64c-1439a7ffdbc8
-@UserId = 1fd3d9f7-c171-4596-b332-fa0f65d0f057
-@OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
+@ProductId =1ea10c67-d092-4348-9b3e-65587ab98d5b
+@UserId = b491e486-c1b1-44b8-9e83-6e226073d7f2
 @SizeId = 6bec10ff-0fbd-4881-99f4-6acf188d2bea
+@OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
 
 ### Get Orders
 GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
