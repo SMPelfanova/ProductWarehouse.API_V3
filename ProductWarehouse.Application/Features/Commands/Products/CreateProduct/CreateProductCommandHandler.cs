@@ -21,18 +21,15 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
 	public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
 	{
-		Product? product;
-		
+		Product? product = _mapper.Map<Product>(request);
+
 		try
 		{
-			product = _mapper.Map<Product>(request);
-
 			_unitOfWork.BeginTransaction();
+			product = await _unitOfWork.Products.AddAsync(product);
+			_unitOfWork.CommitTransaction();
 
-			var addedProduct = await _unitOfWork.Products.AddAsync(product, cancellationToken);
-
-			await _unitOfWork.SaveChangesAsync(cancellationToken);
-			var productDto = _mapper.Map<ProductDto>(addedProduct);
+			var productDto = _mapper.Map<ProductDto>(product);
 
 			return productDto;
 		}

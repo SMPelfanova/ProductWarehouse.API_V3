@@ -55,12 +55,14 @@ internal class UnitOfWork : IUnitOfWork
 		User = userRepository;
 		ProductSizes = productSizeRepository;
 	}
-	public void BeginTransaction()
+	public IDbTransaction BeginTransaction()
 	{
 		if (_dbTransaction == null)
 		{
 			_dbTransaction = _dbContext.Database.BeginTransaction().GetDbTransaction();
 		}
+
+		return _dbTransaction;
 	}
 
 	public void CommitTransaction()

@@ -15,7 +15,7 @@ public interface IUnitOfWork : IDisposable
 	IBasketLineRepository BasketLines { get; }
 	IUserRepository User { get; }
 
-	void BeginTransaction();
+	IDbTransaction BeginTransaction();
 	void CommitTransaction();
 	void RollbackTransaction();
 	Task<int> SaveChangesAsync(CancellationToken cancellationToken);

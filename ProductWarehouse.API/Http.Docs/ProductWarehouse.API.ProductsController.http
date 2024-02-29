@@ -56,4 +56,4 @@ Content-Type: application/json
 }
 
 ### Delete Product
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/00858d45-fcc2-4d44-b809-2087d566e679
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/d21fc7f7-daff-455c-a1b8-4c709a26ba6e

@@ -46,8 +46,8 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 		try
 		{
 			_unitOfWork.BeginTransaction();
-			await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
-			await _unitOfWork.SaveChangesAsync(cancellationToken);
+			await _unitOfWork.Products.UpdateAsync(product);
+			_unitOfWork.CommitTransaction();
 		}
 		catch (Exception)
 		{
