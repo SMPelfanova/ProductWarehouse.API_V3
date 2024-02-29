@@ -20,11 +20,9 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	public ProductRepository(
 		ApplicationDbContext dbContext,
 		IDbConnection dbConnection,
-		IDbTransaction dbTransaction,
-		ILogger logger) : base(dbContext, dbConnection, dbTransaction, logger)
+		ILogger logger) : base(dbContext, dbConnection, logger)
 	{
 		_dbConnection = dbConnection;
-		_dbTransaction = dbTransaction;
 		_logger = logger;
 	}
 
@@ -75,10 +73,10 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			await _dbConnection.ExecuteAsync(CommandConstants.UpdatePproduct, product, _dbTransaction);
+			await _dbConnection.ExecuteAsync(CommandConstants.UpdateProduct, product, _dbTransaction);
 
 			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductGroups, new { ProductId = product.Id }, _dbTransaction);
-
+			
 			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductSizes, new { ProductId = product.Id }, _dbTransaction);
 
 			foreach (var group in product.ProductGroups)

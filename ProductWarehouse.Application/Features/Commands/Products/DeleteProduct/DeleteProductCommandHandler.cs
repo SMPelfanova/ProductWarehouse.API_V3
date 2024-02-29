@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using ProductWarehouse.Application.Constants;
 using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
 
@@ -18,12 +20,14 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductComm
 		product.IsDeleted = true;
 		try
 		{
+			_unitOfWork.BeginTransaction();
 			await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
 		}
-		catch
+		catch (Exception)
 		{
 			_unitOfWork.Rollback();
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage);
 		}
 	}
 }

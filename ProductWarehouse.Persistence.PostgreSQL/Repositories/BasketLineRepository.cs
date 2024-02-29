@@ -18,8 +18,7 @@ public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepositor
 	public BasketLineRepository(
 		ApplicationDbContext dbContext,
 		IDbConnection  dbConnection,
-		IDbTransaction dbTransaction,
-		ILogger logger) : base(dbContext,  dbConnection, dbTransaction, logger)
+		ILogger logger) : base(dbContext,  dbConnection, logger)
 	{
 		_dbContext = dbContext;
 		 _dbConnection =  dbConnection;

@@ -1,4 +1,6 @@
-﻿namespace ProductWarehouse.Application.Interfaces;
+﻿using System.Data;
+
+namespace ProductWarehouse.Application.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {
@@ -13,6 +15,9 @@ public interface IUnitOfWork : IDisposable
 	IBasketLineRepository BasketLines { get; }
 	IUserRepository User { get; }
 
+	void BeginTransaction();
+	void CommitTransaction();
+	void RollbackTransaction();
 	Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 	void Rollback();

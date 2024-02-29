@@ -11,8 +11,7 @@ public class BrandRepository : Repository<Brand>, IBrandRepository
 	public BrandRepository(
 		ApplicationDbContext dbContext,
 		IDbConnection  dbConnection,
-		IDbTransaction dbTransaction,
-		ILogger logger) : base(dbContext,  dbConnection, dbTransaction, logger)
+		ILogger logger) : base(dbContext,  dbConnection, logger)
 	{
 	}
 }

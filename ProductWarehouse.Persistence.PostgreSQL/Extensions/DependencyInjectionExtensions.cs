@@ -21,24 +21,12 @@ public static class DependencyInjectionExtensions
 			options.UseNpgsql(configuration.GetConnectionString("WerehouseNpgsqlDbConnectionString"));
 		});
 
-		services.AddScoped<NpgsqlConnection>(provider =>
+		services.AddScoped<IDbConnection>(provider =>
 		{
 			var connectionString = configuration.GetConnectionString("WerehouseNpgsqlDbConnectionString");
 			return new NpgsqlConnection(connectionString);
 		});
-
-		services.AddScoped<IDbConnection>(provider =>
-		{
-			return provider.GetRequiredService<NpgsqlConnection>();
-		});
-
-		services.AddScoped<IDbTransaction>(provider =>
-		{
-			var connection = provider.GetRequiredService<NpgsqlConnection>();
-			connection.Open();
-			return connection.BeginTransaction();
-		});
-
+		
 		services.AddScoped<IProductRepository, ProductRepository>();
 		services.AddScoped<IGroupRepository, GroupRepository>();
 		services.AddScoped<IUserRepository, UserRepository>();

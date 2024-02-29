@@ -11,8 +11,7 @@ public class UserRepository : Repository<User>, IUserRepository
 	public UserRepository(
 		ApplicationDbContext dbContext,
 		IDbConnection dbConnection,
-		IDbTransaction dbTransaction,
-		ILogger logger) : base(dbContext, dbConnection, dbTransaction, logger)
+		ILogger logger) : base(dbContext, dbConnection, logger)
 	{
 	}
 }

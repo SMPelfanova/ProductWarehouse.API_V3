@@ -12,4 +12,5 @@ public static class MessageConstants
 
 	public static string NotAvailableQuantityMessage = "Requested quantity exceeds available quantity.";
 	public static string ProductSizeAlreadyAddedMessage = "Product with the same size is already added to the basket.";
+	public static string GeneralErrorMessage = "An error occurred while processing the request.";
 }

@@ -14,7 +14,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 	private readonly IDbConnection _connection;
 	private readonly ILogger _logger;
 
-	protected Repository(DbContext context, IDbConnection connection, IDbTransaction dbTransaction, ILogger logger)
+	protected Repository(DbContext context, IDbConnection connection, ILogger logger)
 	{
 		_dbContext = context;
 		_connection = connection ?? throw new ArgumentNullException(nameof(connection));

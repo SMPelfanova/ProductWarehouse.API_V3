@@ -39,6 +39,11 @@ public class GlobalExceptionHandler : IExceptionHandler
 				Status = StatusCodes.Status400BadRequest,
 				Title = exception.Message
 			},
+			DatabaseException => new ProblemDetails
+			{
+				Status = StatusCodes.Status500InternalServerError,
+				Title = exception.Message
+			},
 			OperationCanceledException => new ProblemDetails
 			{
 				Status = StatusCodes.Status400BadRequest,

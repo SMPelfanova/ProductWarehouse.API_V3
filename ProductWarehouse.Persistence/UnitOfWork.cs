@@ -1,4 +1,6 @@
-﻿using ProductWarehouse.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using ProductWarehouse.Application.Interfaces;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL;
 using System.Data;
 
@@ -7,7 +9,7 @@ namespace ProductWarehouse.Persistence;
 internal class UnitOfWork : IUnitOfWork
 {
 	private readonly ApplicationDbContext _dbContext;
-	IDbTransaction _dbTransaction;
+	private IDbTransaction _dbTransaction;
 	public IProductRepository Products { get; }
 
 	public ISizeRepository Sizes { get; }
@@ -29,7 +31,6 @@ internal class UnitOfWork : IUnitOfWork
 	public IProductSizeRepository ProductSizes { get; }
 
 	public UnitOfWork(ApplicationDbContext dbContext,
-						IDbTransaction dbTransaction,
 						IOrderStatusRepository orderStatusRepository,
 						IGroupRepository groupRepository,
 						IProductRepository productRepository,
@@ -43,7 +44,6 @@ internal class UnitOfWork : IUnitOfWork
 						)
 	{
 		_dbContext = dbContext;
-		_dbTransaction = dbTransaction;
 		OrdersStatuses = orderStatusRepository;
 		Group = groupRepository;
 		Products = productRepository;
@@ -55,15 +55,31 @@ internal class UnitOfWork : IUnitOfWork
 		User = userRepository;
 		ProductSizes = productSizeRepository;
 	}
+	public void BeginTransaction()
+	{
+		if (_dbTransaction == null)
+		{
+			_dbTransaction = _dbContext.Database.BeginTransaction().GetDbTransaction();
+		}
+	}
+
+	public void CommitTransaction()
+	{
+		_dbTransaction?.Commit();
+	}
+
+	public void RollbackTransaction()
+	{
+		_dbTransaction?.Rollback();
+	}
+
 	public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
 	{
-	    _dbTransaction.Commit();	
 		return await _dbContext.SaveChangesAsync(cancellationToken);
 	}
 
 	public void Rollback()
 	{
-		_dbTransaction.Rollback();
 		_dbContext.Database.RollbackTransaction();
 	}
 
@@ -77,9 +93,12 @@ internal class UnitOfWork : IUnitOfWork
 	{
 		if (disposing)
 		{
-			_dbTransaction.Connection?.Close();
-			_dbTransaction.Connection?.Dispose();
-			_dbTransaction.Dispose();
+			if (_dbTransaction != null)
+			{
+				_dbTransaction.Connection?.Close();
+				_dbTransaction.Connection?.Dispose();
+				_dbTransaction.Dispose();
+			}
 			_dbContext.Dispose();
 		}
 	}

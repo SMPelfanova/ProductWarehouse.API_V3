@@ -20,10 +20,10 @@ POST {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
  
 {
-    "title": "Product X",
-    "description": "Description of Product 3",
-    "photo": "product3.jpg",
-    "price": 10,
+    "title": "check if rolback works",
+    "description": "D",
+    "photo": "p.jpg",
+    "price": 1,
     "brandId": "{{BrandId}}",
     "sizes": [
     { "id":"{{SizeId}}",

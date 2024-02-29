@@ -17,7 +17,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 	private readonly IDbConnection _dbConnection;
 	private readonly ILogger _logger;
 
-	public OrderRepository(ApplicationDbContext dbContext, IDbConnection dbConnection, IDbTransaction dbTransaction, ILogger logger) : base(dbContext, dbConnection, dbTransaction, logger)
+	public OrderRepository(ApplicationDbContext dbContext, IDbConnection dbConnection, ILogger logger) : base(dbContext, dbConnection, logger)
 	{
 		_dbContext = dbContext;
 		_dbConnection = dbConnection;

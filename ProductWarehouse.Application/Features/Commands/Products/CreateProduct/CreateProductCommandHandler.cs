@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
+using ProductWarehouse.Application.Constants;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models.Product;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.Application.Features.Commands.Products;
 
@@ -20,9 +22,13 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 	public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
 	{
 		Product? product;
+		
 		try
 		{
 			product = _mapper.Map<Product>(request);
+
+			_unitOfWork.BeginTransaction();
+
 			var addedProduct = await _unitOfWork.Products.AddAsync(product, cancellationToken);
 
 			await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -30,10 +36,10 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
 			return productDto;
 		}
-		catch
+		catch (Exception)
 		{
 			_unitOfWork.Rollback();
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage);
 		}
-		return new ProductDto();
 	}
 }
