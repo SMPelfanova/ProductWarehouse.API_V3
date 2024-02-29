@@ -29,7 +29,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		{
 			var productsDictionary = new Dictionary<Guid, Product>();
 			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, ProductSize, Size, Group, Product>(
-				QueryConstants.GetAllProductsQuery,
+				ReadContants.ProductReadQueriesContants.GetAllProductsQuery,
 				(product, brand, productGroup, productSize, size, group) =>
 				{
 					if (!productsDictionary.TryGetValue(product.Id, out var productEntry))
@@ -70,15 +70,15 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			await _dbConnection.ExecuteAsync(CommandConstants.UpdateProduct, product);
+			await _dbConnection.ExecuteAsync(MutateConstants.ProductUpdateQueriesContants.UpdateProduct, product);
 
-			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductGroups, new { ProductId = product.Id });
+			await _dbConnection.ExecuteAsync(MutateConstants.ProductDeleteQueriesContants.DeleteProductGroups, new { ProductId = product.Id });
 			
-			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductSizes, new { ProductId = product.Id });
+			await _dbConnection.ExecuteAsync(MutateConstants.ProductDeleteQueriesContants.DeleteProductSizes, new { ProductId = product.Id });
 
 			foreach (var group in product.ProductGroups)
 			{
-				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductGroup, new
+				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductGroup, new
 				{
 					ProductId = product.Id,
 					GroupId = group.GroupId
@@ -87,7 +87,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
 			foreach (var size in product.ProductSizes)
 			{
-				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductSize, new
+				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductSize, new
 				{
 					ProductId = product.Id,
 					SizeId = size.SizeId,
@@ -106,20 +106,20 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var id = await _dbConnection.ExecuteScalarAsync<Guid>(CommandConstants.InsertProduct, product);
+			var id = await _dbConnection.ExecuteScalarAsync<Guid>(MutateConstants.ProductInsertQueriesContants.InsertProduct, product);
 			product.Id = id;
 			foreach (var group in product.ProductGroups)
 			{
-				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductGroup, new { ProductId = product.Id, GroupId = group.GroupId });
+				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductGroup, new { ProductId = product.Id, GroupId = group.GroupId });
 			}
 
 			foreach (var size in product.ProductSizes)
 			{
-				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductSize, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock });
+				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductSize, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock });
 			}
 
 			var groups = await _dbConnection.QueryAsync<ProductGroups, Group, ProductGroups>(
-				QueryConstants.GetProductGroups,
+				ReadContants.ProductReadQueriesContants.GetProductGroups,
 				(productGroup, group) =>
 				{
 					productGroup.Group = group;
@@ -128,7 +128,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 				new { ProductId = product.Id },
 				splitOn: $"{nameof(Baskets.Id)}");
 
-			var sizes = await _dbConnection.QueryAsync<ProductSize, Size, ProductSize>(QueryConstants.GetProductSizes,
+			var sizes = await _dbConnection.QueryAsync<ProductSize, Size, ProductSize>(ReadContants.ProductReadQueriesContants.GetProductSizes,
 				(productSize, size) =>
 				{
 					productSize.Size = size;
@@ -154,10 +154,10 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			var productsDictionary = new Dictionary<Guid, Product>();
-			product = await _dbConnection.QueryFirstOrDefaultAsync<Product>(QueryConstants.GetProductDetailsQuery, new { Id = id });
+			product = await _dbConnection.QueryFirstOrDefaultAsync<Product>(ReadContants.ProductReadQueriesContants.GetProductDetailsQuery, new { Id = id });
 
 			var products = await _dbConnection.QueryAsync<Product, Brand, ProductGroups, Group, ProductSize, Size, Product>(
-				QueryConstants.GetProductDetailsQuery,
+				ReadContants.ProductReadQueriesContants.GetProductDetailsQuery,
 				(product, brand, productGroup, group, productSize, size) =>
 				{
 					if (!productsDictionary.TryGetValue(product.Id, out var productEntry))
@@ -210,7 +210,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			return await _dbConnection.QueryFirstOrDefaultAsync<ProductSize>(
-				QueryConstants.GetProductSizeQuery,
+				ReadContants.ProductReadQueriesContants.GetProductSizeQuery,
 				new { ProductId = productId, SizeId = sizeId });
 		}
 		catch (Exception ex)
@@ -225,7 +225,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			return await _dbConnection.ExecuteScalarAsync<int>(
-				QueryConstants.CheckQuantityInStockQuery,
+				ReadContants.ProductReadQueriesContants.CheckQuantityInStockQuery,
 				new { ProductId = productId, SizeId = sizeId });
 		}
 		catch (Exception ex)
@@ -240,7 +240,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			await _dbConnection.ExecuteAsync(
-				CommandConstants.DeleteProductGroup,
+				MutateConstants.ProductDeleteQueriesContants.DeleteProductGroup,
 				new { ProductId = productId, GroupId = groupId });
 		}
 		catch (Exception ex)
@@ -255,7 +255,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			await _dbConnection.ExecuteAsync(
-				CommandConstants.DeleteProductSize,
+				MutateConstants.ProductDeleteQueriesContants.DeleteProductSize,
 				new { ProductId = productId, SizeId = sizeId });
 		}
 		catch (Exception ex)
@@ -270,7 +270,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			await _dbConnection.ExecuteAsync(
-				CommandConstants.UpdateQuantityInStock,
+				MutateConstants.ProductUpdateQueriesContants.UpdateQuantityInStock,
 				new { QuantityInStock = productSize.QuantityInStock, ProductId = productSize.ProductId, SizeId = productSize.SizeId });
 		}
 		catch (Exception ex)
@@ -282,6 +282,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
 	public async Task UpdateProductIsDeletedAsync(Guid productId)
 	{
-		await _dbConnection.ExecuteAsync(CommandConstants.UpdateProductIsDeleted, new { IsDeleted = true, Id = productId });
+		await _dbConnection.ExecuteAsync(MutateConstants.ProductUpdateQueriesContants.UpdateProductIsDeleted, new { IsDeleted = true, Id = productId });
 	}
 }

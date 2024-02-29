@@ -30,7 +30,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		try
 		{
 			await _dbConnection.QueryAsync<Order, OrderLine, OrderStatus, Order>(
-                QueryConstants.GetOrderDetailsQuery,
+                ReadContants.OrderReadQueriesConstants.GetOrderDetailsQuery,
 				(order, orderLine, orderStatus) =>
 				{
 					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))
@@ -69,7 +69,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		try
 		{
 			await _dbConnection.QueryAsync<Order, OrderLine, OrderStatus, Order>(
-				QueryConstants.GetOrdersByUserIdQuery,
+				ReadContants.OrderReadQueriesConstants.GetOrdersByUserIdQuery,
 				(order, orderLine, orderStatus) =>
 				{
 					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))

@@ -34,7 +34,7 @@ public class BasketRepository : Repository<Baskets>, IBasketRepository
 		{
 			var basketsLookup = new Dictionary<Guid, Baskets>();
 			await _dbConnection.QueryAsync<Baskets, BasketLine, Baskets>(
-				QueryConstants.GetBasketByUserIdQuery,
+				ReadContants.BasketReadQueriesConstants.GetBasketByUserIdQuery,
 				(basket, basketLine) =>
 				{
 					if (currentBasket == null || currentBasket.Id != basket.Id)
