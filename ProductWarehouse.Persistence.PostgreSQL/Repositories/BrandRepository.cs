@@ -8,10 +8,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
 public class BrandRepository : Repository<Brand>, IBrandRepository
 {
-	public BrandRepository(
-		ApplicationDbContext dbContext,
-		IDbConnection  dbConnection,
-		ILogger logger) : base(dbContext,  dbConnection, logger)
+	public BrandRepository(ApplicationDbContext dbContext, IDbConnection  dbConnection, ILogger logger) : base(dbContext,  dbConnection, logger)
 	{
 	}
 }

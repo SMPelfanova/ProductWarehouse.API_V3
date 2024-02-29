@@ -16,11 +16,8 @@ public class ProductRepository : Repository<Product>, IProductRepository
 {
 	private readonly IDbConnection _dbConnection;
 	private readonly ILogger _logger;
-	private readonly IDbTransaction _dbTransaction;
-	public ProductRepository(
-		ApplicationDbContext dbContext,
-		IDbConnection dbConnection,
-		ILogger logger) : base(dbContext, dbConnection, logger)
+
+	public ProductRepository(ApplicationDbContext dbContext, IDbConnection dbConnection, ILogger logger) : base(dbContext, dbConnection, logger)
 	{
 		_dbConnection = dbConnection;
 		_logger = logger;
@@ -73,11 +70,11 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			await _dbConnection.ExecuteAsync(CommandConstants.UpdateProduct, product, _dbTransaction);
+			await _dbConnection.ExecuteAsync(CommandConstants.UpdateProduct, product);
 
-			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductGroups, new { ProductId = product.Id }, _dbTransaction);
+			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductGroups, new { ProductId = product.Id });
 			
-			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductSizes, new { ProductId = product.Id }, _dbTransaction);
+			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductSizes, new { ProductId = product.Id });
 
 			foreach (var group in product.ProductGroups)
 			{
@@ -85,7 +82,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 				{
 					ProductId = product.Id,
 					GroupId = group.GroupId
-				}, _dbTransaction);
+				});
 			}
 
 			foreach (var size in product.ProductSizes)
@@ -95,7 +92,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 					ProductId = product.Id,
 					SizeId = size.SizeId,
 					QuantityInStock = size.QuantityInStock
-				}, _dbTransaction);
+				});
 			}
 		}
 		catch (Exception ex)
@@ -109,16 +106,16 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var id = await _dbConnection.ExecuteScalarAsync<Guid>(CommandConstants.InsertProduct, product, _dbTransaction);
+			var id = await _dbConnection.ExecuteScalarAsync<Guid>(CommandConstants.InsertProduct, product);
 			product.Id = id;
 			foreach (var group in product.ProductGroups)
 			{
-				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductGroup, new { ProductId = product.Id, GroupId = group.GroupId }, _dbTransaction);
+				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductGroup, new { ProductId = product.Id, GroupId = group.GroupId });
 			}
 
 			foreach (var size in product.ProductSizes)
 			{
-				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductSize, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock }, _dbTransaction);
+				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductSize, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock });
 			}
 
 			var groups = await _dbConnection.QueryAsync<ProductGroups, Group, ProductGroups>(
@@ -129,7 +126,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
 					return productGroup;
 				},
 				new { ProductId = product.Id },
-				_dbTransaction,
 				splitOn: $"{nameof(Baskets.Id)}");
 
 			var sizes = await _dbConnection.QueryAsync<ProductSize, Size, ProductSize>(QueryConstants.GetProductSizes,
@@ -139,7 +135,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
 					return productSize;
 				},
 				new { ProductId = product.Id },
-				_dbTransaction,
 				splitOn: $"{nameof(Baskets.Id)}");
 
 			product.ProductGroups = groups.ToList();

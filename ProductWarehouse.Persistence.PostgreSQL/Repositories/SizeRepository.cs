@@ -8,10 +8,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
 public class SizeRepository : Repository<Size>, ISizeRepository
 {
-	public SizeRepository(
-		ApplicationDbContext dbContext,
-		IDbConnection dbConnection,
-		ILogger logger) : base(dbContext, dbConnection, logger)
+	public SizeRepository(ApplicationDbContext dbContext, IDbConnection dbConnection, ILogger logger) : base(dbContext, dbConnection, logger)
 	{
 	}
 }

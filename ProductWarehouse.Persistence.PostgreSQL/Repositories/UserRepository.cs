@@ -8,10 +8,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
 public class UserRepository : Repository<User>, IUserRepository
 {
-	public UserRepository(
-		ApplicationDbContext dbContext,
-		IDbConnection dbConnection,
-		ILogger logger) : base(dbContext, dbConnection, logger)
+	public UserRepository(ApplicationDbContext dbContext, IDbConnection dbConnection, ILogger logger) : base(dbContext, dbConnection, logger)
 	{
 	}
 }
