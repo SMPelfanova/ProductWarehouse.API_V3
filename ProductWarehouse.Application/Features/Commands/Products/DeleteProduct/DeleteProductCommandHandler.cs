@@ -24,9 +24,9 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductComm
 			await _unitOfWork.Products.UpdateProductIsDeletedAsync(product.Id);
 			_unitOfWork.CommitTransaction();
 		}
-		catch (Exception)
+		catch (DatabaseException)
 		{
-			_unitOfWork.Rollback();
+			_unitOfWork.RollbackTransaction();
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage);
 		}
 	}

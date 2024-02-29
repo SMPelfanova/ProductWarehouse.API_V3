@@ -42,7 +42,7 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-  "id": "d21fc7f7-daff-455c-a1b8-4c709a26ba6e",
+  "id": "89cca55f-7393-4ebd-ae66-f0d3ef613c3d",
   "title": "Product",
   "description": "Product Descr",
   "brandId": "{{BrandId}}",

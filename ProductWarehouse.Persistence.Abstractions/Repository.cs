@@ -27,18 +27,17 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		try
 		{
 			var query = QueryConstants.SelectEntityById(GetEntityName());
-			entity = await _connection.QueryFirstOrDefaultAsync<TEntity>(query, new { Id = id });
-			
+			entity = await _connection.QuerySingleAsync<TEntity>(query, new { Id = id });
+		}
+		catch(InvalidOperationException ex)
+		{
+			_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
+			throw new NotFoundException($"Entity of type {typeof(TEntity)} not found.");
 		}
 		catch (Exception ex)
 		{
 			_logger.Error("An error occurred while fetching the entity by id.", ex);
 			throw new DatabaseException("An error occurred while fetching the entity by id.", ex);
-		}
-		if (entity is null)
-		{
-			_logger.Warning($"Entity of type {typeof(TEntity)} with id {id} not found.");
-			throw new NotFoundException($"Entity of type {typeof(TEntity)} not found.");
 		}
 	
 		return entity;
@@ -112,7 +111,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		try
 		{
 			var entity = await _dbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken);
-			return entity != null;
+			return entity is not null;
 		}
 		catch (Exception ex)
 		{

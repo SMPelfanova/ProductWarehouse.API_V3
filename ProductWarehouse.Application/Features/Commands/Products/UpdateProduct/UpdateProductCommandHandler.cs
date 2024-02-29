@@ -49,9 +49,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 			await _unitOfWork.Products.UpdateAsync(product);
 			_unitOfWork.CommitTransaction();
 		}
-		catch (Exception)
+		catch (DatabaseException)
 		{
-			_unitOfWork.Rollback();
+			_unitOfWork.RollbackTransaction();
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage);
 		}
 

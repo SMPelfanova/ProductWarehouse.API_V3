@@ -33,9 +33,9 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 
 			return productDto;
 		}
-		catch (Exception)
+		catch (DatabaseException)
 		{
-			_unitOfWork.Rollback();
+			_unitOfWork.RollbackTransaction();
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage);
 		}
 	}
