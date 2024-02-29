@@ -18,11 +18,14 @@ public static class QueryConstants
 	public static string GetOrderDetailsQuery = @"
                     SELECT 
                         o.*, 
-                        ol.*
+                        ol.*,
+	                    os.*
                     FROM 
                         ""Orders"" o
                     LEFT JOIN 
                         ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
+	                LEFT JOIN
+                        ""OrderStatus"" os ON o.""StatusId"" = os.""Id""
                     WHERE 
                         o.""Id"" = @Id 
                         AND NOT o.""IsDeleted""";
@@ -76,9 +79,30 @@ public static class QueryConstants
             FROM ""ProductSizes""
             WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
 
-	public static string GetProductSizeQuery = @"
+	public static string GetProductSizeQuery =  @"
 				SELECT *
 				FROM ""ProductSizes""
 				WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
 
+	public static string GetProductGroups = @"
+					SELECT 
+						pg.*,
+						g.*
+					FROM 
+						""ProductGroups"" pg
+					INNER JOIN 
+						""Groups"" g ON pg.""GroupId"" = g.""Id""
+					WHERE 
+						pg.""ProductId"" = @ProductId;";
+
+	public static string GetProductSizes = @"
+					SELECT 
+						ps.*,
+						s.*
+					FROM 
+						""ProductSizes"" ps
+					INNER JOIN 
+						""Sizes"" s ON ps.""SizeId"" = s.""Id""
+					WHERE 
+						ps.""ProductId"" = @ProductId;";
 }

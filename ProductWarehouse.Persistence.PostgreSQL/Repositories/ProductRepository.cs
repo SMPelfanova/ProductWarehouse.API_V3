@@ -75,48 +75,29 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var productUpdateQuery = @"
-                    UPDATE ""Products"" 
-                    SET 
-                        ""BrandId"" = @BrandId,
-                        ""Title"" = @Title,
-                        ""Photo"" = @Photo,
-                        ""Price"" = @Price,
-                        ""Description"" = @Description,
-                        ""IsDeleted"" = @IsDeleted
-                    WHERE 
-                        ""Id"" = @Id;
-                ";
-			await _dbConnection.ExecuteAsync(productUpdateQuery, product, _dbTransaction);
+			await _dbConnection.ExecuteAsync(CommandConstants.UpdatePproduct, product, _dbTransaction);
 
-			var deleteProductGroupsQuery = @"
-                    DELETE FROM ""ProductGroups"" 
-                    WHERE ""ProductId"" = @ProductId;
-                ";
-			await _dbConnection.ExecuteAsync(deleteProductGroupsQuery, new { ProductId = product.Id }, _dbTransaction);
+			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductGroups, new { ProductId = product.Id }, _dbTransaction);
 
-			var deleteProductSizesQuery = @"
-                    DELETE FROM ""ProductSizes"" 
-                    WHERE ""ProductId"" = @ProductId;
-                ";
-			await _dbConnection.ExecuteAsync(deleteProductSizesQuery, new { ProductId = product.Id }, _dbTransaction);
+			await _dbConnection.ExecuteAsync(CommandConstants.DeleteProductSizes, new { ProductId = product.Id }, _dbTransaction);
 
 			foreach (var group in product.ProductGroups)
 			{
-				var productGroupInsertQuery = @"
-                        INSERT INTO ""ProductGroups"" (""ProductId"", ""GroupId"")
-                        VALUES (@ProductId, @GroupId);
-                    ";
-				await _dbConnection.ExecuteAsync(productGroupInsertQuery, new { ProductId = product.Id, GroupId = group.GroupId }, _dbTransaction);
+				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductGroup, new
+				{
+					ProductId = product.Id,
+					GroupId = group.GroupId
+				}, _dbTransaction);
 			}
 
 			foreach (var size in product.ProductSizes)
 			{
-				var productSizeInsertQuery = @"
-                        INSERT INTO ""ProductSizes"" (""ProductId"", ""SizeId"", ""QuantityInStock"")
-                        VALUES (@ProductId, @SizeId, @QuantityInStock);
-                    ";
-				await _dbConnection.ExecuteAsync(productSizeInsertQuery, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock }, _dbTransaction);
+				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductSize, new
+				{
+					ProductId = product.Id,
+					SizeId = size.SizeId,
+					QuantityInStock = size.QuantityInStock
+				}, _dbTransaction);
 			}
 		}
 		catch (Exception ex)
@@ -130,48 +111,20 @@ public class ProductRepository : Repository<Product>, IProductRepository
 	{
 		try
 		{
-			var query = @"
-                INSERT INTO ""Products"" (""BrandId"", ""Title"", ""Photo"", ""Price"", ""Description"", ""IsDeleted"") 
-                VALUES (@BrandId, @Title, @Photo, @Price, @Description, @IsDeleted)
-				RETURNING ""Id"";";
-
-			var id = await _dbConnection.ExecuteScalarAsync<Guid>(query, product, _dbTransaction);
+			var id = await _dbConnection.ExecuteScalarAsync<Guid>(CommandConstants.InsertProduct, product, _dbTransaction);
 			product.Id = id;
 			foreach (var group in product.ProductGroups)
 			{
-				var productGroupQuery = @"
-
-					INSERT INTO ""ProductGroups"" (""ProductId"", ""GroupId"")
-                    VALUES (@ProductId, @GroupId)
-                     ON CONFLICT (""ProductId"", ""GroupId"") DO NOTHING;";
-
-				await _dbConnection.ExecuteAsync(productGroupQuery, new { ProductId = product.Id, GroupId = group.GroupId }, _dbTransaction);
+				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductGroup, new { ProductId = product.Id, GroupId = group.GroupId }, _dbTransaction);
 			}
 
 			foreach (var size in product.ProductSizes)
 			{
-				var productSizeQuery = @"
-                    INSERT INTO ""ProductSizes"" (""ProductId"", ""SizeId"", ""QuantityInStock"")
-                    VALUES (@ProductId, @SizeId, @QuantityInStock)
-                    ON CONFLICT (""ProductId"", ""SizeId"") DO UPDATE SET ""QuantityInStock"" = @QuantityInStock;";
-
-				await _dbConnection.ExecuteAsync(productSizeQuery, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock }, _dbTransaction);
+				await _dbConnection.ExecuteAsync(CommandConstants.InsertProductSize, new { ProductId = product.Id, SizeId = size.SizeId, QuantityInStock = size.QuantityInStock }, _dbTransaction);
 			}
 
-			// Fetch newly added groups associated with the product
-			var groupsQuery = @"
-					SELECT 
-						pg.*,
-						g.*
-					FROM 
-						""ProductGroups"" pg
-					INNER JOIN 
-						""Groups"" g ON pg.""GroupId"" = g.""Id""
-					WHERE 
-						pg.""ProductId"" = @ProductId;";
-
 			var groups = await _dbConnection.QueryAsync<ProductGroups, Group, ProductGroups>(
-				groupsQuery,
+				QueryConstants.GetProductGroups,
 				(productGroup, group) =>
 				{
 					productGroup.Group = group;
@@ -181,20 +134,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 				_dbTransaction,
 				splitOn: $"{nameof(Baskets.Id)}");
 
-			// Fetch newly added sizes associated with the product
-			var sizesQuery = @"
-					SELECT 
-						ps.*,
-						s.*
-					FROM 
-						""ProductSizes"" ps
-					INNER JOIN 
-						""Sizes"" s ON ps.""SizeId"" = s.""Id""
-					WHERE 
-						ps.""ProductId"" = @ProductId;";
-
-			var sizes = await _dbConnection.QueryAsync<ProductSize, Size, ProductSize>(
-				sizesQuery,
+			var sizes = await _dbConnection.QueryAsync<ProductSize, Size, ProductSize>(QueryConstants.GetProductSizes,
 				(productSize, size) =>
 				{
 					productSize.Size = size;
@@ -265,8 +205,8 @@ public class ProductRepository : Repository<Product>, IProductRepository
 
 		if (product is null)
 		{
-			_logger.Warning($"Product not found.");
-			throw new NotFoundException($"Product not found.");
+			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Product)));
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Product)));
 		}
 
 		return product;
@@ -307,7 +247,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			await _dbConnection.ExecuteAsync(
-				CommandConstants.DeleteProductGroupCommand,
+				CommandConstants.DeleteProductGroup,
 				new { ProductId = productId, GroupId = groupId });
 		}
 		catch (Exception ex)
@@ -322,7 +262,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			await _dbConnection.ExecuteAsync(
-				CommandConstants.DeleteProductSizeCommand,
+				CommandConstants.DeleteProductSize,
 				new { ProductId = productId, SizeId = sizeId });
 		}
 		catch (Exception ex)
@@ -337,7 +277,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		try
 		{
 			await _dbConnection.ExecuteAsync(
-				CommandConstants.UpdateQuantityInStockCommand,
+				CommandConstants.UpdateQuantityInStock,
 				new { QuantityInStock = productSize.QuantityInStock, ProductId = productSize.ProductId, SizeId = productSize.SizeId });
 		}
 		catch (Exception ex)

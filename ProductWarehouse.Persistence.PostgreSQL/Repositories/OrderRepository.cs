@@ -29,9 +29,9 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 		var ordersLookup = new Dictionary<Guid, Order>();
 		try
 		{
-			await _dbConnection.QueryAsync<Order, OrderLine, Order>(
+			await _dbConnection.QueryAsync<Order, OrderLine, OrderStatus, Order>(
                 QueryConstants.GetOrderDetailsQuery,
-				(order, orderLine) =>
+				(order, orderLine, orderStatus) =>
 				{
 					if (!ordersLookup.TryGetValue(order.Id, out Order currentOrder))
 					{
@@ -41,10 +41,11 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 					}
 
 					currentOrder.OrderLines.Add(orderLine);
+					currentOrder.Status = orderStatus;
 					return currentOrder;
 				},
 				new { Id = id },
-				splitOn: $"{nameof(Order.Id)}");
+				splitOn: $"{nameof(Order.Id)},{nameof(OrderStatus.Id)}");
 		}
 		catch (Exception ex)
 		{
@@ -54,8 +55,8 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
 		if (ordersLookup is null || ordersLookup.Count is 0)
 		{
-			_logger.Warning($"Orders not found.");
-			throw new NotFoundException($"Orders not found.");
+			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Order)));
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order)));
 		}
 
 		return ordersLookup.Count > 0 ? ordersLookup[id] : null;
@@ -94,8 +95,8 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
 		if (ordersLookup is null || ordersLookup.Count is 0)
 		{
-			_logger.Warning($"Order not found.");
-			throw new NotFoundException($"Order not found.");
+			_logger.Warning(MessageConstants.NotFoundErrorMessage(nameof(Order)));
+			throw new NotFoundException(MessageConstants.NotFoundErrorMessage(nameof(Order)));
 		}
 
 		return new List<Order>(ordersLookup.Values);

@@ -19,48 +19,48 @@ public class OrderStatusRepository : Repository<OrderStatus>, IOrderStatusReposi
 		_dbConnection = dbConnection;
 		_logger = logger;
 	}
-	new public async Task<IReadOnlyList<OrderStatus>> GetAllAsync(CancellationToken cancellationToken)
-	{
-		IEnumerable<OrderStatus?> orderStatuses;
+	//new public async Task<IReadOnlyList<OrderStatus>> GetAllAsync(CancellationToken cancellationToken)
+	//{
+	//	IEnumerable<OrderStatus?> orderStatuses;
 
-		try
-		{
-			orderStatuses = await _dbConnection.QueryAsync<OrderStatus>(QueryConstants.GetAllOrderStatusesQuery);
-		}
-		catch (Exception ex)
-		{
-			_logger.Error("An error occurred while fetching all orders.", ex);
-			throw new DatabaseException("An error occurred while fetching all orders.", ex);
-		}
+	//	try
+	//	{
+	//		orderStatuses = await _dbConnection.QueryAsync<OrderStatus>(QueryConstants.GetAllOrderStatusesQuery);
+	//	}
+	//	catch (Exception ex)
+	//	{
+	//		_logger.Error("An error occurred while fetching all orders.", ex);
+	//		throw new DatabaseException("An error occurred while fetching all orders.", ex);
+	//	}
 
-		if (orderStatuses is null || orderStatuses.Count() is 0)
-		{
-			_logger.Warning($"Order statuses not found.");
-			throw new NotFoundException($"Order statuses not found.");
-		}
+	//	if (orderStatuses is null || orderStatuses.Count() is 0)
+	//	{
+	//		_logger.Warning($"Order statuses not found.");
+	//		throw new NotFoundException($"Order statuses not found.");
+	//	}
 
-		return orderStatuses.ToList().AsReadOnly();
-	}
+	//	return orderStatuses.ToList().AsReadOnly();
+	//}
 
-	new public async Task<OrderStatus> GetByIdAsync(Guid id, CancellationToken cancellationToken)
-	{
-		OrderStatus? orderStatus;
-		try
-		{
-			orderStatus = await _dbConnection.QueryFirstOrDefaultAsync<OrderStatus>(QueryConstants.GetOrderStatusByIdQuery, new { Id = id });
-		}
-		catch (Exception ex)
-		{
-			_logger.Error("An error occurred while fetching all orders.", ex);
-			throw new DatabaseException("An error occurred while fetching all orders.", ex);
-		}
+	//new public async Task<OrderStatus> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+	//{
+	//	OrderStatus? orderStatus;
+	//	try
+	//	{
+	//		orderStatus = await _dbConnection.QueryFirstOrDefaultAsync<OrderStatus>(QueryConstants.GetOrderStatusByIdQuery, new { Id = id });
+	//	}
+	//	catch (Exception ex)
+	//	{
+	//		_logger.Error("An error occurred while fetching all orders.", ex);
+	//		throw new DatabaseException("An error occurred while fetching all orders.", ex);
+	//	}
 
-		if (orderStatus is null)
-		{
-			_logger.Warning($"Order status not found.");
-			throw new NotFoundException($"Order status not found.");
-		}
+	//	if (orderStatus is null)
+	//	{
+	//		_logger.Warning($"Order status not found.");
+	//		throw new NotFoundException($"Order status not found.");
+	//	}
 
-		return orderStatus;
-	}
+	//	return orderStatus;
+	//}
 }

@@ -26,7 +26,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		TEntity? entity;
 		try
 		{
-			var query = QueryConstants.SelectEntityById(typeof(TEntity).Name);
+			var query = QueryConstants.SelectEntityById(GetEntityName());
 			entity = await _connection.QueryFirstOrDefaultAsync<TEntity>(query, new { Id = id });
 			
 		}
@@ -49,7 +49,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 		IEnumerable<TEntity?> entities;
 		try
 		{
-			entities = await _connection.QueryAsync<TEntity>(QueryConstants.SelectEntity(typeof(TEntity).Name));
+			entities = await _connection.QueryAsync<TEntity>(QueryConstants.SelectEntity(GetEntityName()));
 		}
 		catch (Exception ex)
 		{
@@ -119,5 +119,15 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 			_logger.Error("An error occurred while checking if the entity exists by id.", ex);
 			throw new DatabaseException("An error occurred while checking if the entity exists by id.", ex);
 		}
+	}
+
+	private string GetEntityName()
+	{
+		var entityName = typeof(TEntity).Name;
+		if (entityName == Constants.Constants.OrderStatus)
+		{
+			return entityName;
+		}
+		return entityName.EndsWith("s") ? entityName + "es" : entityName + "s";
 	}
 }

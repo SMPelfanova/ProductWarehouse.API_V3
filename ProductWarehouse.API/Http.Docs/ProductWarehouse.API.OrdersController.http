@@ -8,7 +8,7 @@
 GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
 
 ### Get Order
-GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/e519ed7e-5c57-4439-9c67-9ac0e1049ece
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/585ee648-e31f-4a2a-b37c-a5e5a15c4a0d
 
 ### Create Order
 POST {{ProductWarehouse.API_HostAddress}}/api/orders
@@ -26,7 +26,6 @@ Content-Type: application/json
     }
   ]
 }
-
 
 ### Partially Update Order
 PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/2be26ede-cee2-43c9-3997-08dc338dbf74
