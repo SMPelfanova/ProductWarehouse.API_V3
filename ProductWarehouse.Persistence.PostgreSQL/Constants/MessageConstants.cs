@@ -1,6 +1,5 @@
-﻿using ProductWarehouse.Domain.Entities;
+﻿namespace ProductWarehouse.Persistence.PostgreSQL.Constants;
 
-namespace ProductWarehouse.Persistence.PostgreSQL.Constants;
 public static class MessageConstants
 {
 	public static string NotFoundErrorMessage(string paramName, Guid id) => $"{paramName} with specified id: {id} not found.";
