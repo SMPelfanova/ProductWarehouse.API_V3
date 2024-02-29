@@ -11,4 +11,5 @@ public interface IProductRepository : IRepository<Product>
 	Task DeleteProductSizeAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken);
 	Task UpdateQuantityInStockAsync(ProductSize productSize, CancellationToken cancellationToken);
 	Task<int> CheckQuantityInStockAsync(Guid productId, Guid sizeId, CancellationToken cancellationToken);
+	Task UpdateProductIsDeletedAsync(Guid productId);
 }

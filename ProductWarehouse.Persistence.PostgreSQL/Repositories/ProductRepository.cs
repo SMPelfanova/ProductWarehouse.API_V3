@@ -279,4 +279,9 @@ public class ProductRepository : Repository<Product>, IProductRepository
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(ProductSize)), ex);
 		}
 	}
+
+	public async Task UpdateProductIsDeletedAsync(Guid productId)
+	{
+		await _dbConnection.ExecuteAsync(CommandConstants.UpdateProductIsDeleted, new { IsDeleted = true, Id = productId });
+	}
 }

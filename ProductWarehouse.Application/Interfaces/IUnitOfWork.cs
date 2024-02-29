@@ -20,5 +20,5 @@ public interface IUnitOfWork : IDisposable
 	void RollbackTransaction();
 	Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
-	void Rollback();
+	Task Rollback();
 }

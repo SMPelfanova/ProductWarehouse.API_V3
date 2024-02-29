@@ -26,6 +26,13 @@ public static class CommandConstants
             WHERE 
                 ""Id"" = @Id;";
 
+	public static string UpdateProductIsDeleted = @"
+            UPDATE ""Products"" 
+            SET 
+                ""IsDeleted"" = @IsDeleted
+            WHERE 
+                ""Id"" = @Id;";
+
 	public static string UpdateQuantityInStock = @"
             UPDATE ""ProductSizes""
             SET ""QuantityInStock"" = @QuantityInStock

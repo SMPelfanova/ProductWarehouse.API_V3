@@ -21,7 +21,7 @@ public class DeleteProductSizeCommandHandler : IRequestHandler<DeleteProductComm
 		try
 		{
 			_unitOfWork.BeginTransaction();
-			await _unitOfWork.Products.UpdateAsync(product);
+			await _unitOfWork.Products.UpdateProductIsDeletedAsync(product.Id);
 			_unitOfWork.CommitTransaction();
 		}
 		catch (Exception)

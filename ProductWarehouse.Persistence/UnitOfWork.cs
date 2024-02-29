@@ -79,9 +79,9 @@ internal class UnitOfWork : IUnitOfWork
 		return await _dbContext.SaveChangesAsync(cancellationToken);
 	}
 
-	public void Rollback()
+	public async Task Rollback()
 	{
-		_dbContext.Database.RollbackTransaction();
+		await _dbContext.Database.RollbackTransactionAsync();
 	}
 
 	public void Dispose()
