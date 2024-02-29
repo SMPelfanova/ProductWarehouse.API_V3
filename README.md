@@ -1,4 +1,20 @@
+# Phase 3
+
+# Phase 2 + 
+- **PostgreSQL Database Integration**
+  - Infrastructure assembly has been changed to use PostgreSQL.
+  - Implemented using a separate assembly: `ProductWarehouse.Persistence.PostgreSQL`.
+  - Introduced in PR1.
+
+- **Micro ORM Dapper Integration**
+  - Started using Dapper as the micro ORM.
+  - Implemented full CRUD operations for the Products domain area.
+  - Implemented read-only queries for the rest of the core.
+  - Introduced in PR2.
+
+
 # Phase 2
+![image](https://github.com/SMPelfanova/ProductWarehouse.API_V2/assets/90159933/4fbad368-161f-4449-8c3f-a6b46e4c4963)
 
 # Phase 1 + 
 - **EF Core with MSSQL**
@@ -6,9 +22,7 @@
 - **Repository Pattern with Generic Approach**
 - **CRUD operations**
 
-  
-![image](https://github.com/SMPelfanova/ProductWarehouse.API_V2/assets/90159933/4fbad368-161f-4449-8c3f-a6b46e4c4963)
-
+ 
 # Phase 1 - Product Wherehouse API
 The API endpoint allows users to retrieve products and apply filters, with the ability to highlight specific keywords in product descriptions.
 
