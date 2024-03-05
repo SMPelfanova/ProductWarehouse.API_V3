@@ -193,7 +193,6 @@ public class ProductRepository : Repository<Product>, IProductRepository
 				},
 				new { Id = id },
 				splitOn: $"{nameof(Brand.Id)},{nameof(ProductGroups.GroupId)},{nameof(Group.Id)},{nameof(ProductSize.SizeId)},{nameof(Size.Id)}");
-			//todo: check
 			product = products.FirstOrDefault();
 		}
 		catch (Exception ex)
