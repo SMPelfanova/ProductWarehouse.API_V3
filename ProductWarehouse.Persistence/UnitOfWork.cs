@@ -54,6 +54,7 @@ internal class UnitOfWork : IUnitOfWork
 		User = userRepository;
 		ProductSizes = productSizeRepository;
 	}
+
 	public IDbTransaction BeginTransaction()
 	{
 		if (_dbTransaction == null)
@@ -73,6 +74,7 @@ internal class UnitOfWork : IUnitOfWork
 	{
 		_dbTransaction?.Rollback();
 	}
+
 
 	public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
 	{

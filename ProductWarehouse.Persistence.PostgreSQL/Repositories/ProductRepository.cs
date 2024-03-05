@@ -65,43 +65,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
 		}
 	}
-
-	new public async Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
-	{
-		try
-		{
-			await _dbConnection.ExecuteAsync(MutateConstants.ProductUpdateQueriesContants.UpdateProduct, product);
-
-			await _dbConnection.ExecuteAsync(MutateConstants.ProductDeleteQueriesContants.DeleteProductGroups, new { ProductId = product.Id });
-			
-			await _dbConnection.ExecuteAsync(MutateConstants.ProductDeleteQueriesContants.DeleteProductSizes, new { ProductId = product.Id });
-
-			foreach (var group in product.ProductGroups)
-			{
-				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductGroup, new
-				{
-					ProductId = product.Id,
-					GroupId = group.GroupId
-				});
-			}
-
-			foreach (var size in product.ProductSizes)
-			{
-				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductSize, new
-				{
-					ProductId = product.Id,
-					SizeId = size.SizeId,
-					QuantityInStock = size.QuantityInStock
-				});
-			}
-		}
-		catch (Exception ex)
-		{
-			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
-			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
-		}
-	}
-
+	
 	new public async Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default)
 	{
 		try
@@ -148,6 +112,47 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
+	new public async Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
+	{
+		try
+		{
+			await _dbConnection.ExecuteAsync(MutateConstants.ProductUpdateQueriesContants.UpdateProduct, product);
+
+			await _dbConnection.ExecuteAsync(MutateConstants.ProductDeleteQueriesContants.DeleteProductGroups, new { ProductId = product.Id });
+			
+			await _dbConnection.ExecuteAsync(MutateConstants.ProductDeleteQueriesContants.DeleteProductSizes, new { ProductId = product.Id });
+
+			foreach (var group in product.ProductGroups)
+			{
+				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductGroup, new
+				{
+					ProductId = product.Id,
+					GroupId = group.GroupId
+				});
+			}
+
+			foreach (var size in product.ProductSizes)
+			{
+				await _dbConnection.ExecuteAsync(MutateConstants.ProductInsertQueriesContants.InsertProductSize, new
+				{
+					ProductId = product.Id,
+					SizeId = size.SizeId,
+					QuantityInStock = size.QuantityInStock
+				});
+			}
+		}
+		catch (Exception ex)
+		{
+			_logger.Error(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage(nameof(Product)), ex);
+		}
+	}
+
+	public async Task UpdateProductIsDeletedAsync(Guid productId)
+	{
+		await _dbConnection.ExecuteAsync(MutateConstants.ProductUpdateQueriesContants.UpdateProductIsDeleted, new { IsDeleted = true, Id = productId });
+	}
+
 	public async Task<Product> GetProductDetailsAsync(Guid id, CancellationToken cancellationToken)
 	{
 		Product? product;
@@ -188,6 +193,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
 				},
 				new { Id = id },
 				splitOn: $"{nameof(Brand.Id)},{nameof(ProductGroups.GroupId)},{nameof(Group.Id)},{nameof(ProductSize.SizeId)},{nameof(Size.Id)}");
+			//todo: check
 			product = products.FirstOrDefault();
 		}
 		catch (Exception ex)
@@ -280,8 +286,4 @@ public class ProductRepository : Repository<Product>, IProductRepository
 		}
 	}
 
-	public async Task UpdateProductIsDeletedAsync(Guid productId)
-	{
-		await _dbConnection.ExecuteAsync(MutateConstants.ProductUpdateQueriesContants.UpdateProductIsDeleted, new { IsDeleted = true, Id = productId });
-	}
 }

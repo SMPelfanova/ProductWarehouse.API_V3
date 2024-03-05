@@ -4,117 +4,126 @@ public static class ReadContants
 {
 	public static class ProductReadQueriesContants
 	{
-		public static string GetAllProductsQuery = @"
+		public static string GetAllProductsQuery = """
             SELECT 
                 p.*, b.*, pg.*, ps.*, s.*, g.*
-            FROM ""Products"" p
-            LEFT JOIN ""Brands"" b ON p.""BrandId"" = b.""Id""
-            LEFT JOIN ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
-            LEFT JOIN ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
-            LEFT JOIN ""Sizes"" s ON ps.""SizeId"" = s.""Id""
-            LEFT JOIN ""Groups"" g ON pg.""GroupId"" = g.""Id""
-            WHERE p.""IsDeleted"" = FALSE";
+            FROM "Products" p
+            LEFT JOIN "Brands" b ON p."BrandId" = b."Id"
+            LEFT JOIN "ProductGroups" pg ON p."Id" = pg."ProductId"
+            LEFT JOIN "ProductSizes" ps ON p."Id" = ps."ProductId"
+            LEFT JOIN "Sizes" s ON ps."SizeId" = s."Id"
+            LEFT JOIN "Groups" g ON pg."GroupId" = g."Id"
+            WHERE p."IsDeleted" = FALSE
+            """;
 
-		public static string GetProductDetailsQuery = @"
+		public static string GetProductDetailsQuery = """
             SELECT 
                 p.*, b.*, pg.*, g.*, ps.*, s.*
             FROM 
-                ""Products"" p
+                "Products" p
             LEFT JOIN 
-                ""Brands"" b ON p.""BrandId"" = b.""Id""
+                "Brands" b ON p."BrandId" = b."Id"
             LEFT JOIN 
-                ""ProductGroups"" pg ON p.""Id"" = pg.""ProductId""
+                "ProductGroups" pg ON p."Id" = pg."ProductId"
             LEFT JOIN 
-                ""Groups"" g ON pg.""GroupId"" = g.""Id""
+                "Groups" g ON pg."GroupId" = g."Id"
             LEFT JOIN 
-                ""ProductSizes"" ps ON p.""Id"" = ps.""ProductId""
+                "ProductSizes" ps ON p."Id" = ps."ProductId"
             LEFT JOIN 
-                ""Sizes"" s ON ps.""SizeId"" = s.""Id""
+                "Sizes" s ON ps."SizeId" = s."Id"
             WHERE 
-                p.""Id"" = @Id AND p.""IsDeleted"" = FALSE";
+                p."Id" = @Id AND p."IsDeleted" = FALSE
+            """;
 
-		public static string CheckQuantityInStockQuery = @"
-            SELECT ""QuantityInStock""
-            FROM ""ProductSizes""
-            WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
+		public static string CheckQuantityInStockQuery = """
+            SELECT "QuantityInStock"
+            FROM "ProductSizes"
+            WHERE "ProductId" = @ProductId AND "SizeId" = @SizeId
+            """;
 
-		public static string GetProductSizeQuery = @"
+		public static string GetProductSizeQuery = """
             SELECT *
-            FROM ""ProductSizes""
-            WHERE ""ProductId"" = @ProductId AND ""SizeId"" = @SizeId";
+            FROM "ProductSizes"
+            WHERE "ProductId" = @ProductId AND "SizeId" = @SizeId
+            """;
 
-		public static string GetProductGroups = @"
+		public static string GetProductGroups = """
             SELECT 
                 pg.*,
                 g.*
             FROM 
-                ""ProductGroups"" pg
+                "ProductGroups" pg
             INNER JOIN 
-                ""Groups"" g ON pg.""GroupId"" = g.""Id""
+                "Groups" g ON pg."GroupId" = g."Id"
             WHERE 
-                pg.""ProductId"" = @ProductId;";
+                pg."ProductId" = @ProductId
+            """;
 
-		public static string GetProductSizes = @"
+		public static string GetProductSizes = """
             SELECT 
                 ps.*,
                 s.*
             FROM 
-                ""ProductSizes"" ps
+                "ProductSizes" ps
             INNER JOIN 
-                ""Sizes"" s ON ps.""SizeId"" = s.""Id""
+                "Sizes" s ON ps."SizeId" = s."Id"
             WHERE 
-                ps.""ProductId"" = @ProductId;";
+                ps."ProductId" = @ProductId
+            """;
 	}
 
 	public static class OrderReadQueriesConstants
 	{
-		public static string GetAllOrderStatusesQuery = "SELECT * FROM \"OrderStatus\"";
+		public static string GetAllOrderStatusesQuery = """SELECT * FROM "OrderStatus" """;
 
-		public static string GetOrderStatusByIdQuery = "SELECT * FROM \"OrderStatus\" WHERE \"Id\" = @Id;";
+		public static string GetOrderStatusByIdQuery = """SELECT * FROM "OrderStatus" WHERE "Id" = @Id; """;
 
-		public static string GetOrderDetailsQuery = @"
+		public static string GetOrderDetailsQuery = """
             SELECT 
                 o.*, 
                 ol.*,
                 os.*
             FROM 
-                ""Orders"" o
+                "Orders" o
             LEFT JOIN 
-                ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
+                "OrderLines" ol ON o."Id" = ol."OrderId"
             LEFT JOIN
-                ""OrderStatus"" os ON o.""StatusId"" = os.""Id""
+                "OrderStatus" os ON o."StatusId" = os."Id"
             WHERE 
-                o.""Id"" = @Id 
-                AND NOT o.""IsDeleted""";
+                o."Id" = @Id 
+                AND NOT o."IsDeleted"
+           """;
 
-		public static string GetOrdersByUserIdQuery = @"
+		public static string GetOrdersByUserIdQuery = """
             SELECT 
                 o.*, 
                 ol.*,
                 os.*
             FROM 
-                ""Orders"" o
+                "Orders" o
             LEFT JOIN 
-                ""OrderLines"" ol ON o.""Id"" = ol.""OrderId""
+                "OrderLines" ol ON o."Id" = ol."OrderId"
             LEFT JOIN
-                ""OrderStatus"" os ON o.""StatusId"" = os.""Id""
+                "OrderStatus" os ON o."StatusId" = os."Id"
             WHERE 
-                o.""UserId"" = @UserId 
-                AND NOT o.""IsDeleted""";
+                o."UserId" = @UserId 
+                AND NOT o."IsDeleted"
+           """;
 	}
 
 	public static class BasketReadQueriesConstants
 	{
-		public static string GetBasketByUserIdQuery = @"
+		public static string GetBasketByUserIdQuery = """
             SELECT 
                 b.*, 
                 bl.* 
             FROM 
-                ""Baskets"" b
+                "Baskets" b
             LEFT JOIN 
-                ""BasketLines"" bl ON b.""Id"" = bl.""BasketId""
+                "BasketLines" bl ON b."Id" = bl."BasketId"
             WHERE 
-                b.""UserId"" = @UserId";
+                b."UserId" = @UserId
+            """;
 	}
 
 }

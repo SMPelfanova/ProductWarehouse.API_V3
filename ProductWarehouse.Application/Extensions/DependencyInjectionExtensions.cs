@@ -2,7 +2,12 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using ProductWarehouse.Application.Behaviors;
+using ProductWarehouse.Application.Features.Commands.Products;
+using ProductWarehouse.Application.Features.Commands.Products.CreateProduct;
+using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Mapping;
+using ProductWarehouse.Application.Models.Product;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.Application.Extensions;
 
@@ -19,7 +24,9 @@ public static class DependencyInjectionExtensions
 			configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
 		});
 
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ExceptionHandlingPipelineBehavior<,>));
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
+		services.AddTransient<IRequestExceptionHandler<CreateProductCommand, ProductDto, DatabaseException>, CreateProductCommandExceptionHandler>();
 
 		services.AddAutoMapper(typeof(AutoMapperProfile));
 

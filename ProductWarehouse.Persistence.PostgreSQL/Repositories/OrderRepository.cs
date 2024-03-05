@@ -81,6 +81,7 @@ public class OrderRepository : Repository<Order>, IOrderRepository
 
 					currentOrder.OrderLines.Add(orderLine);
 					currentOrder.Status = orderStatus;
+
 					return currentOrder;
 				},
 				new { UserId = userId },

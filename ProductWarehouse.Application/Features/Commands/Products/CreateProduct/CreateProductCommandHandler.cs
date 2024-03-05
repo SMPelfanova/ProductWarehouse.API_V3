@@ -23,20 +23,21 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
 	{
 		Product? product = _mapper.Map<Product>(request);
 
-		try
-		{
+		//try
+		//{
 			_unitOfWork.BeginTransaction();
 			product = await _unitOfWork.Products.AddAsync(product);
+			throw new DatabaseException("error");
 			_unitOfWork.CommitTransaction();
 
 			var productDto = _mapper.Map<ProductDto>(product);
 
 			return productDto;
-		}
-		catch (DatabaseException)
-		{
-			_unitOfWork.RollbackTransaction();
-			throw new DatabaseException(MessageConstants.GeneralErrorMessage);
-		}
+		//}
+		//catch (DatabaseException)
+		//{
+		//	//_unitOfWork.RollbackTransaction();
+		//	throw new DatabaseException(MessageConstants.GeneralErrorMessage);
+		//}
 	}
 }
