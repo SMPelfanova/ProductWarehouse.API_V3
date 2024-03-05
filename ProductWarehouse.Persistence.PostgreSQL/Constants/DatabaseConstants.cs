@@ -12,4 +12,6 @@ public static class DatabaseConstants
 	public const string DecimalColumnTypeNpgsql = "numeric(18, 2)";
 	public const string DateColumnTypeNpgsql = "date";
 	public const string DateDefaultValueNpgsql = "CURRENT_DATE";
+	public const string GeneratedGuidNpgsql = "gen_random_uuid()";
+	
 }

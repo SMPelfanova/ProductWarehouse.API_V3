@@ -1,12 +1,14 @@
-﻿using ProductWarehouse.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.PostgreSQL;
+using System.Data;
 
 namespace ProductWarehouse.Persistence;
 
 internal class UnitOfWork : IUnitOfWork
 {
 	private readonly ApplicationDbContext _dbContext;
-
+	private IDbTransaction _dbTransaction;
 	public IProductRepository Products { get; }
 
 	public ISizeRepository Sizes { get; }
@@ -52,14 +54,36 @@ internal class UnitOfWork : IUnitOfWork
 		User = userRepository;
 		ProductSizes = productSizeRepository;
 	}
-	public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+
+	public IDbTransaction BeginTransaction()
 	{
-		return _dbContext.SaveChangesAsync(cancellationToken);
+		if (_dbTransaction == null)
+		{
+			_dbTransaction = _dbContext.Database.BeginTransaction().GetDbTransaction();
+		}
+
+		return _dbTransaction;
 	}
 
-	public void Rollback()
+	public void CommitTransaction()
 	{
-		_dbContext.Database.RollbackTransaction();
+		_dbTransaction?.Commit();
+	}
+
+	public void RollbackTransaction()
+	{
+		_dbTransaction?.Rollback();
+	}
+
+
+	public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+	{
+		return await _dbContext.SaveChangesAsync(cancellationToken);
+	}
+
+	public async Task Rollback()
+	{
+		await _dbContext.Database.RollbackTransactionAsync();
 	}
 
 	public void Dispose()
@@ -72,6 +96,12 @@ internal class UnitOfWork : IUnitOfWork
 	{
 		if (disposing)
 		{
+			if (_dbTransaction != null)
+			{
+				_dbTransaction.Connection?.Close();
+				_dbTransaction.Connection?.Dispose();
+				_dbTransaction.Dispose();
+			}
 			_dbContext.Dispose();
 		}
 	}

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
+using ProductWarehouse.Application.Constants;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Models.Product;
 using ProductWarehouse.Domain.Entities;
+using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 
@@ -20,7 +22,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 	public async Task<ProductDto> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
 	{
 		var product = await _unitOfWork.Products.GetProductDetailsAsync(request.Id, cancellationToken);
-
+		
 		_mapper.Map(request, product);
 
 		product.ProductSizes.Clear();
@@ -41,9 +43,17 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 				GroupId = groupDto.Id
 			});
 		}
-
-		await _unitOfWork.Products.UpdateAsync(product, cancellationToken);
-		await _unitOfWork.SaveChangesAsync(cancellationToken);
+		try
+		{
+			_unitOfWork.BeginTransaction();
+			await _unitOfWork.Products.UpdateAsync(product);
+			_unitOfWork.CommitTransaction();
+		}
+		catch (DatabaseException)
+		{
+			_unitOfWork.RollbackTransaction();
+			throw new DatabaseException(MessageConstants.GeneralErrorMessage);
+		}
 
 		var productDto = _mapper.Map<ProductDto>(product);
 

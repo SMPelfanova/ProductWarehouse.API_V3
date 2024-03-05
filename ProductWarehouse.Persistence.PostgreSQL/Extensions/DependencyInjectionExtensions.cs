@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Persistence.PostgreSQL.Repositories;
+using System.Data;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Extensions;
 
@@ -18,6 +21,12 @@ public static class DependencyInjectionExtensions
 			options.UseNpgsql(configuration.GetConnectionString("WerehouseNpgsqlDbConnectionString"));
 		});
 
+		services.AddScoped<IDbConnection>(provider =>
+		{
+			var connectionString = configuration.GetConnectionString("WerehouseNpgsqlDbConnectionString");
+			return new NpgsqlConnection(connectionString);
+		});
+		
 		services.AddScoped<IProductRepository, ProductRepository>();
 		services.AddScoped<IGroupRepository, GroupRepository>();
 		services.AddScoped<IUserRepository, UserRepository>();

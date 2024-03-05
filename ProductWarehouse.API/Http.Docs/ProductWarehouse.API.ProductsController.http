@@ -1,9 +1,9 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@BrandId = d6f201af-cf75-40d9-814a-1e0d17e9796c
-@ProductId = 288d5d4f-a2fd-4e01-4a21-08dc2c862878
-@UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
-@SizeId = ea88c493-9e58-47c7-80cd-766ac89a7a01
-@GroupId = 0e596ec6-bc97-4e5d-9593-69387ac3cb03
+@BrandId =62262d18-7d45-4347-8994-d276fff745fa
+@ProductId =89cca55f-7393-4ebd-ae66-f0d3ef613c3d
+@UserId = b491e486-c1b1-44b8-9e83-6e226073d7f2
+@SizeId = 6bec10ff-0fbd-4881-99f4-6acf188d2bea
+@GroupId = c6d8c25e-2810-439c-960d-a34191d8f46c
 @OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
 
 ### Get Products
@@ -13,23 +13,22 @@ GET {{ProductWarehouse.API_HostAddress}}/api/products
 GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
 
 ### Get Product
-GET {{ProductWarehouse.API_HostAddress}}/api/products/a56b78bc-55f8-4fc4-139d-08dc338a8040
+GET {{ProductWarehouse.API_HostAddress}}/api/products/d21fc7f7-daff-455c-a1b8-4c709a26ba6e
 
 ### Create Product
 POST {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
  
 {
-    "title": "Product X",
-    "description": "Description of Product 3",
-    "photo": "product3.jpg",
-    "price": 10,
+    "title": "check if rolback works",
+    "description": "D",
+    "photo": "p.jpg",
+    "price": 1,
     "brandId": "{{BrandId}}",
     "sizes": [
-      {
-        "id": "{{SizeId}}",
-        "quantityInStock": 1
-      }
+    { "id":"{{SizeId}}",
+     "QuantityInStock":2
+    }
     ],
     "groups": [
       {
@@ -43,23 +42,18 @@ PUT {{ProductWarehouse.API_HostAddress}}/api/products
 Content-Type: application/json
 
 {
-  "id": "d927799f-5e68-4783-ba35-08dc33bc4507",
+  "id": "89cca55f-7393-4ebd-ae66-f0d3ef613c3d",
   "title": "Product",
   "description": "Product Descr",
-  "brandId": "e8c25c64-44a8-4481-84fb-29718c37c6b4",
+  "brandId": "{{BrandId}}",
   "price": 100,
   "sizes": [
-    {
-      "id": "ea88c493-9e58-47c7-80cd-766ac89a7a01",
-      "quantityInStock": 10
-    }
+   
   ],
   "groups": [
-    {
-      "id": "cd95a5b4-efb0-4755-9379-73a81a3a2f9f"
-    }
+   
   ]
 }
 
 ### Delete Product
-DELETE {{ProductWarehouse.API_HostAddress}}/api/products/a56b78bc-55f8-4fc4-139d-08dc338a8040
+DELETE {{ProductWarehouse.API_HostAddress}}/api/products/d21fc7f7-daff-455c-a1b8-4c709a26ba6e

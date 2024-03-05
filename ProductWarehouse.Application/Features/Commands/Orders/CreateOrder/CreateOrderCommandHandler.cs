@@ -33,12 +33,12 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Ord
 
 		var order = _mapper.Map<Order>(request);
 		var addedOrder = await _unitOfWork.Orders.AddAsync(order, cancellationToken);
+		addedOrder.Status = await _unitOfWork.OrdersStatuses.GetByIdAsync(request.StatusId);
 
 		await _unitOfWork.Basket.DeleteBasketLinesAsync(request.UserId, cancellationToken);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
 		var orderDto = _mapper.Map<OrderDto>(addedOrder);
-
 		return orderDto;
 	}
 

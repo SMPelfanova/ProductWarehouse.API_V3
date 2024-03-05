@@ -1,7 +1,7 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@ProductId = 288d5d4f-a2fd-4e01-4a21-08dc2c862878
-@UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
-@SizeId = 2aef86e1-2190-455a-890f-c19b276c97e1
+@ProductId =1ea10c67-d092-4348-9b3e-65587ab98d5b
+@UserId = b491e486-c1b1-44b8-9e83-6e226073d7f2
+@SizeId = 6bec10ff-0fbd-4881-99f4-6acf188d2bea
 
 ### Get Basket
 GET {{ProductWarehouse.API_HostAddress}}/api/baskets/{{UserId}}
@@ -16,7 +16,7 @@ Content-Type: application/json
 {
   "productId": "{{ProductId}}",
   "quantity": 1,
-  "sizeId": "da35ec2b-24e1-4652-ab48-7671b93b5edc"
+  "sizeId": "{{SizeId}}"
 }
 
 ### Delete Basket Line

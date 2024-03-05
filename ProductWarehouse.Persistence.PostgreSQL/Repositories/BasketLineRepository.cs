@@ -5,17 +5,23 @@ using ProductWarehouse.Persistence.Abstractions;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 using ProductWarehouse.Persistence.PostgreSQL.Constants;
 using Serilog;
+using System.Data;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Repositories;
 
 public class BasketLineRepository : Repository<BasketLine>, IBasketLineRepository
 {
 	private readonly ApplicationDbContext _dbContext;
+	private readonly IDbConnection _dbConnection;
 	private readonly ILogger _logger;
 
-	public BasketLineRepository(ApplicationDbContext dbContext, ILogger logger) : base(dbContext, logger)
+	public BasketLineRepository(
+		ApplicationDbContext dbContext,
+		IDbConnection  dbConnection,
+		ILogger logger) : base(dbContext,  dbConnection, logger)
 	{
 		_dbContext = dbContext;
+		 _dbConnection =  dbConnection;
 		_logger = logger;
 	}
 

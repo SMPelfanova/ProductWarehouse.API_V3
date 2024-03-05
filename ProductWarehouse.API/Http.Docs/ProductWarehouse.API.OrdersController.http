@@ -1,13 +1,14 @@
 @ProductWarehouse.API_HostAddress = http://localhost:5068
-@ProductId = 11ead65f-14e8-4362-1b2f-08dc2c6aea3f
-@UserId = eb1bd4c7-0b80-40a9-a462-2b5a487bddfd
+@ProductId =1ea10c67-d092-4348-9b3e-65587ab98d5b
+@UserId = b491e486-c1b1-44b8-9e83-6e226073d7f2
+@SizeId = 6bec10ff-0fbd-4881-99f4-6acf188d2bea
 @OrderId = 43a7521f-7e8f-431b-cf06-08dc2c6cf3b1
 
 ### Get Orders
 GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}
 
 ### Get Order
-GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/ca087a94-4452-48b7-4db6-08dc3381e749
+GET {{ProductWarehouse.API_HostAddress}}/api/orders/{{UserId}}/585ee648-e31f-4a2a-b37c-a5e5a15c4a0d
 
 ### Create Order
 POST {{ProductWarehouse.API_HostAddress}}/api/orders
@@ -18,20 +19,13 @@ Content-Type: application/json
   "totalAmount": 10,
     "orderLines": [
     {
-      "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
-      "quantity": 2,
+      "productId": "{{ProductId}}",
+      "quantity": 1,
       "price": 1110.00,
-      "sizeId": "10c96071-d5d0-4915-aba0-f52585132de4"
-    },
-    {
-      "productId": "11ead65f-14e8-4362-1b2f-08dc2c6aea3f",
-      "quantity": 2,
-      "price": 1110.00,
-      "sizeId": "7aee3527-c299-4c13-b907-ecaa57f9a655"
+      "sizeId": "{{SizeId}}"
     }
   ]
 }
-
 
 ### Partially Update Order
 PATCH {{ProductWarehouse.API_HostAddress}}/api/orders/2be26ede-cee2-43c9-3997-08dc338dbf74

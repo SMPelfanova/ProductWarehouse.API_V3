@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProductWarehouse.Persistence.PostgreSQL;
@@ -11,9 +12,11 @@ using ProductWarehouse.Persistence.PostgreSQL;
 namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240227145316_WerehouseUUIDGeneration2")]
+    partial class WerehouseUUIDGeneration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,8 +29,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("BasketId")
                         .HasColumnType("uuid");
@@ -66,8 +68,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -87,9 +88,9 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("983ce5b2-2dcd-42de-b63c-2b7edac31ef0"),
+                            Id = new Guid("240fa885-e110-4d36-928a-6b4f93722a58"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserId = new Guid("b491e486-c1b1-44b8-9e83-6e226073d7f2")
+                            UserId = new Guid("95d931ad-7ac9-4d76-b29c-634324ece69c")
                         });
                 });
 
@@ -97,8 +98,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -117,19 +117,19 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8c6f38a4-e069-4f45-8542-9a4637fa68e2"),
+                            Id = new Guid("8d5b008f-88ba-43b4-b80b-f06a38070713"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Zara"
                         },
                         new
                         {
-                            Id = new Guid("f4b9e0a7-c4b3-4689-a473-98667c13ddc1"),
+                            Id = new Guid("bde0aee3-a170-459a-b268-a1d91be223fe"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Bershka"
                         },
                         new
                         {
-                            Id = new Guid("62262d18-7d45-4347-8994-d276fff745fa"),
+                            Id = new Guid("6296c5ca-a75d-4c91-a8fd-d467e38edb63"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Stella Nova"
                         });
@@ -139,8 +139,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -159,13 +158,13 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c6d8c25e-2810-439c-960d-a34191d8f46c"),
+                            Id = new Guid("ab95df5e-0fb6-4c9c-8a9e-d698b1e472a2"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Casual"
                         },
                         new
                         {
-                            Id = new Guid("d2fe068c-6f02-4ed5-b911-bb2692547310"),
+                            Id = new Guid("7fed3643-3638-4a45-b243-91be1de21203"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Comfortable"
                         });
@@ -175,8 +174,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -253,8 +251,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -273,19 +270,19 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("552daa0a-66c1-46c6-b669-88e6cbf9758e"),
+                            Id = new Guid("49cb8222-b017-4e12-a98d-7ed54d8f6be9"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Initial"
                         },
                         new
                         {
-                            Id = new Guid("c663435d-eb64-4275-a0e0-7e07d2a12f9d"),
+                            Id = new Guid("4b6368e9-513e-456b-b77f-2c77a8523744"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Pending"
                         },
                         new
                         {
-                            Id = new Guid("39d5fe6d-a149-43df-96aa-a7700ae13fae"),
+                            Id = new Guid("6db3a4fa-52b2-4f1b-9ad1-73aeef39d135"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Delivered"
                         });
@@ -295,8 +292,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -327,8 +323,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uuid");
@@ -404,8 +399,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -426,8 +420,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -446,31 +439,31 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dcee68c7-65c7-4870-9897-404581548128"),
+                            Id = new Guid("d0a626b7-43ff-419b-b7b3-649d71ca7e88"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XS"
                         },
                         new
                         {
-                            Id = new Guid("6f75ae87-a517-4a3c-b625-900dbeb22582"),
+                            Id = new Guid("094cb9fe-9dde-46cf-92af-6dfa7f4404b8"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "S"
                         },
                         new
                         {
-                            Id = new Guid("de75ba98-3197-485b-b9a8-40593d6bd5e3"),
+                            Id = new Guid("5d260013-25c1-4d70-8b21-d29adb19a5e5"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "M"
                         },
                         new
                         {
-                            Id = new Guid("6bec10ff-0fbd-4881-99f4-6acf188d2bea"),
+                            Id = new Guid("eedf3f54-529d-4de8-8a44-05689ecc9221"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "L"
                         },
                         new
                         {
-                            Id = new Guid("2c61ac65-03b1-4342-98f8-515563d342b4"),
+                            Id = new Guid("12f9dfa5-0dc4-4d29-986e-bf580d20d8a4"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "XL"
                         });
@@ -480,8 +473,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -527,7 +519,7 @@ namespace ProductWarehouse.Persistence.PostgreSQL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b491e486-c1b1-44b8-9e83-6e226073d7f2"),
+                            Id = new Guid("95d931ad-7ac9-4d76-b29c-634324ece69c"),
                             Address = "Street default",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "test@email.com",
