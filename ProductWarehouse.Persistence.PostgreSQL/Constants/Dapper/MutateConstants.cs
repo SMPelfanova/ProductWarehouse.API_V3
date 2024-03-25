@@ -1,4 +1,6 @@
-﻿namespace ProductWarehouse.Persistence.PostgreSQL.Constants.Dapper;
+﻿using System.Collections.Generic;
+
+namespace ProductWarehouse.Persistence.PostgreSQL.Constants.Dapper;
 
 public static class MutateConstants
 {
@@ -71,6 +73,22 @@ public static class MutateConstants
 		public static string DeleteProductSize = """
             DELETE FROM "ProductSizes"
             WHERE "ProductId" = @ProductId AND "SizeId" = @SizeId
+            """;
+	}
+
+    public static class UserUpdateQueriesConstants
+    {
+        public const string DeleteUserRefreshToken = """
+            UPDATE "Users"
+            SET "RefreshToken" = NULL
+            WHERE "Email" = @Email
+            """;
+
+        public const string SetUserRefreshToken = """ 
+            UPDATE "Users"
+            SET "RefreshToken" = @RefreshToken,
+                "RefreshTokenExpiresAt" = @RefreshTokenExpiresAt
+            WHERE "Email" = @Email
             """;
 	}
 }

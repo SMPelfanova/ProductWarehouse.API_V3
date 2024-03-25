@@ -5,9 +5,9 @@ using ProductWarehouse.Persistence.PostgreSQL.Constants;
 
 namespace ProductWarehouse.Persistence.PostgreSQL.Configurations;
 
-public class UserConfiguration : EntityConfiguration<User>
+public class UserConfiguration : EntityConfiguration<ProductWarehouse.Domain.Entities.User>
 {
-	public override void Configure(EntityTypeBuilder<User> builder)
+	public override void Configure(EntityTypeBuilder<ProductWarehouse.Domain.Entities.User> builder)
 	{
 		base.Configure(builder);
 

@@ -7,6 +7,9 @@ namespace ProductWarehouse.Persistence.PostgreSQL;
 
 public class ApplicationDbContext : DbContext
 {
+	public ApplicationDbContext()
+	{
+	}
 	public ApplicationDbContext(DbContextOptions options) : base(options)
 	{
 	}
@@ -17,6 +20,14 @@ public class ApplicationDbContext : DbContext
 		context.Database.Migrate();
 	}
 
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.EnableSensitiveDataLogging();
+		if (!optionsBuilder.IsConfigured)
+		{
+			optionsBuilder.UseNpgsql("Host=localhost; Database=Werehouse; Username=postgres; Password=123456789");
+		}
+	}
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

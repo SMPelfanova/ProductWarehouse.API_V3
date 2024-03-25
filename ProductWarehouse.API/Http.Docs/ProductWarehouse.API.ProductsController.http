@@ -13,7 +13,7 @@ GET {{ProductWarehouse.API_HostAddress}}/api/products
 GET {{ProductWarehouse.API_HostAddress}}/api/products/filter?minPrice=10&maxPrice=100
 
 ### Get Product
-GET {{ProductWarehouse.API_HostAddress}}/api/products/d21fc7f7-daff-455c-a1b8-4c709a26ba6e
+GET {{ProductWarehouse.API_HostAddress}}/api/products/818c447b-0459-4bd2-afb5-083fc8d2f170
 
 ### Create Product
 POST {{ProductWarehouse.API_HostAddress}}/api/products

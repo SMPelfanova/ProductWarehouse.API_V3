@@ -13,6 +13,7 @@ using ProductWarehouse.Application.Models.Group;
 using ProductWarehouse.Application.Models.Order;
 using ProductWarehouse.Application.Models.Product;
 using ProductWarehouse.Application.Models.Size;
+using ProductWarehouse.Application.Models.User;
 using ProductWarehouse.Domain.Entities;
 
 namespace ProductWarehouse.Application.Mapping;
@@ -29,6 +30,7 @@ public class AutoMapperProfile : Profile
 
 	private void FromEntityToDto()
 	{
+		CreateMap<User, UserDto>().ReverseMap();
 		CreateMap<Brand, BrandDto>().ReverseMap();
 		CreateMap<Group, GroupDto>().ReverseMap();
 		CreateMap<BasketLine, BasketLineDto>()

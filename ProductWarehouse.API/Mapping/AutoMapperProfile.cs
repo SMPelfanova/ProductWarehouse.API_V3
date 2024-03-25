@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using ProductWarehouse.API.Models.Requests;
+using ProductWarehouse.API.Models.Requests.Auth;
 using ProductWarehouse.API.Models.Requests.Base;
 using ProductWarehouse.API.Models.Requests.Basket;
 using ProductWarehouse.API.Models.Requests.Order;
@@ -14,6 +15,8 @@ using ProductWarehouse.API.Models.Responses.Group;
 using ProductWarehouse.API.Models.Responses.Order;
 using ProductWarehouse.API.Models.Responses.Product;
 using ProductWarehouse.API.Models.Responses.Size;
+using ProductWarehouse.Application.Features.Commands.Auth.CreateRefreshToken;
+using ProductWarehouse.Application.Features.Commands.Auth.UserLogin;
 using ProductWarehouse.Application.Features.Commands.Basket.AddBasketLine;
 using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasket;
 using ProductWarehouse.Application.Features.Commands.Basket.DeleteBasketLine;
@@ -61,6 +64,7 @@ public class AutoMapperProfile : Profile
 
 	private void MapFromRequestToCommands()
 	{
+		CreateMap<UserLoginRequest, UserLoginCommand>();
 		CreateMap<AddBasketLineRequest, AddBasketLineCommand>();
 		CreateMap<UpdateBasketLineRequest, UpdateBasketLineCommand>();
 
@@ -92,6 +96,8 @@ public class AutoMapperProfile : Profile
 		CreateMap<DeleteProductGroupRequest, DeleteProductGroupCommand>();
 		CreateMap<DeleteProductSizeRequest, DeleteProductSizeCommand>();
 		CreateMap<UpdateProductSizeRequest, UpdateProductSizeCommand>();
+		CreateMap<UserRefreshTokenRequest, GenerateRefreshTokenCommand>();
+		
 	}
 
 	private void MapFromRequestToQueries()

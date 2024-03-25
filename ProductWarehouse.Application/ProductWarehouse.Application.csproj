@@ -23,11 +23,16 @@
 	<PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
 	<PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
 	<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ProductWarehouse.Domain\ProductWarehouse.Domain.csproj" />
     <ProjectReference Include="..\ProductWarehouse.Persistence.Abstractions\ProductWarehouse.Persistence.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Queries\Auth\" />
   </ItemGroup>
 
 </Project>

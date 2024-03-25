@@ -20,7 +20,7 @@ public class GetBasketQueryHandler : IRequestHandler<GetBasketQuery, BasketDto>
 	{
 		var basket = await _unitOfWork.Basket.GetBasketByUserIdAsync(request.UserId, cancellationToken);
 		var result = _mapper.Map<BasketDto>(basket);
-
+		
 		return result;
 	}
 }

@@ -14,7 +14,6 @@ public interface IUnitOfWork : IDisposable
 	IBasketRepository Basket { get; }
 	IBasketLineRepository BasketLines { get; }
 	IUserRepository User { get; }
-
 	IDbTransaction BeginTransaction();
 	void CommitTransaction();
 	void RollbackTransaction();

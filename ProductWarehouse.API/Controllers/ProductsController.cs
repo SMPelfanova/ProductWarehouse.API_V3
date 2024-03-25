@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductWarehouse.API.Models.Requests;
 using ProductWarehouse.API.Models.Requests.Base;
@@ -9,6 +10,8 @@ using ProductWarehouse.Application.Features.Commands.Products.DeleteProduct;
 using ProductWarehouse.Application.Features.Commands.Products.UpdateProduct;
 using ProductWarehouse.Application.Features.Queries.GetProduct;
 using ProductWarehouse.Application.Features.Queries.GetProducts;
+using ProductWarehouse.API.Enums;
+
 
 namespace ProductWarehouse.API.Controllers;
 
@@ -84,6 +87,7 @@ public class ProductsController : BaseController
 	/// <param name="request">The request containing the product details.</param>
 	/// <returns>The newly created product.</returns>
 	[HttpPost]
+	[Authorize]
 	[ProducesResponseType(StatusCodes.Status201Created)]
 	public async Task<IActionResult> CreateProduct(
 		[FromBody] CreateProductRequest request,
@@ -103,7 +107,8 @@ public class ProductsController : BaseController
 	/// </summary>
 	/// <param name="request">The request containing the updated product details.</param>
 	/// <returns>No content if the update is successful.</returns>
-	[HttpPut]
+	[HttpPut("{id:guid}")]
+	[Authorize(Policy = UserRoles.Admin)]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public async Task<IActionResult> UpdateProduct(
 		[FromBody] UpdateProductRequest request,
@@ -123,6 +128,7 @@ public class ProductsController : BaseController
 	/// <param name="id">The ID of the product to delete.</param>
 	/// <returns>No content if the deletion is successful.</returns>
 	[HttpDelete("{id:guid}")]
+	[Authorize(Roles = UserRoles.Admin)]
 	[ProducesResponseType(StatusCodes.Status204NoContent)]
 	public async Task<IActionResult> DeleteProduct(
 		[FromRoute] BaseRequestId request,

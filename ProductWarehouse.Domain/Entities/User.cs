@@ -12,4 +12,6 @@ public class User : Entity
 	public ICollection<Order> Orders { get; set; }
 	public ICollection<UserRole> UserRoles { get; set; }
 	public Baskets Basket { get; set; }
+	public string? RefreshToken { get; set; }
+	public DateTime? RefreshTokenExpiresAt { get; set; }
 }

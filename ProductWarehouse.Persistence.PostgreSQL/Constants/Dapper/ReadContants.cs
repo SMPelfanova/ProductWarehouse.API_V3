@@ -126,4 +126,27 @@ public static class ReadContants
             """;
 	}
 
+	public static class UserReadQueriesConstants
+	{
+		public static string GetUserByEmailQuery = """
+            SELECT u.*, r.* 
+            FROM "Users" u
+            JOIN "UserRoles" ur ON u."Id" = ur."UserId"
+            JOIN "Role" r ON ur."RoleId" = r."Id"
+            WHERE u."Email" = @Email
+        """;
+
+	
+		public const string CheckUserExistQuery = """
+            SELECT
+            FROM "Users" 
+            WHERE "Email" = @Email
+        """;
+
+		public const string GetUserRefreshTokenQuery = """
+            SELECT "RefreshToken"
+            FROM "User"
+            WHERE "Email" = @Email
+        """;
+	}
 }

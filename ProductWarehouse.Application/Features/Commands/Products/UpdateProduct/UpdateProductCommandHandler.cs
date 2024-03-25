@@ -49,7 +49,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
 			await _unitOfWork.Products.UpdateAsync(product);
 			_unitOfWork.CommitTransaction();
 		}
-		catch (DatabaseException)
+		catch (DatabaseException ex)
 		{
 			_unitOfWork.RollbackTransaction();
 			throw new DatabaseException(MessageConstants.GeneralErrorMessage);

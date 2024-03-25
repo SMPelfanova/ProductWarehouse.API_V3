@@ -7,6 +7,7 @@ using ProductWarehouse.Application.Features.Commands.Products.CreateProduct;
 using ProductWarehouse.Application.Interfaces;
 using ProductWarehouse.Application.Mapping;
 using ProductWarehouse.Application.Models.Product;
+using ProductWarehouse.Application.Services;
 using ProductWarehouse.Persistence.Abstractions.Exceptions;
 
 namespace ProductWarehouse.Application.Extensions;
@@ -27,6 +28,7 @@ public static class DependencyInjectionExtensions
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ExceptionHandlingPipelineBehavior<,>));
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
 		services.AddTransient<IRequestExceptionHandler<CreateProductCommand, ProductDto, DatabaseException>, CreateProductCommandExceptionHandler>();
+		services.AddScoped<ITokenService, TokenService>();
 
 		services.AddAutoMapper(typeof(AutoMapperProfile));
 
